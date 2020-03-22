@@ -20,7 +20,7 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import uniandes.isis2304.parranderos.negocio.Bar;
+import uniandes.isis2304.parranderos.negocio.Operador;
 
 /**
  * Clase que encapsula los métodos que hacen acceso a la base de datos para el concepto BAR de Parranderos
@@ -28,7 +28,7 @@ import uniandes.isis2304.parranderos.negocio.Bar;
  * 
  * @author Germán Bravo
  */
-class SQLBar 
+class SQLOperador 
 {
 	/* ****************************************************************
 	 * 			Constantes
@@ -55,7 +55,7 @@ class SQLBar
 	 * Constructor
 	 * @param pp - El Manejador de persistencia de la aplicación
 	 */
-	public SQLBar (PersistenciaParranderos pp)
+	public SQLOperador (PersistenciaParranderos pp)
 	{
 		this.pp = pp;
 	}
@@ -70,7 +70,7 @@ class SQLBar
 	 * @param sedes - El número de sedes del bar
 	 * @return El número de tuplas insertadas
 	 */
-	public long adicionarBar (PersistenceManager pm, long idBar, String nombre, String ciudad, String presupuesto, int sedes) 
+	public long adicionarOperador (PersistenceManager pm, long idBar, String nombre, String ciudad, String presupuesto, int sedes) 
 	{
         Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaBar () + "(id, nombre, ciudad, presupuesto, cantsedes) values (?, ?, ?, ?, ?)");
         q.setParameters(idBar, nombre, ciudad, presupuesto, sedes);
@@ -110,12 +110,12 @@ class SQLBar
 	 * @param idBar - El identificador del bar
 	 * @return El objeto BAR que tiene el identificador dado
 	 */
-	public Bar darBarPorId (PersistenceManager pm, long idBar) 
+	public Operador darBarPorId (PersistenceManager pm, long idBar) 
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaBar () + " WHERE id = ?");
-		q.setResultClass(Bar.class);
+		q.setResultClass(Operador.class);
 		q.setParameters(idBar);
-		return (Bar) q.executeUnique();
+		return (Operador) q.executeUnique();
 	}
 
 	/**
@@ -125,12 +125,12 @@ class SQLBar
 	 * @param nombreBar - El nombre de bar buscado
 	 * @return Una lista de objetos BAR que tienen el nombre dado
 	 */
-	public List<Bar> darBaresPorNombre (PersistenceManager pm, String nombreBar) 
+	public List<Operador> darBaresPorNombre (PersistenceManager pm, String nombreBar) 
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaBar () + " WHERE nombre = ?");
-		q.setResultClass(Bar.class);
+		q.setResultClass(Operador.class);
 		q.setParameters(nombreBar);
-		return (List<Bar>) q.executeList();
+		return (List<Operador>) q.executeList();
 	}
 
 	/**
@@ -139,11 +139,11 @@ class SQLBar
 	 * @param pm - El manejador de persistencia
 	 * @return Una lista de objetos BAR
 	 */
-	public List<Bar> darBares (PersistenceManager pm)
+	public List<Operador> darBares (PersistenceManager pm)
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaBar ());
-		q.setResultClass(Bar.class);
-		return (List<Bar>) q.executeList();
+		q.setResultClass(Operador.class);
+		return (List<Operador>) q.executeList();
 	}
 
 	/**

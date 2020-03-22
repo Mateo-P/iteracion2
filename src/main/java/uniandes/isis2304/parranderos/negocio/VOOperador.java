@@ -21,7 +21,7 @@ package uniandes.isis2304.parranderos.negocio;
  * 
  * @author Germán Bravo
  */
-public interface VOBar 
+public interface VOOperador 
 {
 	/* ****************************************************************
 	 * 			Métodos 
@@ -39,17 +39,38 @@ public interface VOBar
 	/**
 	 * @return la ciudad del bar
 	 */
-	public String getCiudad();
+	public String getHoraApertura();
 	
 	/**
 	 * @return El presupuesto del bar
 	 */
-	public String getPresupuesto();
+	public String getHoraCierre();
 	
 	/**
 	 * @return la cantSedes del bar
 	 */
-	public int getCantSedes();
+	public String getCorreo();
+	
+	/**
+	 * @return la cantSedes del bar
+	 */
+	public int getTelefono();
+
+	
+	/**
+	 * @return la cantSedes del bar
+	 */
+	public String getTipoVinculo();
+
+	/**
+	 * @return la cantSedes del bar
+	 */
+	public double getDineroRecaudado();
+
+	/**
+	 * @return la cantSedes del bar
+	 */
+	public String getTipoOperador();
 
 	@Override
 	/**
