@@ -15,12 +15,15 @@
 
 package uniandes.isis2304.parranderos.persistencia;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import uniandes.isis2304.parranderos.negocio.Sirven;
+import uniandes.isis2304.parranderos.negocio.Bebida;
+import uniandes.isis2304.parranderos.negocio.Reserva;
+import uniandes.isis2304.parranderos.negocio.TipoBebida;
 
 /**
  * Clase que encapsula los métodos que hacen acceso a la base de datos para el concepto SIRVEN de Parranderos
@@ -28,7 +31,7 @@ import uniandes.isis2304.parranderos.negocio.Sirven;
  * 
  * @author Germán Bravo
  */
-class SQLSirven 
+class SQLReserva
 {
 	/* ****************************************************************
 	 * 			Constantes
@@ -54,23 +57,23 @@ class SQLSirven
 	 * Constructor
 	 * @param pp - El Manejador de persistencia de la aplicación
 	 */
-	public SQLSirven (PersistenciaParranderos pp)
+	public SQLReserva (PersistenciaParranderos pp)
 	{
 		this.pp = pp;
 	}
 	
 	/**
-	 * Crea y ejecuta la sentencia SQL para adicionar un SIRVEN a la base de datos de Parranderos
+	 * Crea y ejecuta la sentencia SQL para adicionar una RESERVA a la base de datos de Alohandes
 	 * @param pm - El manejador de persistencia
 	 * @param idBar - El identificador del bar
 	 * @param idBebida - El identificador de la bebida
 	 * @param horario - El horario en que el bar sirve la bebida (DIURNO, NOCTURNO, TDOOS)
 	 * @return EL número de tuplas insertadas
 	 */
-	public long adicionarSirven (PersistenceManager pm, long idBar, long idBebida, String horario) 
+	public long adicionarReserva (PersistenceManager pm, long idReserva,Timestamp fechaInicioReserva,Timestamp fechaFinReserva,Timestamp fechaGeneracionReserva,int numeroPersonas,long idInmueble) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaSirven () + "(idbar, idbebida, horario) values (?, ?, ?)");
-        q.setParameters(idBar, idBebida, horario);
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaReserva () + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,NUMERO_PERSONAS,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?)");
+        q.setParameters(idReserva, fechaInicioReserva, fechaFinReserva,fechaGeneracionReserva,numeroPersonas,idInmueble);
         return (long)q.executeUnique();            
 	}
 
@@ -81,11 +84,22 @@ class SQLSirven
 	 * @param idBebida - El identificador de la bebida
 	 * @return EL número de tuplas eliminadas
 	 */
-	public long eliminarSirven (PersistenceManager pm, long idBar, long idBebida) 
+	public long eliminarReserva (PersistenceManager pm, long idReserva, long idInmueble) 
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaSirven () + " WHERE idbar = ? AND idbebida = ?");
-        q.setParameters(idBar, idBebida);
-        return (long) q.executeUnique();            
+		Query q1 = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva () + " WHERE ID_RESERVA = ?");
+		q1.setResultClass(TipoBebida.class);
+		q1.setParameters(idReserva);
+		Reserva reserva=  (Reserva) q1.executeUnique();
+		Timestamp fecha = reserva.getFechaGeneracion();
+		Timestamp fechainicio = reserva.getFechaInicio();
+		Timestamp hola = fecha;
+		if(true)
+		{
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaReserva () + " WHERE ID_RESERVA = ? AND ID_INMUEBLE = ?");
+        q.setParameters(idReserva, idInmueble);
+        return (long) q.executeUnique();    
+		}
+		return 0;
 	}
 
 	/**
@@ -94,11 +108,11 @@ class SQLSirven
 	 * @param pm - El manejador de persistencia
 	 * @return Una lista de objetos SIRVEN
 	 */
-	public List<Sirven> darSirven (PersistenceManager pm)
+	public List<Reserva> darSirven (PersistenceManager pm)
 	{
-		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaSirven ());
-		q.setResultClass(Sirven.class);
-		return (List<Sirven>) q.execute();
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva ());
+		q.setResultClass(Reserva.class);
+		return (List<Reserva>) q.execute();
 	}
  
 	/**
@@ -111,7 +125,7 @@ class SQLSirven
 	public List<Object []> darBaresYCantidadBebidasSirven (PersistenceManager pm)
 	{
         String sql = "SELECT idBar, count (*) as numBebidas";
-        sql += " FROM " + pp.darTablaSirven ();
+        sql += " FROM " + pp.darTablaReserva ();
        	sql	+= " GROUP BY idBar";
 		Query q = pm.newQuery(SQL, sql);
 		return q.executeList();

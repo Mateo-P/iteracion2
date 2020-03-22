@@ -477,10 +477,10 @@ public class Parranderos
 	 * @param sedes - El número de sedes que tiene el bar en la ciudad (Mayor que 0)
 	 * @return El objeto Bar adicionado. null si ocurre alguna Excepción
 	 */
-	public Bar adicionarBar (String nombre, String presupuesto, String ciudad, int sedes)
+	public Operador adicionarBar (String nombre, String presupuesto, String ciudad, int sedes)
 	{
         log.info ("Adicionando bar: " + nombre);
-        Bar bar = pp.adicionarBar (nombre, presupuesto, ciudad, sedes);
+        Operador bar = pp.adicionarOperador (nombre, presupuesto, ciudad, sedes);
         log.info ("Adicionando bar: " + bar);
         return bar;
 	}
@@ -508,7 +508,7 @@ public class Parranderos
 	public long eliminarBarPorId (long idBar)
 	{
         log.info ("Eliminando bar por id: " + idBar);
-        long resp = pp.eliminarBarPorId (idBar);
+        long resp = pp.eliminarOperadorPorId (idBar);
         log.info ("Eliminando bar: " + resp);
         return resp;
 	}
@@ -518,10 +518,10 @@ public class Parranderos
 	 * Adiciona entradas al log de la aplicación
 	 * @return Una lista de objetos Bar con todos las bares que conoce la aplicación, llenos con su información básica
 	 */
-	public List<Bar> darBares ()
+	public List<Operador> darBares ()
 	{
         log.info ("Listando Bares");
-        List<Bar> bares = pp.darBares ();	
+        List<Operador> bares = pp.darBares ();	
         log.info ("Listando Bares: " + bares.size() + " bares existentes");
         return bares;
 	}
@@ -531,11 +531,11 @@ public class Parranderos
 	 * Adiciona entradas al log de la aplicación
 	 * @return Una lista de objetos Bar con todos las bares que conoce la aplicación, llenos con su información básica
 	 */
-	public List<VOBar> darVOBares ()
+	public List<VOOperador> darVOBares ()
 	{
 		log.info ("Generando los VO de Bares");
-		List<VOBar> voBares = new LinkedList<VOBar> ();
-		for (Bar bar: pp.darBares ())
+		List<VOOperador> voBares = new LinkedList<VOOperador> ();
+		for (Operador bar: pp.darBares ())
 		{
 			voBares.add (bar);
 		}
@@ -647,10 +647,10 @@ public class Parranderos
 	 * @param horario - El horario en el que se sirve la bebida (DIURNO, NOCTURNO, TODOS)
 	 * @return Un objeto Sirven con los valores dados
 	 */
-	public Sirven adicionarSirven (long idBar, long idBebida, String horario)
+	public Reserva adicionarReserva (long idBar, long idBebida, String horario)
 	{
         log.info ("Adicionando sirven [" + idBar + ", " + idBebida + "]");
-        Sirven resp = pp.adicionarSirven (idBar, idBebida, horario);
+        Reserva resp = pp.adicionarReserva (idBar, idBebida, horario);
         log.info ("Adicionando sirven: " + resp + " tuplas insertadas");
         return resp;
 	}
@@ -662,7 +662,7 @@ public class Parranderos
 	 * @param idBebida - El identificador de la bebida
 	 * @return El número de tuplas eliminadas
 	 */
-	public long eliminarSirven (long idBar, long idBebida)
+	public long eliminarReserva (long idBar, long idBebida)
 	{
         log.info ("Eliminando sirven");
         long resp = pp.eliminarSirven (idBar, idBebida);
@@ -675,10 +675,10 @@ public class Parranderos
 	 * Adiciona entradas al log de la aplicación
 	 * @return Una lista de objetos SIRVEN con todos los GUSTAN que conoce la aplicación, llenos con su información básica
 	 */
-	public List<Sirven> darSirven ()
+	public List<Reserva> darSirven ()
 	{
         log.info ("Listando Sirven");
-        List<Sirven> sirven = pp.darSirven ();	
+        List<Reserva> sirven = pp.darSirven ();	
         log.info ("Listando Sirven: " + sirven.size() + " sirven existentes");
         return sirven;
 	}
@@ -688,11 +688,11 @@ public class Parranderos
 	 * Adiciona entradas al log de la aplicación
 	 * @return Una lista de objetos SIRVEN con todos los SIRVEN que conoce la aplicación, llenos con su información básica
 	 */
-	public List<VOSirven> darVOSirven ()
+	public List<VOReserva> darVOReserva ()
 	{
 		log.info ("Generando los VO de Sirven");
-		List<VOSirven> voGustan = new LinkedList<VOSirven> ();
-		for (VOSirven sirven: pp.darSirven ())
+		List<VOReserva> voGustan = new LinkedList<VOReserva> ();
+		for (VOReserva sirven: pp.darSirven ())
 		{
 			voGustan.add (sirven);
 		}

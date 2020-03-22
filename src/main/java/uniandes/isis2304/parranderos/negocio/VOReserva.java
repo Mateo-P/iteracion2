@@ -15,13 +15,15 @@
 
 package uniandes.isis2304.parranderos.negocio;
 
+import java.sql.Timestamp;
+
 /**
  * Interfaz para los métodos get de SIRVEN.
  * Sirve para proteger la información del negocio de posibles manipulaciones desde la interfaz 
  * 
  * @author Germán Bravo
  */
-public interface VOSirven 
+public interface VOReserva
 {
 	/* ****************************************************************
 	 * 			Métodos
@@ -29,18 +31,34 @@ public interface VOSirven
 	/**
 	 * @return El idBar
 	 */
-	public long getIdBar();
+	public long getIdReserva();
 
 	/**
 	 * @return El idBebida
 	 */
-	public long getIdBebida();
+	public long getIdInmueble();
 
 	/**
 	 * @return El horario en que el bar sirve la bebida
 	 */
-	public String getHorario();
+	public Timestamp getFechaInicio();
 
+	/**
+	 * @return El horario en que el bar sirve la bebida
+	 */
+	public Timestamp getFechaFin();
+	
+	/**
+	 * @return El horario en que el bar sirve la bebida
+	 */
+	public Timestamp getFechaGeneracion();
+	
+	/**
+	 * @return El horario en que el bar sirve la bebida
+	 */
+	public int getNumeroPersonas();
+	
+	
 	/** 
 	 * @return Una cadena con la información básica
 	 */

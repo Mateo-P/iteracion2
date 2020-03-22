@@ -72,7 +72,7 @@ class SQLOperador
 	 */
 	public long adicionarOperador (PersistenceManager pm, long idBar, String nombre, String ciudad, String presupuesto, int sedes) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaBar () + "(id, nombre, ciudad, presupuesto, cantsedes) values (?, ?, ?, ?, ?)");
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaOperador() + "(id, nombre, ciudad, presupuesto, cantsedes) values (?, ?, ?, ?, ?)");
         q.setParameters(idBar, nombre, ciudad, presupuesto, sedes);
         return (long) q.executeUnique();
 	}
@@ -85,7 +85,7 @@ class SQLOperador
 	 */
 	public long eliminarBaresPorNombre (PersistenceManager pm, String nombreBar)
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBar () + " WHERE nombre = ?");
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaOperador () + " WHERE nombre = ?");
         q.setParameters(nombreBar);
         return (long) q.executeUnique();
 	}
@@ -98,7 +98,7 @@ class SQLOperador
 	 */
 	public long eliminarBarPorId (PersistenceManager pm, long idBar)
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBar () + " WHERE id = ?");
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaOperador () + " WHERE id = ?");
         q.setParameters(idBar);
         return (long) q.executeUnique();
 	}
@@ -112,7 +112,7 @@ class SQLOperador
 	 */
 	public Operador darBarPorId (PersistenceManager pm, long idBar) 
 	{
-		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaBar () + " WHERE id = ?");
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaOperador () + " WHERE id = ?");
 		q.setResultClass(Operador.class);
 		q.setParameters(idBar);
 		return (Operador) q.executeUnique();
@@ -127,7 +127,7 @@ class SQLOperador
 	 */
 	public List<Operador> darBaresPorNombre (PersistenceManager pm, String nombreBar) 
 	{
-		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaBar () + " WHERE nombre = ?");
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaOperador () + " WHERE nombre = ?");
 		q.setResultClass(Operador.class);
 		q.setParameters(nombreBar);
 		return (List<Operador>) q.executeList();
@@ -141,7 +141,7 @@ class SQLOperador
 	 */
 	public List<Operador> darBares (PersistenceManager pm)
 	{
-		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaBar ());
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaOperador ());
 		q.setResultClass(Operador.class);
 		return (List<Operador>) q.executeList();
 	}
@@ -155,7 +155,7 @@ class SQLOperador
 	 */
 	public long aumentarSedesBaresCiudad (PersistenceManager pm, String ciudad)
 	{
-        Query q = pm.newQuery(SQL, "UPDATE " + pp.darTablaBar () + " SET cantsedes = cantsedes + 1 WHERE ciudad = ?");
+        Query q = pm.newQuery(SQL, "UPDATE " + pp.darTablaOperador () + " SET cantsedes = cantsedes + 1 WHERE ciudad = ?");
         q.setParameters(ciudad);
         return (long) q.executeUnique();
 	}

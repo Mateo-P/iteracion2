@@ -153,7 +153,7 @@ class SQLBebida
 	 */
 	public long eliminarBebidasNoServidas (PersistenceManager pm)
 	{
-        String q2Str = "SELECT idBebida FROM " + pp.darTablaSirven ();
+        String q2Str = "SELECT idBebida FROM " + pp.darTablaReserva ();
         Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBebida () + " WHERE id NOT IN (" + q2Str + ")");
         return (long) q.executeUnique();            
     }

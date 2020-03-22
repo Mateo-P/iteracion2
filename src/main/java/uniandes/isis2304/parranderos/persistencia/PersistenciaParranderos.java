@@ -32,6 +32,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import uniandes.isis2304.parranderos.negocio.Operador;
+import uniandes.isis2304.parranderos.negocio.Reserva;
 import uniandes.isis2304.parranderos.negocio.Bebedor;
 import uniandes.isis2304.parranderos.negocio.Bebida;
 import uniandes.isis2304.parranderos.negocio.Gustan;
@@ -116,7 +117,7 @@ public class PersistenciaParranderos
 	/**
 	 * Atributo para el acceso a la tabla SIRVEN de la base de datos
 	 */
-	private SQLSirven sqlSirven;
+	private SQLReserva sqlReserva;
 	
 	/**
 	 * Atributo para el acceso a la tabla VISITAN de la base de datos
@@ -224,7 +225,7 @@ public class PersistenciaParranderos
 		sqlOperador = new SQLOperador(this);
 		sqlBebedor = new SQLBebedor(this);
 		sqlGustan = new SQLGustan(this);
-		sqlSirven = new SQLSirven (this);
+		sqlReserva = new SQLReserva (this);
 		sqlVisitan = new SQLVisitan(this);		
 		sqlUtil = new SQLUtil(this);
 	}
@@ -280,7 +281,7 @@ public class PersistenciaParranderos
 	/**
 	 * @return La cadena de caracteres con el nombre de la tabla de Sirven de parranderos
 	 */
-	public String darTablaSirven ()
+	public String darTablaReserva ()
 	{
 		return tablas.get (6);
 	}
@@ -934,7 +935,7 @@ public class PersistenciaParranderos
 			String horarioVisita = (String) tupla [6];
 			
 			Object [] visita = new Object [3];
-			visita [0] = new Bar (idBar, nombreBar, ciudadBar, presupuestoBar, sedesBar);
+			//visita [0] = new Operador(id, nombre, tipoVinculo, horaApertura, horaCierre, dinero, correo, telefono, tipoOperador);
 			visita [1] = fechaVisita;
 			visita [2] = horarioVisita;
 
@@ -983,7 +984,7 @@ public class PersistenciaParranderos
 	 * @param sedes - El número de sedes del bar en la ciudad (Mayor que 0)
 	 * @return El objeto Bar adicionado. null si ocurre alguna Excepción
 	 */
-	public Bar adicionarBar(String nombre, String ciudad, String presupuesto, int sedes) 
+	public Operador adicionarOperador(String nombre, String ciudad, String presupuesto, int sedes) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -991,12 +992,12 @@ public class PersistenciaParranderos
         {
             tx.begin();
             long idBar = nextval ();
-            long tuplasInsertadas = sqlBar.adicionarBar(pm, idBar, nombre, ciudad, presupuesto, sedes);
+            long tuplasInsertadas = sqlOperador.adicionarOperador(pm, idBar, nombre, ciudad, presupuesto, sedes);
             tx.commit();
 
             log.trace ("Inserción de Bar: " + nombre + ": " + tuplasInsertadas + " tuplas insertadas");
 
-            return new Bar (idBar, nombre, ciudad, presupuesto, sedes);
+            return new Operador (idBar, nombre, ciudad, presupuesto, presupuesto, sedes, presupuesto, sedes, presupuesto);
         }
         catch (Exception e)
         {
@@ -1027,7 +1028,7 @@ public class PersistenciaParranderos
         try
         {
             tx.begin();
-            long resp = sqlBar.eliminarBaresPorNombre(pm, nombreBar);
+            long resp = sqlOperador.eliminarBaresPorNombre(pm, nombreBar);
             tx.commit();
 
             return resp;
@@ -1054,14 +1055,14 @@ public class PersistenciaParranderos
 	 * @param idBar - El identificador del bar
 	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
 	 */
-	public long eliminarBarPorId (long idBar) 
+	public long eliminarOperadorPorId (long idBar) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
         try
         {
             tx.begin();
-            long resp = sqlBar.eliminarBarPorId (pm, idBar);
+            long resp = sqlOperador.eliminarBarPorId (pm, idBar);
             tx.commit();
 
             return resp;
@@ -1086,9 +1087,9 @@ public class PersistenciaParranderos
 	 * Método que consulta todas las tuplas en la tabla BAR
 	 * @return La lista de objetos BAR, construidos con base en las tuplas de la tabla BAR
 	 */
-	public List<Bar> darBares ()
+	public List<Operador> darBares ()
 	{
-		return sqlBar.darBares (pmf.getPersistenceManager());
+		return sqlOperador.darBares (pmf.getPersistenceManager());
 	}
  
 	/**
@@ -1096,9 +1097,9 @@ public class PersistenciaParranderos
 	 * @param nombreBar - El nombre del bar
 	 * @return La lista de objetos BAR, construidos con base en las tuplas de la tabla BAR
 	 */
-	public List<Bar> darBaresPorNombre (String nombreBar)
+	public List<Operador> darBaresPorNombre (String nombreBar)
 	{
-		return sqlBar.darBaresPorNombre (pmf.getPersistenceManager(), nombreBar);
+		return sqlOperador.darBaresPorNombre (pmf.getPersistenceManager(), nombreBar);
 	}
  
 	/**
@@ -1106,9 +1107,9 @@ public class PersistenciaParranderos
 	 * @param idBar - El identificador del bar
 	 * @return El objeto BAR, construido con base en la tuplas de la tabla BAR, que tiene el identificador dado
 	 */
-	public Bar darBarPorId (long idBar)
+	public Operador darBarPorId (long idBar)
 	{
-		return sqlBar.darBarPorId (pmf.getPersistenceManager(), idBar);
+		return sqlOperador.darBarPorId (pmf.getPersistenceManager(), idBar);
 	}
  
 	/**
@@ -1123,7 +1124,7 @@ public class PersistenciaParranderos
         try
         {
             tx.begin();
-            long resp = sqlBar.aumentarSedesBaresCiudad(pm, ciudad);
+            long resp = sqlOperador.aumentarSedesBaresCiudad(pm, ciudad);
             tx.commit();
 
             return resp;
@@ -1241,19 +1242,19 @@ public class PersistenciaParranderos
 	 * @param horario - El hororio en que se sirve (DIURNO, NOCTURNO, TODOS)
 	 * @return Un objeto SIRVEN con la información dada. Null si ocurre alguna Excepción
 	 */
-	public Sirven adicionarSirven (long idBar, long idBebida, String horario) 
+	public Reserva adicionarReserva (long idBar, long idBebida, String horario) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
         try
         {
             tx.begin();
-            long tuplasInsertadas = sqlSirven.adicionarSirven (pmf.getPersistenceManager(), idBar, idBebida, horario);
+            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(), idBar, idBebida, horario);
     		tx.commit();
 
             log.trace ("Inserción de gustan: [" + idBar + ", " + idBebida + "]. " + tuplasInsertadas + " tuplas insertadas");
 
-            return new Sirven (idBar, idBebida, horario);
+            return new Reserva (idBar, idBebida, horario);
         }
         catch (Exception e)
         {
@@ -1284,7 +1285,7 @@ public class PersistenciaParranderos
 	        try
 	        {
 	            tx.begin();
-	            long resp = sqlSirven.eliminarSirven (pm, idBar, idBebida);	            
+	            long resp = sqlReserva.eliminarReserva (pm, idBar, idBebida);	            
 	            tx.commit();
 
 	            return resp;
@@ -1309,9 +1310,9 @@ public class PersistenciaParranderos
 	 * Método que consulta todas las tuplas en la tabla SIRVEN
 	 * @return La lista de objetos SIRVEN, construidos con base en las tuplas de la tabla SIRVEN
 	 */
-	public List<Sirven> darSirven ()
+	public List<Reserva> darSirven ()
 	{
-		return sqlSirven.darSirven (pmf.getPersistenceManager());
+		return sqlReserva.darSirven (pmf.getPersistenceManager());
 	}
  
 	/**
@@ -1322,7 +1323,7 @@ public class PersistenciaParranderos
 	public List<long []> darBaresYCantidadBebidasSirven ()
 	{
 		List<long []> resp = new LinkedList<long []> ();
-		List<Object []> tuplas =  sqlSirven.darBaresYCantidadBebidasSirven (pmf.getPersistenceManager());
+		List<Object []> tuplas =  sqlReserva.darBaresYCantidadBebidasSirven (pmf.getPersistenceManager());
         for ( Object [] tupla : tuplas)
         {
 			long [] datosResp = new long [2];

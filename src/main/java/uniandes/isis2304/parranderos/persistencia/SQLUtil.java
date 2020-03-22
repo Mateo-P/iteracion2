@@ -78,12 +78,12 @@ class SQLUtil
 	public long [] limpiarParranderos (PersistenceManager pm)
 	{
         Query qGustan = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaGustan ());          
-        Query qSirven = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaSirven ());
+        Query qSirven = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaReserva ());
         Query qVisitan = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaVisitan ());
         Query qBebida = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBebida ());
         Query qTipoBebida = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaTipoBebida ());
         Query qBebedor = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBebedor ());
-        Query qBar = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBar ());
+        Query qBar = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaOperador ());
 
         long gustanEliminados = (long) qGustan.executeUnique ();
         long sirvenEliminados = (long) qSirven.executeUnique ();

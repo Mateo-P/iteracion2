@@ -160,7 +160,7 @@ class SQLBebedor
         sql += " FROM ";
         sql += pp.darTablaBebedor () + " bdor, ";
         sql += pp.darTablaVisitan () + " vis, ";
-        sql += pp.darTablaBar () + " bar ";
+        sql += pp.darTablaOperador () + " bar ";
        	sql	+= " WHERE ";
        	sql += "bdor.id = ?";
        	sql += " AND bdor.id = vis.idbebedor";

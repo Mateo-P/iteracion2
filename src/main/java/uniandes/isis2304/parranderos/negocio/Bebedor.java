@@ -215,7 +215,7 @@ public class Bebedor implements VOBebedor
 		int i = 1;
 		for (Object [] visita : visitasRealizadas)
 		{
-			Bar bar = (Bar) visita [0];
+			Operador bar = (Operador) visita [0];
 			Timestamp fecha = (Timestamp) visita [1];
 			String horario = (String) visita [2];
 			resp += i++ + ". " + "[" +bar.toString() + ", fecha= " + fecha + ", horario= " + horario + "]\n";
