@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import uniandes.isis2304.parranderos.negocio.Bar;
+import uniandes.isis2304.parranderos.negocio.Operador;
 import uniandes.isis2304.parranderos.negocio.Bebedor;
 import uniandes.isis2304.parranderos.negocio.Bebida;
 import uniandes.isis2304.parranderos.negocio.Gustan;
@@ -101,7 +101,7 @@ public class PersistenciaParranderos
 	/**
 	 * Atributo para el acceso a la tabla BAR de la base de datos
 	 */
-	private SQLBar sqlBar;
+	private SQLOperador sqlOperador;
 	
 	/**
 	 * Atributo para el acceso a la tabla BEBIDA de la base de datos
@@ -221,7 +221,7 @@ public class PersistenciaParranderos
 	{
 		sqlTipoBebida = new SQLTipoBebida(this);
 		sqlBebida = new SQLBebida(this);
-		sqlBar = new SQLBar(this);
+		sqlOperador = new SQLOperador(this);
 		sqlBebedor = new SQLBebedor(this);
 		sqlGustan = new SQLGustan(this);
 		sqlSirven = new SQLSirven (this);
@@ -256,7 +256,7 @@ public class PersistenciaParranderos
 	/**
 	 * @return La cadena de caracteres con el nombre de la tabla de Bar de parranderos
 	 */
-	public String darTablaBar ()
+	public String darTablaOperador ()
 	{
 		return tablas.get (3);
 	}
