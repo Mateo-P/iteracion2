@@ -67,7 +67,7 @@ public class SQLInmueble {
             Query q3= pm.newQuery(SQL, "DELETE FROM " + tipo_inmueble + " WHERE  ID_INMUEBLE= ?");
             q3.setParameters(idInmueble);
             long fila1 = (long) q3.executeUnique();
-            Query q4= pm.newQuery(SQL, "DELETE FROM " + pp.darTablaTablaInmueble() + " WHERE  ID_INMUEBLE= ?");
+            Query q4= pm.newQuery(SQL, "DELETE FROM " + pp.darTablaInmueble() + " WHERE  ID_INMUEBLE= ?");
             q4.setParameters(idInmueble);
             long fila2=  (long) q4.executeUnique();
             return fila1+fila2;
