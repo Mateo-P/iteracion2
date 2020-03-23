@@ -71,10 +71,10 @@ class SQLCxc
 	 * @param horario - EL horario en que se realizó la visita (DIURNO, NOCTURNO, TODOS)
 	 * @return EL número de tuplas insertadas
 	 */
-	public long adicionarVisitan (PersistenceManager pm, long idBebedor, long idBar, Timestamp fecha, String horario) 
+	public long adicionarCxc (PersistenceManager pm, long idReserva, double monto) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaCxc () + "(idbebedor, idbar, fechavisita, horario) values (?, ?, ?, ?)");
-        q.setParameters(idBebedor, idBar, fecha, horario);
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaCxc () + "(ID_RESERVA, MONTO) values (?, ?)");
+        q.setParameters(idReserva, monto);
         return (long) q.executeUnique();
 	}
 
@@ -83,7 +83,7 @@ class SQLCxc
 	 * @param pm - El manejador de persistencia
 	 * @return EL número de tuplas eliminadas
 	 */
-	public long eliminarVisitan (PersistenceManager pm) 
+	public long eliminarCxc (PersistenceManager pm) 
 	{
         Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc ());
         return (long) q.executeUnique();
@@ -96,38 +96,14 @@ class SQLCxc
 	 * @param idBar - El identificador del bar
 	 * @return EL número de tuplas eliminadas
 	 */
-	public long eliminarVisitan (PersistenceManager pm, long idBebedor, long idBar) 
+	public long eliminarCxcPorIdReserva (PersistenceManager pm, long idReserva) 
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE idbebedor = ? AND idbar = ?");
-        q.setParameters(idBebedor, idBar);
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE ID_RESERVA = ?");
+        q.setParameters(idReserva);
         return (long) q.executeUnique();
 	}
 
-	/**
-	 * Crea y ejecuta la sentencia SQL para ELIMINAR TODAS LAS VISITAS DE UN BEBEDOR de la base de datos de Parranderos, por su identificador
-	 * @param pm - El manejador de persistencia
-	 * @param idBebedor - El identificador del bebedor
-	 * @return EL número de tuplas eliminadas
-	 */
-	public long eliminarVisitanPorIdBebedor (PersistenceManager pm, long idBebedor) 
-	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE idbebedor = ?");
-        q.setParameters(idBebedor);
-        return (long) q.executeUnique();
-	}
-
-	/**
-	 * Crea y ejecuta la sentencia SQL para ELIMINAR TODAS LAS VISITAS HECHAS A UN BAR de la base de datos de Parranderos, por su identificador
-	 * @param pm - El manejador de persistencia
-	 * @param idBar - El identificador del bar
-	 * @return EL número de tuplas eliminadas
-	 */
-	public long eliminarVisitanPorIdBar (PersistenceManager pm, long idBar) 
-	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE idBar = ?");
-        q.setParameters(idBar);
-        return (long) q.executeUnique();
-	}
+	
 
 	/**
 	 * Crea y ejecuta la sentencia SQL para encontrar la información de los VISITAN de la 

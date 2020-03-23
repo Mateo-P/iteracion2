@@ -49,12 +49,12 @@ import com.google.gson.stream.JsonReader;
 import uniandes.isis2304.parranderos.interfazApp.PanelDatos;
 import uniandes.isis2304.parranderos.negocio.Parranderos;
 import uniandes.isis2304.parranderos.negocio.VOOperador;
-import uniandes.isis2304.parranderos.negocio.VOBebedor;
+
 import uniandes.isis2304.parranderos.negocio.VOBebida;
 import uniandes.isis2304.parranderos.negocio.VOGustan;
 import uniandes.isis2304.parranderos.negocio.VOReserva;
 import uniandes.isis2304.parranderos.negocio.VOTipoBebida;
-import uniandes.isis2304.parranderos.negocio.VOVisitan;
+import uniandes.isis2304.parranderos.negocio.VOCxc;
 
 /**
  * Clase principal de la interfaz
@@ -1375,26 +1375,25 @@ public class InterfazParranderosDemo extends JFrame implements ActionListener
     		// Ejecución de la demo y recolección de los resultados
 			// ATENCIÓN: En una aplicación real, los datos JAMÁS están en el código
 			VOOperador bar1 = parranderos.adicionarBar ("Los Amigos1", "Bogotá", "Bajo", 2);
-			VOBebedor bdor1 = parranderos.adicionarBebedor ("Pepito", "Bogotá", "Alto");
-			parranderos.adicionarVisitan (bdor1.getId (), bar1.getId (), new Timestamp (System.currentTimeMillis()), "diurno");
-
+		
+			
 			List <VOOperador> listaBares = parranderos.darVOBares ();
-			List <VOBebedor> listaBebedores = parranderos.darVOBebedores ();
-			List <VOVisitan> listaVisitan = parranderos.darVOVisitan();
-			long visitanEliminados = parranderos.eliminarVisitan (bdor1.getId (), bar1.getId ());
+	
+			
+		
 			long baresEliminados = parranderos.eliminarBarPorNombre ("Los Amigos1");
-			long bebedoresEliminadas = parranderos.eliminarBebedorPorNombre ("Pepito");
+		
 			
 			// Generación de la cadena de caracteres con la traza de la ejecución de la demo
 			String resultado = "Demo de creación y listado de Visitan\n\n";
 			resultado += "\n\n************ Generando datos de prueba ************ \n";
 			resultado += "\n" + listarBares (listaBares);
-			resultado += "\n" + listarBebedores (listaBebedores);
+		
 			resultado += "\n\n************ Ejecutando la demo ************ \n";
-			resultado += "\n" + listarVisitan (listaVisitan);
+		
 			resultado += "\n\n************ Limpiando la base de datos ************ \n";
-			resultado += visitanEliminados + " Visitan eliminados\n";
-			resultado += bebedoresEliminadas + " Bebedores eliminadas\n";
+		
+		
 			resultado += baresEliminados + " Bares eliminados\n";
 			resultado += "\n Demo terminada";
    
@@ -1600,22 +1599,6 @@ public class InterfazParranderosDemo extends JFrame implements ActionListener
 	}
 
     /**
-     * Genera una cadena de caracteres con la lista de bebedores recibida: una línea por cada bebedor
-     * @param lista - La lista con los bebedores
-     * @return La cadena con una líea para cada bebedor recibido
-     */
-    private String listarBebedores (List<VOBebedor> lista) 
-    {
-    	String resp = "Los bebedores existentes son:\n";
-    	int i = 1;
-        for (VOBebedor bdor : lista)
-        {
-        	resp += i++ + ". " + bdor.toString() + "\n";
-        }
-        return resp;
-	}
-
-    /**
      * Genera una cadena de caracteres con la lista de bares recibida: una línea por cada bar
      * @param lista - La lista con los bares
      * @return La cadena con una líea para cada bar recibido
@@ -1668,11 +1651,11 @@ public class InterfazParranderosDemo extends JFrame implements ActionListener
      * @param lista - La lista con los visitan
      * @return La cadena con una líea para cada visitan recibido
      */
-    private String listarVisitan (List<VOVisitan> lista) 
+    private String listarCxc (List<VOCxc> lista) 
     {
-    	String resp = "Los visitan existentes son:\n";
+    	String resp = "Las Cxc existentes son:\n";
     	int i = 1;
-        for (VOVisitan vis : lista)
+        for (VOCxc vis : lista)
         {
         	resp += i++ + ". " + vis.toString() + "\n";
         }
@@ -1700,27 +1683,7 @@ public class InterfazParranderosDemo extends JFrame implements ActionListener
         return resp;
 	}
 
-    /**
-     * Genera una cadena de caracteres con la lista de parejas de objetos recibida: una línea por cada pareja
-     * @param lista - La lista con las parejas (Bebedor, numero visitas)
-     * @return La cadena con una línea para cada pareja recibido
-     */
-    private String listarBebedorYNumVisitas (List<Object[]> lista) 
-    {
-    	String resp = "Los bebedores y el número visitas realizadas son:\n";
-    	int i = 1;
-        for (Object [] tupla : lista)
-        {
-			VOBebedor bdor = (VOBebedor) tupla [0];
-			int numVisitas = (int) tupla [1];
-	        String resp1 = i++ + ". " + "[";
-			resp1 += bdor + ", ";
-			resp1 += "numVisitas: " + numVisitas;
-	        resp1 += "]";
-	        resp += resp1 + "\n";
-        }
-        return resp;
-	}
+    
 
     /**
      * Genera una cadena de caracteres con la descripción de la excepcion e, haciendo énfasis en las excepcionsde JDO
