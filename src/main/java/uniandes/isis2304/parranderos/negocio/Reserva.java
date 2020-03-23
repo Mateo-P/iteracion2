@@ -68,12 +68,12 @@ public class Reserva implements VOReserva
 	{
 		this.idReserva = 0;
 		this.idInmueble = 0;
-		this.idCliente=0;
-		this.cancelado='N';
+		this.setIdCliente(0);
+		this.setCancelado('N');
 		this.fechaInicio = new Timestamp (0);
 		this.fechaFin = new Timestamp (0);
 		this.fechaGeneracion = new Timestamp (0);
-		this.fechaCancelacion = new Timestamp(0);
+		this.setFechaCancelacion(new Timestamp(0));
 		this.numeroPersonas=0;
 	}
 
@@ -83,14 +83,17 @@ public class Reserva implements VOReserva
 	 * @param idBebida - El identificador de la bebida. Debe existir una bebida con dicho identificador
 	 * @param horario - El horario en el que el bar sirve la bebida (DIURNO, NOCTURNO, TODOS)
 	 */
-	public Reserva (long idReserva, long idInmueble, Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion, int numeroPersonas) 
+	public Reserva (long idReserva, long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas) 
 	{
 		this.idReserva = idReserva;
 		this.idInmueble = idInmueble;
+		this.idCliente=idCliente;
 		this.numeroPersonas = numeroPersonas;
 		this.fechaInicio=fechaInicio;
 		this.fechaFin=fechaFin;
 		this.fechaGeneracion=fechaGeneracion;
+		this.fechaCancelacion=fechaCancelacion;
+		this.cancelado=cancelado;
 	}
 
 	@Override
@@ -157,5 +160,29 @@ public class Reserva implements VOReserva
 	public void setFechaNumeroPersonas(int numeroPersonas)
 	{
 		this.numeroPersonas=numeroPersonas;
+	}
+
+	public char getCancelado() {
+		return cancelado;
+	}
+
+	public void setCancelado(char cancelado) {
+		this.cancelado = cancelado;
+	}
+
+	public long getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(long idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public Timestamp getFechaCancelacion() {
+		return fechaCancelacion;
+	}
+
+	public void setFechaCancelacion(Timestamp fechaCancelacion) {
+		this.fechaCancelacion = fechaCancelacion;
 	}
 }

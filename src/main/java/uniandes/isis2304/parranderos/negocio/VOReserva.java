@@ -37,7 +37,7 @@ public interface VOReserva
 	 * @return El idBebida
 	 */
 	public long getIdInmueble();
-
+	public long getIdCliente();
 	/**
 	 * @return El horario en que el bar sirve la bebida
 	 */
@@ -52,6 +52,7 @@ public interface VOReserva
 	 * @return El horario en que el bar sirve la bebida
 	 */
 	public Timestamp getFechaGeneracion();
+	public Timestamp getFechaCancelacion();
 	
 	/**
 	 * @return El horario en que el bar sirve la bebida

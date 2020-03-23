@@ -35,9 +35,10 @@ import uniandes.isis2304.parranderos.negocio.Operador;
 import uniandes.isis2304.parranderos.negocio.Reserva;
 import uniandes.isis2304.parranderos.negocio.Bebedor;
 import uniandes.isis2304.parranderos.negocio.Bebida;
+import uniandes.isis2304.parranderos.negocio.Cxc;
 import uniandes.isis2304.parranderos.negocio.Gustan;
 import uniandes.isis2304.parranderos.negocio.TipoBebida;
-import uniandes.isis2304.parranderos.negocio.Visitan;
+
 
 /**
  * Clase para el manejador de persistencia del proyecto Parranderos
@@ -121,7 +122,7 @@ public class PersistenciaParranderos
 	/**
 	 * Atributo para el acceso a la tabla VISITAN de la base de datos
 	 */
-	private SQLVisitan sqlVisitan;
+	private SQLCxc sqlCxc;
 	
 	/* ****************************************************************
 	 * 			Métodos del MANEJADOR DE PERSISTENCIA
@@ -140,11 +141,11 @@ public class PersistenciaParranderos
 		tablas.add ("Parranderos_sequence");
 		tablas.add ("TIPOBEBIDA");
 		tablas.add ("BEBIDA");
-		tablas.add ("BAR");
+		tablas.add ("OPERADOR");
 		tablas.add ("BEBEDOR");
-		tablas.add ("GUSTAN");
-		tablas.add ("SIRVEN");
-		tablas.add ("VISITAN");
+		tablas.add ("INMUEBLE");
+		tablas.add ("RESERVA");
+		tablas.add ("CXC");
 }
 
 	/**
@@ -225,7 +226,7 @@ public class PersistenciaParranderos
 		sqlBebedor = new SQLBebedor(this);
 		sqlGustan = new SQLGustan(this);
 		sqlReserva = new SQLReserva (this);
-		sqlVisitan = new SQLVisitan(this);		
+		sqlCxc = new SQLCxc(this);		
 		sqlUtil = new SQLUtil(this);
 	}
 
@@ -272,7 +273,7 @@ public class PersistenciaParranderos
 	/**
 	 * @return La cadena de caracteres con el nombre de la tabla de Gustan de parranderos
 	 */
-	public String darTablaGustan ()
+	public String darTablaInmueble ()
 	{
 		return tablas.get (5);
 	}
@@ -288,7 +289,7 @@ public class PersistenciaParranderos
 	/**
 	 * @return La cadena de caracteres con el nombre de la tabla de Visitan de parranderos
 	 */
-	public String darTablaVisitan ()
+	public String darTablaCxc ()
 	{
 		return tablas.get (7);
 	}
@@ -1241,19 +1242,19 @@ public class PersistenciaParranderos
 	 
 	 * @return Un objeto RESERVA con la información dada. Null si ocurre alguna Excepción
 	 */
-	public Reserva adicionarReserva (long idReserva,Timestamp fechaInicioReserva,Timestamp fechaFinReserva,Timestamp fechaGeneracionReserva,int numeroPersonas,long idInmueble) 
+	public Reserva adicionarReserva (long idReserva, long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
         try
         {
             tx.begin();
-            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(),  idReserva, fechaInicioReserva, fechaFinReserva, fechaGeneracionReserva, numeroPersonas, idInmueble);
+            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(), idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
     		tx.commit();
 
             log.trace ("Inserción de Reserva: [" + idReserva + ", " + idInmueble + "]. " + tuplasInsertadas + " tuplas insertadas");
 
-            return new Reserva ( idReserva, idInmueble, fechaInicioReserva, fechaFinReserva, fechaGeneracionReserva, numeroPersonas);
+            return new Reserva ( idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
         }
         catch (Exception e)
         {
@@ -1329,7 +1330,7 @@ public class PersistenciaParranderos
 	 * @param horario - El hororio en que se sirve (DIURNO, NOCTURNO, TODOS)
 	 * @return Un objeto VISITAN con la información dada. Null si ocurre alguna Excepción
 	 */	
-	public Visitan adicionarVisitan (long idBebedor, long idBar, Timestamp fecha, String horario) 
+	public Cxc adicionarVisitan (long idBebedor, long idBar, Timestamp fecha, String horario) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
@@ -1465,9 +1466,9 @@ public class PersistenciaParranderos
 	 * Método que consulta todas las tuplas en la tabla VISITAN
 	 * @return La lista de objetos VISITAN, construidos con base en las tuplas de la tabla VISITAN
 	 */
-	public List<Visitan> darVisitan ()
+	public List<Cxc> darCxc ()
 	{
-		return sqlVisitan.darVisitan (pmf.getPersistenceManager());
+		return sqlCxc.darCxc (pmf.getPersistenceManager());
 	}	
 
 	/**

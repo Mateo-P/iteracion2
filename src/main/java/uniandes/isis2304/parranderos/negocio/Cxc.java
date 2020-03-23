@@ -15,7 +15,7 @@
 
 package uniandes.isis2304.parranderos.negocio;
 
-import java.sql.Timestamp;
+
 
 /**
  * Clase para modelar la relación VISITAN del negocio de los Parranderos:
@@ -27,7 +27,7 @@ import java.sql.Timestamp;
  * 
  * @author Germán Bravo
  */
-public class Visitan implements VOVisitan
+public class Cxc implements VOCxc
 {
 	/* ****************************************************************
 	 * 			Atributos
@@ -35,22 +35,14 @@ public class Visitan implements VOVisitan
 	/**
 	 * El identificador del bebedor que realiza la visita
 	 */
-	private long idBebedor;
+	private long idReserva;
 	
 	/**
 	 * El identificador del bar visitado
 	 */
-	private long idBar;
+	private double monto;
 	
-	/**
-	 * La fecha de la visita
-	 */
-	private Timestamp fechaVisita;
 	
-	/**
-	 * El horario en que se realizó la visita (DIURNO, NOCTURNO, TODOS)
-	 */
-	private String horario;
 
 	/* ****************************************************************
 	 * 			Métodos
@@ -58,12 +50,10 @@ public class Visitan implements VOVisitan
 	/**
 	 * Constructor por defecto
 	 */
-	public Visitan() 
+	public Cxc() 
 	{
-		this.idBebedor = 0;
-		this.idBar = 0;
-		this.horario = "";
-		this.fechaVisita = new Timestamp (0);
+		this.idReserva = 0;
+		this.monto = 0;
 	}
 
 	/**
@@ -73,85 +63,49 @@ public class Visitan implements VOVisitan
 	 * @param fechaVisita - La fecha en la cual se realiza la visita
 	 * @param horario - El horario en el que el bebedor vista el bar (DIURNO, NOCTURNO, TODOS)
 	 */
-	public Visitan(long idBebedor, long idBar, Timestamp fechaVisita, String horario) 
+	public Cxc(long idReserva, double monto) 
 	{
-		this.idBebedor = idBebedor;
-		this.idBar = idBar;
-		this.fechaVisita = fechaVisita;
-		this.horario = horario;
+		this.idReserva = idReserva;
+		this.monto = monto;
+		
 	}
 
 	/**
 	 * @return El idBebedor
 	 */
-	public long getIdBebedor() 
+	public long getidReserva() 
 	{
-		return idBebedor;
+		return idReserva;
 	}
 
 	/**
 	 * @param idBebedor - El nuevo idBebedor. Debe existir un bebedor con dicho identificador
 	 */
-	public void setIdBebedor(long idBebedor) 
+	public void setidReserva(long idReserva) 
 	{
-		this.idBebedor = idBebedor;
+		this.idReserva = idReserva;
 	}
 
 	/**
 	 * @return El idBar
 	 */
-	public long getIdBar() 
+	public double getMonto() 
 	{
-		return idBar;
+		return monto;
 	}
 
 	/**
 	 * @param idBar - El nuevo idBar. Debe exixtir un bar con dicho identificador
 	 */
-	public void setIdBar(long idBar) 
+	public void setMonto(double monto) 
 	{
-		this.idBar = idBar;
+		this.monto = monto;
 	}
 
-	/**
-	 * @return La fechaVisita
-	 */
-	public Timestamp getFechaVisita() 
-	{
-		return fechaVisita;
-	}
-
-	/**
-	 * @param fechaVisita - La nueva fecha de visita al bar por el bebedor
-	 */
-	public void setFechaVisita(Timestamp fechaVisita) 
-	{
-		this.fechaVisita = fechaVisita;
-	}
-
-	/**
-	 * @return El horario
-	 */
-	public String getHorario() 
-	{
-		return horario;
-	}
-
-	/**
-	 * @param horario - El nuevo horario en que se realizó la visita (DIURNO, NOCTURNO, TODOS)
-	 */
-	public void setHorario(String horario) 
-	{
-		this.horario = horario;
-	}
-
-	/** 
-	 * @return Una cadena con la información básica
-	 */
+	
 	@Override
 	public String toString() 
 	{
-		return "Visitan [idBebedor=" + idBebedor + ", idBar=" + idBar + ", fechaVisita=" + fechaVisita + ", horario="
-				+ horario + "]";
+		return "Visitan [idReserva=" + idReserva + ", monto=" + monto + "]";
 	}
 }

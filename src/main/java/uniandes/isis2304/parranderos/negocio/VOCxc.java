@@ -23,7 +23,7 @@ import java.sql.Timestamp;
  * 
  * @author Germán Bravo
  */
-public interface VOVisitan 
+public interface VOCxc
 {
 	/* ****************************************************************
 	 * 			Métodos
@@ -31,23 +31,14 @@ public interface VOVisitan
 	/**
 	 * @return El idBebedor
 	 */
-	public long getIdBebedor();
+	public long getidReserva();
 
 	/**
 	 * @return El idBar
 	 */
-	public long getIdBar();
+	public double getMonto();
 
-	/**
-	 * @return La fechaVisita
-	 */
-	public Timestamp getFechaVisita();
-
-	/**
-	 * @return El horario
-	 */
-	public String getHorario();
-
+	
 	/** 
 	 * @return Una cadena con la información básica
 	 */

@@ -159,7 +159,7 @@ class SQLBebedor
         String sql = "SELECT bar.id, bar.nombre, bar.ciudad, bar.presupuesto, bar.cantsedes, vis.fechavisita, vis.horario";
         sql += " FROM ";
         sql += pp.darTablaBebedor () + " bdor, ";
-        sql += pp.darTablaVisitan () + " vis, ";
+        sql += pp.darTablaCxc () + " vis, ";
         sql += pp.darTablaOperador () + " bar ";
        	sql	+= " WHERE ";
        	sql += "bdor.id = ?";
@@ -184,7 +184,7 @@ class SQLBebedor
         String sql = "SELECT beb.id, beb.nombre, beb.idtipobebida, beb.gradoalcohol, tb.nombre";
         sql += " FROM ";
         sql += pp.darTablaBebedor () + " bdor, ";
-        sql += pp.darTablaGustan () + " g, ";
+        sql += pp.darTablaCxc () + " g, ";
         sql += pp.darTablaBebida () + " beb, ";
         sql += pp.darTablaTipoBebida () + " tb ";
        	sql	+= " WHERE ";
@@ -209,7 +209,7 @@ class SQLBebedor
 	{
 	    String sql = "SELECT id, nombre, ciudad, presupuesto, count (idbebedor) as numVisitas";
 	    sql += " FROM " + pp.darTablaBebedor ();
-	    sql += " LEFT OUTER JOIN " + pp.darTablaVisitan () + " ON id = idbebedor";
+	    sql += " LEFT OUTER JOIN " + pp.darTablaCxc () + " ON id = idbebedor";
 	    sql	+= " GROUP BY id, nombre, ciudad, presupuesto";
 	    sql	+= " ORDER BY numVisitas";
 		
@@ -228,7 +228,7 @@ class SQLBebedor
 	{
         String sql1 = "SELECT UNIQUE ID";
         sql1 += " FROM " + pp.darTablaBebedor ();
-        sql1 += " INNER JOIN " + pp.darTablaVisitan () + " ON id = idbebedor";
+        sql1 += " INNER JOIN " + pp.darTablaCxc () + " ON id = idbebedor";
        	sql1	+= " WHERE ciudad = ?";
        	
        	String sql = "SELECT count (*) FROM (" + sql1 + ")";
@@ -264,7 +264,7 @@ class SQLBebedor
 	 */
 	public long [] eliminarBebedorYVisitas_v1 (PersistenceManager pm, long idBebedor) 
 	{
-      Query q1 = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaVisitan () + " WHERE idBebedor = ?");
+      Query q1 = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE idBebedor = ?");
       q1.setParameters(idBebedor);
       Query q2 = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBebedor () + " WHERE id = ?");
       q2.setParameters(idBebedor);
@@ -290,7 +290,7 @@ class SQLBebedor
 	{
 		// Selecciona las parejas [idBebedor, idBar] únicas de la tabla VISITAN
 		String sql0 = "SELECT DISTINCT idbebedor, idBar";
-		sql0 += " FROM " + pp.darTablaVisitan ();
+		sql0 += " FROM " + pp.darTablaCxc ();
 		
 		// Agrupa las parejas anteriores por idBebedor y cuenta cuántos bares visita cada bebedor
 		String sql1 = "SELECT idbebedor, count (*) as numbares";
@@ -317,7 +317,7 @@ class SQLBebedor
 	public List<Object> darBebedoresYNumVisitasRealizadas_v2 (PersistenceManager pm)
 	{		
 		String sql1 = "SELECT idbebedor, count (*) as numVisitas";
-		sql1 += " FROM " + pp.darTablaVisitan ();
+		sql1 += " FROM " + pp.darTablaCxc ();
 		sql1 += " GROUP BY idBebedor";
 		
         String sql = "SELECT id, nombre, ciudad, presupuesto, NVL (numVisitas, 0)";

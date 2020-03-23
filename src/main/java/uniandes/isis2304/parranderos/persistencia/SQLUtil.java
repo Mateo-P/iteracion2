@@ -79,7 +79,7 @@ class SQLUtil
 	{
         Query qGustan = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaGustan ());          
         Query qSirven = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaReserva ());
-        Query qVisitan = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaVisitan ());
+        Query qVisitan = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc ());
         Query qBebida = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBebida ());
         Query qTipoBebida = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaTipoBebida ());
         Query qBebedor = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBebedor ());
