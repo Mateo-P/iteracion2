@@ -103,24 +103,28 @@ class SQLReserva
 		Timestamp fechafin = reserva.getFechaFin();
 		Timestamp fechainicio = reserva.getFechaInicio();
 		int margenDias = 7*24*60*60*1000;
+		double penalizacion=0;
+		if(fechafin.getTime()-fechainicio.getTime()<7*24*60*60*1000){
+			margenDias=3*24*60*60*1000;
+		}
 		int diaActual= (int) System.currentTimeMillis();
-
-		if(diaActual<fechainicio.getTime()-margenDias)
-		{
-			//10%
+		if(diaActual<fechainicio.getTime()-margenDias){
+			penalizacion=0.1;
 		}
-
-		if(fechainicio.getTime()-margenDias<diaActual && diaActual< fechainicio.getTime())
-		{
-			//30%
+		if(fechainicio.getTime()-margenDias<diaActual && diaActual< fechainicio.getTime()){
+			penalizacion=0.3;
 		}	
-		if(fechainicio.getTime()<diaActual&& diaActual< fechafin.getTime())
-		{
-			Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaReserva () + " WHERE ID_RESERVA = ? AND ID_INMUEBLE = ?");
-			q.setParameters(idReserva, idInmueble);
-			return (long) q.executeUnique();    
+		if(fechainicio.getTime()<diaActual&& diaActual< fechafin.getTime()){
+			penalizacion=0.5;	   
 		}
-		return 0;
+		//UPDATE CXC SET MONTO=MONTO*0.1 WHERE ID_RESERVA=2234567898;
+		Query q2=pm.newQuery(SQL,"UPDATE "+pp.darTablaCxc()+ " SET MONTO=MONTO*"+penalizacion+" WHERE ID_RESERVA=?");
+		q2.setParameters(idReserva);
+		q2.executeUnique();
+		Timestamp fechahoy = new Timestamp(System.currentTimeMillis());
+		Query q = pm.newQuery(SQL, "UPDATE " + pp.darTablaReserva () + "SET FECHA_CANCELACION=? , CANCELADO=? WHERE ID_RESERVA = ?");
+		q.setParameters(fechahoy,'Y',idReserva);
+		return (long) q.executeUnique(); 
 	}
 
 	/**
