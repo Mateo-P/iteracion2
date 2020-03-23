@@ -36,7 +36,6 @@ import uniandes.isis2304.parranderos.negocio.Reserva;
 import uniandes.isis2304.parranderos.negocio.Bebedor;
 import uniandes.isis2304.parranderos.negocio.Bebida;
 import uniandes.isis2304.parranderos.negocio.Gustan;
-import uniandes.isis2304.parranderos.negocio.Sirven;
 import uniandes.isis2304.parranderos.negocio.TipoBebida;
 import uniandes.isis2304.parranderos.negocio.Visitan;
 
@@ -1231,30 +1230,30 @@ public class PersistenciaParranderos
  
  
 	/* ****************************************************************
-	 * 			Métodos para manejar la relación SIRVEN
+	 * 			Métodos para manejar la relación RESERVA
 	 *****************************************************************/
 	
 	/**
-	 * Método que inserta, de manera transaccional, una tupla en la tabla SIRVEN
+	 * Método que inserta, de manera transaccional, una tupla en la tabla RESERVA
 	 * Adiciona entradas al log de la aplicación
-	 * @param idBar - El identificador del bar - Debe haber un bar con ese identificador
-	 * @param idBebida - El identificador de la bebida - Debe haber una bebida con ese identificador
-	 * @param horario - El hororio en que se sirve (DIURNO, NOCTURNO, TODOS)
-	 * @return Un objeto SIRVEN con la información dada. Null si ocurre alguna Excepción
+	 * @param idReserva - El identificador de la RESERVA - Debe haber un RESERVA con ese identificador
+	 * @param idInmueble - El identificador dEl INMUEBLE - Debe haber una INMUEBLE con ese identificador
+	 
+	 * @return Un objeto RESERVA con la información dada. Null si ocurre alguna Excepción
 	 */
-	public Reserva adicionarReserva (long idBar, long idBebida, String horario) 
+	public Reserva adicionarReserva (long idReserva,Timestamp fechaInicioReserva,Timestamp fechaFinReserva,Timestamp fechaGeneracionReserva,int numeroPersonas,long idInmueble) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
         try
         {
             tx.begin();
-            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(), idBar, idBebida, horario);
+            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(),  idReserva, fechaInicioReserva, fechaFinReserva, fechaGeneracionReserva, numeroPersonas, idInmueble);
     		tx.commit();
 
-            log.trace ("Inserción de gustan: [" + idBar + ", " + idBebida + "]. " + tuplasInsertadas + " tuplas insertadas");
+            log.trace ("Inserción de Reserva: [" + idReserva + ", " + idInmueble + "]. " + tuplasInsertadas + " tuplas insertadas");
 
-            return new Reserva (idBar, idBebida, horario);
+            return new Reserva ( idReserva, idInmueble, fechaInicioReserva, fechaFinReserva, fechaGeneracionReserva, numeroPersonas);
         }
         catch (Exception e)
         {
@@ -1273,19 +1272,19 @@ public class PersistenciaParranderos
 	}
  
 	/**
-	 * Método que elimina, de manera transaccional, una tupla en la tabla SIRVEN, dados los identificadores de bar y bebida
-	 * @param idBar - El identificador del bar
-	 * @param idBebida - El identificador de la bebida
+	 * Método que elimina, de manera transaccional, una tupla en la tabla RESERVA, dados los identificadores de RESERVA e Inmueble
+	 * @param idReserva - El identificador de la Reserva
+	 * @param idInmueble - El identificador del Inmueble
 	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
 	 */
-	public long eliminarSirven (long idBar, long idBebida) 
+	public long eliminarReserva (long idReserva, long idInmueble) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 	        Transaction tx=pm.currentTransaction();
 	        try
 	        {
 	            tx.begin();
-	            long resp = sqlReserva.eliminarReserva (pm, idBar, idBebida);	            
+	            long resp = sqlReserva.eliminarReserva (pm, idReserva, idInmueble);	            
 	            tx.commit();
 
 	            return resp;
@@ -1307,33 +1306,15 @@ public class PersistenciaParranderos
 	}
  
 	/**
-	 * Método que consulta todas las tuplas en la tabla SIRVEN
-	 * @return La lista de objetos SIRVEN, construidos con base en las tuplas de la tabla SIRVEN
+	 * Método que consulta todas las tuplas en la tabla RESERVA
+	 * @return La lista de objetos RESERVA, construidos con base en las tuplas de la tabla RESERVA
 	 */
-	public List<Reserva> darSirven ()
+	public List<Reserva> darReservas  ()
 	{
-		return sqlReserva.darSirven (pmf.getPersistenceManager());
+		return sqlReserva.darReservas (pmf.getPersistenceManager());
 	}
  
-	/**
-	 * Método que encuentra el identificador de los bares y cuántas bebidas sirve cada uno de ellos. Si una bebida se sirve en diferentes horarios,
-	 * cuenta múltiples veces
-	 * @return Una lista de arreglos de 2 números. El primero corresponde al identificador del bar, el segundo corresponde al nombre del tipo de bebida
-	 */
-	public List<long []> darBaresYCantidadBebidasSirven ()
-	{
-		List<long []> resp = new LinkedList<long []> ();
-		List<Object []> tuplas =  sqlReserva.darBaresYCantidadBebidasSirven (pmf.getPersistenceManager());
-        for ( Object [] tupla : tuplas)
-        {
-			long [] datosResp = new long [2];
-			
-			datosResp [0] = ((BigDecimal) tupla [0]).longValue ();
-			datosResp [1] = ((BigDecimal) tupla [1]).longValue ();
-			resp.add (datosResp);
-        }
-        return resp;
-	}
+	
  
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación VISITAN

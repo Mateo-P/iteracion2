@@ -34,7 +34,8 @@ public class Reserva implements VOReserva
 	 * El identificador del bar que sirve la bebida
 	 */
 	private long idReserva;
-	
+	private char cancelado;
+	private long idCliente;
 	/**
 	 * El identificador de la bebida que es servida en el bar
 	 */
@@ -54,6 +55,7 @@ public class Reserva implements VOReserva
 	 * El horario en que sirve la bebida en el bar (DIURNO, NOCTURNO, TODOS)
 	 */
 	private Timestamp fechaGeneracion;
+	private Timestamp fechaCancelacion;
 	private int numeroPersonas;
 	
 	/* ****************************************************************
@@ -66,9 +68,12 @@ public class Reserva implements VOReserva
 	{
 		this.idReserva = 0;
 		this.idInmueble = 0;
+		this.idCliente=0;
+		this.cancelado='N';
 		this.fechaInicio = new Timestamp (0);
 		this.fechaFin = new Timestamp (0);
 		this.fechaGeneracion = new Timestamp (0);
+		this.fechaCancelacion = new Timestamp(0);
 		this.numeroPersonas=0;
 	}
 

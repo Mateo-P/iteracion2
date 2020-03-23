@@ -52,7 +52,7 @@ import uniandes.isis2304.parranderos.negocio.VOOperador;
 import uniandes.isis2304.parranderos.negocio.VOBebedor;
 import uniandes.isis2304.parranderos.negocio.VOBebida;
 import uniandes.isis2304.parranderos.negocio.VOGustan;
-import uniandes.isis2304.parranderos.negocio.VOSirven;
+import uniandes.isis2304.parranderos.negocio.VOReserva;
 import uniandes.isis2304.parranderos.negocio.VOTipoBebida;
 import uniandes.isis2304.parranderos.negocio.VOVisitan;
 

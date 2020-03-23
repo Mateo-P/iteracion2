@@ -557,19 +557,7 @@ public class Parranderos
         return resp;
 	}
 	
-	/**
-	 * Encuentra los bares que conoce la aplicación y el número de bebidas que sirve cada uno, 
-	 * para aquellos bares que sirven por lo menos una bebida
-	 * Adiciona entradas al log de la aplicación
-	 * @return Una lista de parejas [IdBar, numBebidas]
-	 */
-	public List<long []> darBaresYCantidadBebidasSirven ()
-	{
-        log.info ("Listando Bares y cuántos bebidas sirven");
-        List<long []> tuplas = pp.darBaresYCantidadBebidasSirven ();
-        log.info ("Listando Bares y cuántos bebidas sirven: Listo!");
-        return tuplas;
-	}
+	
 	
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación GUSTAN
@@ -639,21 +627,7 @@ public class Parranderos
 	 * 			Métodos para manejar la relación SIRVEN
 	 *****************************************************************/
 
-	/**
-	 * Adiciona de manera persistente el hecho que una bebida es servida por un bar
-	 * Adiciona entradas al log de la aplicación
-	 * @param idBar - El identificador del bar
-	 * @param idBebida - El identificador de la bebida
-	 * @param horario - El horario en el que se sirve la bebida (DIURNO, NOCTURNO, TODOS)
-	 * @return Un objeto Sirven con los valores dados
-	 */
-	public Reserva adicionarReserva (long idBar, long idBebida, String horario)
-	{
-        log.info ("Adicionando sirven [" + idBar + ", " + idBebida + "]");
-        Reserva resp = pp.adicionarReserva (idBar, idBebida, horario);
-        log.info ("Adicionando sirven: " + resp + " tuplas insertadas");
-        return resp;
-	}
+	
 	
 	/**
 	 * Elimina de manera persistente el hecho que una bebida es servida por un bar
@@ -664,8 +638,8 @@ public class Parranderos
 	 */
 	public long eliminarReserva (long idBar, long idBebida)
 	{
-        log.info ("Eliminando sirven");
-        long resp = pp.eliminarSirven (idBar, idBebida);
+        log.info ("Eliminando Reservas");
+        long resp = pp.eliminarReserva (idBar, idBebida);
         log.info ("Eliminando sirven: " + resp + "tuplas eliminadas");
         return resp;
 	}
@@ -675,11 +649,11 @@ public class Parranderos
 	 * Adiciona entradas al log de la aplicación
 	 * @return Una lista de objetos SIRVEN con todos los GUSTAN que conoce la aplicación, llenos con su información básica
 	 */
-	public List<Reserva> darSirven ()
+	public List<Reserva> darReservas ()
 	{
-        log.info ("Listando Sirven");
-        List<Reserva> sirven = pp.darSirven ();	
-        log.info ("Listando Sirven: " + sirven.size() + " sirven existentes");
+        log.info ("Listando Reservas");
+        List<Reserva> sirven = pp.darReservas ();	
+        log.info ("Listando Reservas: " + sirven.size() + " Reservas existentes");
         return sirven;
 	}
 
@@ -690,13 +664,13 @@ public class Parranderos
 	 */
 	public List<VOReserva> darVOReserva ()
 	{
-		log.info ("Generando los VO de Sirven");
+		log.info ("Generando los VO de Reserva");
 		List<VOReserva> voGustan = new LinkedList<VOReserva> ();
-		for (VOReserva sirven: pp.darSirven ())
+		for (VOReserva reserva: pp.darReservas ())
 		{
-			voGustan.add (sirven);
+			voGustan.add (reserva);
 		}
-		log.info ("Generando los VO de Sirven: " + voGustan.size () + " Sirven existentes");
+		log.info ("Generando los VO de Reserva: " + voGustan.size () + " Reservas existentes");
 		return voGustan;
 	}
 

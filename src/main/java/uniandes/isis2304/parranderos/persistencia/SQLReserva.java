@@ -119,13 +119,42 @@ class SQLReserva
 	 * @param pm - El manejador de persistencia
 	 * @return Una lista de objetos SIRVEN
 	 */
-	public List<Reserva> darSirven (PersistenceManager pm)
+	public List<Reserva> darReservas (PersistenceManager pm)
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva ());
 		q.setResultClass(Reserva.class);
 		return (List<Reserva>) q.execute();
 	}
 
+	/**
+	 * Crea y ejecuta la sentencia SQL para encontrar la información de UNA RESERVA de la 
+	 * base de datos de Parranderos, por su identificador
+	 * @param pm - El manejador de persistencia
+	 * @param idReserva - El identificador de la reserva
+	 * @return El objeto RESERVA que tiene el identificador dado
+	 */
+	public Reserva buscarReservaPorId (PersistenceManager pm, long idReserva) 
+	{
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva () + " WHERE RESERVA.ID_RESERVA = ?");
+		q.setResultClass(Reserva.class);
+		q.setParameters(idReserva);
+		return (Reserva) q.executeUnique();
+	}
+	
+	/**
+	 * Crea y ejecuta la sentencia SQL para encontrar la información de UNA RESERVA de la 
+	 * base de datos de Parranderos, por su identificador
+	 * @param pm - El manejador de persistencia
+	 * @param idReserva - El identificador de la reserva
+	 * @return El objeto RESERVA que tiene el identificador dado
+	 */
+	public Reserva ValidarReserva (PersistenceManager pm, Timestamp fechaInicio,Timestamp fechafin, long idInmueble) 
+	{
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva () + "WHERE RESERVA.ID_INMUEBLE = ? AND RESERVA.FECHA_INICIO_RESERVA=? AND RESERVA.FECHA_FINAL_RESERVA=?");
+		q.setResultClass(Reserva.class);
+		q.setParameters(idInmueble,fechaInicio,fechafin);
+		return (Reserva) q.executeUnique();
+	}
 	/**
 	 * Crea y ejecuta la sentencia SQL para encontrar el identificador y el número de bebidas que sirven los bares de la 
 	 * base de datos de Parranderos
