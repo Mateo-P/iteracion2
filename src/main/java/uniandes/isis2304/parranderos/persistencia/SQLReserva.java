@@ -61,7 +61,7 @@ class SQLReserva
 	{
 		this.pp = pp;
 	}
-	
+
 	/**
 	 * Crea y ejecuta la sentencia SQL para adicionar una RESERVA a la base de datos de Alohandes
 	 * @param pm - El manejador de persistencia
@@ -72,9 +72,9 @@ class SQLReserva
 	 */
 	public long adicionarReserva (PersistenceManager pm, long idReserva,Timestamp fechaInicioReserva,Timestamp fechaFinReserva,Timestamp fechaGeneracionReserva,int numeroPersonas,long idInmueble) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaReserva () + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,NUMERO_PERSONAS,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?)");
-        q.setParameters(idReserva, fechaInicioReserva, fechaFinReserva,fechaGeneracionReserva,numeroPersonas,idInmueble);
-        return (long)q.executeUnique();            
+		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaReserva () + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,NUMERO_PERSONAS,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?)");
+		q.setParameters(idReserva, fechaInicioReserva, fechaFinReserva,fechaGeneracionReserva,numeroPersonas,idInmueble);
+		return (long)q.executeUnique();            
 	}
 
 	/**
@@ -90,14 +90,25 @@ class SQLReserva
 		q1.setResultClass(TipoBebida.class);
 		q1.setParameters(idReserva);
 		Reserva reserva=  (Reserva) q1.executeUnique();
-		Timestamp fecha = reserva.getFechaGeneracion();
+		Timestamp fechafin = reserva.getFechaFin();
 		Timestamp fechainicio = reserva.getFechaInicio();
-		Timestamp hola = fecha;
-		if(true)
+		int margenDias = 7*24*60*60*1000;
+		int diaActual= (int) System.currentTimeMillis();
+
+		if(diaActual<fechainicio.getTime()-margenDias)
 		{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaReserva () + " WHERE ID_RESERVA = ? AND ID_INMUEBLE = ?");
-        q.setParameters(idReserva, idInmueble);
-        return (long) q.executeUnique();    
+			//10%
+		}
+
+		if(fechainicio.getTime()-margenDias<diaActual && diaActual< fechainicio.getTime())
+		{
+			//30%
+		}	
+		if(fechainicio.getTime()<diaActual&& diaActual< fechafin.getTime())
+		{
+			Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaReserva () + " WHERE ID_RESERVA = ? AND ID_INMUEBLE = ?");
+			q.setParameters(idReserva, idInmueble);
+			return (long) q.executeUnique();    
 		}
 		return 0;
 	}
@@ -114,7 +125,7 @@ class SQLReserva
 		q.setResultClass(Reserva.class);
 		return (List<Reserva>) q.execute();
 	}
- 
+
 	/**
 	 * Crea y ejecuta la sentencia SQL para encontrar el identificador y el número de bebidas que sirven los bares de la 
 	 * base de datos de Parranderos
@@ -124,9 +135,9 @@ class SQLReserva
 	 */
 	public List<Object []> darBaresYCantidadBebidasSirven (PersistenceManager pm)
 	{
-        String sql = "SELECT idBar, count (*) as numBebidas";
-        sql += " FROM " + pp.darTablaReserva ();
-       	sql	+= " GROUP BY idBar";
+		String sql = "SELECT idBar, count (*) as numBebidas";
+		sql += " FROM " + pp.darTablaReserva ();
+		sql	+= " GROUP BY idBar";
 		Query q = pm.newQuery(SQL, sql);
 		return q.executeList();
 	}
