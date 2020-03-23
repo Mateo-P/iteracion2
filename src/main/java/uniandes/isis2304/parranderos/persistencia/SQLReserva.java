@@ -70,11 +70,21 @@ class SQLReserva
 	 * @param horario - El horario en que el bar sirve la bebida (DIURNO, NOCTURNO, TDOOS)
 	 * @return EL número de tuplas insertadas
 	 */
-	public long adicionarReserva (PersistenceManager pm, long idReserva,Timestamp fechaInicioReserva,Timestamp fechaFinReserva,Timestamp fechaGeneracionReserva,int numeroPersonas,long idInmueble) 
+	public long adicionarReserva (PersistenceManager pm,long idReserva, long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas) 
 	{
-		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaReserva () + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,NUMERO_PERSONAS,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?)");
-		q.setParameters(idReserva, fechaInicioReserva, fechaFinReserva,fechaGeneracionReserva,numeroPersonas,idInmueble);
-		return (long)q.executeUnique();            
+		long retorno =0;
+		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaReserva () + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,FECHA_CANCELACION,CANCELADO,NUMERO_PERSONAS,ID_CLIENTE,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		q.setParameters( idReserva,fechaInicio,fechaFin,fechaGeneracion,fechaCancelacion, cancelado,numeroPersonas , idCliente, idInmueble);
+		retorno= (long)q.executeUnique();   
+		double monto =0;
+		Query q1 = pm.newQuery(SQL,"SELECT INMUEBLE.COSTO_NOCHE FROM "+pp.darTablaInmueble()+" WHERE INMUEBLE.ID_INMUEBLE=?");
+		q1.setParameters(idInmueble);
+		monto = (double)q1.execute();
+		
+		Query q2 = pm.newQuery(SQL, "INSERT INTO "+ pp.darTablaCxc() + " (ID_RESERVA,MONTO) VALUES (?,?)");
+		q2.setParameters(idReserva,monto);
+		q2.execute();
+		return retorno;
 	}
 
 	/**
@@ -154,21 +164,6 @@ class SQLReserva
 		q.setResultClass(Reserva.class);
 		q.setParameters(idInmueble,fechaInicio,fechafin);
 		return (Reserva) q.executeUnique();
-	}
-	/**
-	 * Crea y ejecuta la sentencia SQL para encontrar el identificador y el número de bebidas que sirven los bares de la 
-	 * base de datos de Parranderos
-	 * @param pm - El manejador de persistencia
-	 * @return Una lista de parejas de objetos, el primer elemento de cada pareja representa el identificador de un bar,
-	 * 	el segundo elemento representa el número de bebidas que sirve (Una bebida que se sirve en dos horarios cuenta dos veces)
-	 */
-	public List<Object []> darBaresYCantidadBebidasSirven (PersistenceManager pm)
-	{
-		String sql = "SELECT idBar, count (*) as numBebidas";
-		sql += " FROM " + pp.darTablaReserva ();
-		sql	+= " GROUP BY idBar";
-		Query q = pm.newQuery(SQL, sql);
-		return q.executeList();
 	}
 
 }

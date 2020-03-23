@@ -37,7 +37,7 @@ import uniandes.isis2304.parranderos.negocio.Bebedor;
 import uniandes.isis2304.parranderos.negocio.Bebida;
 import uniandes.isis2304.parranderos.negocio.Gustan;
 import uniandes.isis2304.parranderos.negocio.TipoBebida;
-import uniandes.isis2304.parranderos.negocio.Visitan;
+import uniandes.isis2304.parranderos.negocio.Cxc;
 
 /**
  * Clase para el manejador de persistencia del proyecto Parranderos
@@ -121,7 +121,7 @@ public class PersistenciaParranderos
 	/**
 	 * Atributo para el acceso a la tabla VISITAN de la base de datos
 	 */
-	private SQLVisitan sqlVisitan;
+	private SQLCxc sqlCxc;
 	
 	/* ****************************************************************
 	 * 			Métodos del MANEJADOR DE PERSISTENCIA
@@ -143,8 +143,8 @@ public class PersistenciaParranderos
 		tablas.add ("BAR");
 		tablas.add ("BEBEDOR");
 		tablas.add ("GUSTAN");
-		tablas.add ("SIRVEN");
-		tablas.add ("VISITAN");
+		tablas.add ("RESERVA");
+		tablas.add ("CXC");
 }
 
 	/**
@@ -225,7 +225,7 @@ public class PersistenciaParranderos
 		sqlBebedor = new SQLBebedor(this);
 		sqlGustan = new SQLGustan(this);
 		sqlReserva = new SQLReserva (this);
-		sqlVisitan = new SQLVisitan(this);		
+		sqlCxc = new SQLCxc(this);		
 		sqlUtil = new SQLUtil(this);
 	}
 
@@ -272,7 +272,7 @@ public class PersistenciaParranderos
 	/**
 	 * @return La cadena de caracteres con el nombre de la tabla de Gustan de parranderos
 	 */
-	public String darTablaGustan ()
+	public String darTablaInmueble ()
 	{
 		return tablas.get (5);
 	}
@@ -288,7 +288,7 @@ public class PersistenciaParranderos
 	/**
 	 * @return La cadena de caracteres con el nombre de la tabla de Visitan de parranderos
 	 */
-	public String darTablaVisitan ()
+	public String darTablaCxc ()
 	{
 		return tablas.get (7);
 	}
