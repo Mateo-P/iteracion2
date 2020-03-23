@@ -37,7 +37,7 @@ import uniandes.isis2304.parranderos.negocio.Bebedor;
 import uniandes.isis2304.parranderos.negocio.Bebida;
 import uniandes.isis2304.parranderos.negocio.Gustan;
 import uniandes.isis2304.parranderos.negocio.TipoBebida;
-import uniandes.isis2304.parranderos.negocio.Cxc;
+
 
 /**
  * Clase para el manejador de persistencia del proyecto Parranderos
@@ -142,7 +142,7 @@ public class PersistenciaParranderos
 		tablas.add ("BEBIDA");
 		tablas.add ("BAR");
 		tablas.add ("BEBEDOR");
-		tablas.add ("GUSTAN");
+		tablas.add ("INMUEBLE");
 		tablas.add ("RESERVA");
 		tablas.add ("CXC");
 }
@@ -1241,19 +1241,19 @@ public class PersistenciaParranderos
 	 
 	 * @return Un objeto RESERVA con la información dada. Null si ocurre alguna Excepción
 	 */
-	public Reserva adicionarReserva (long idReserva,Timestamp fechaInicioReserva,Timestamp fechaFinReserva,Timestamp fechaGeneracionReserva,int numeroPersonas,long idInmueble) 
+	public Reserva adicionarReserva (long idReserva, long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx=pm.currentTransaction();
         try
         {
             tx.begin();
-            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(),  idReserva, fechaInicioReserva, fechaFinReserva, fechaGeneracionReserva, numeroPersonas, idInmueble);
+            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(), idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
     		tx.commit();
 
             log.trace ("Inserción de Reserva: [" + idReserva + ", " + idInmueble + "]. " + tuplasInsertadas + " tuplas insertadas");
 
-            return new Reserva ( idReserva, idInmueble, fechaInicioReserva, fechaFinReserva, fechaGeneracionReserva, numeroPersonas);
+            return new Reserva ( idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
         }
         catch (Exception e)
         {

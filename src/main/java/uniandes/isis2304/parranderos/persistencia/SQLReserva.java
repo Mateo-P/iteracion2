@@ -79,11 +79,11 @@ class SQLReserva
 		double monto =0;
 		Query q1 = pm.newQuery(SQL,"SELECT INMUEBLE.COSTO_NOCHE FROM "+pp.darTablaInmueble()+" WHERE INMUEBLE.ID_INMUEBLE=?");
 		q1.setParameters(idInmueble);
-		monto = (double)q1.execute();
+		monto = (double)q1.executeUnique();
 		
 		Query q2 = pm.newQuery(SQL, "INSERT INTO "+ pp.darTablaCxc() + " (ID_RESERVA,MONTO) VALUES (?,?)");
 		q2.setParameters(idReserva,monto);
-		q2.execute();
+		q2.executeUnique();
 		return retorno;
 	}
 

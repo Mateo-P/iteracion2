@@ -31,7 +31,7 @@ import uniandes.isis2304.parranderos.negocio.Visitan;
  * 
  * @author Germán Bravo
  */
-class SQLVisitan 
+class SQLCxc 
 {
 	/* ****************************************************************
 	 * 			Constantes
@@ -57,7 +57,7 @@ class SQLVisitan
 	 * Constructor
 	 * @param pp - El Manejador de persistencia de la aplicación
 	 */
-	public SQLVisitan (PersistenciaParranderos pp)
+	public SQLCxc (PersistenciaParranderos pp)
 	{
 		this.pp = pp;
 	}
@@ -73,7 +73,7 @@ class SQLVisitan
 	 */
 	public long adicionarVisitan (PersistenceManager pm, long idBebedor, long idBar, Timestamp fecha, String horario) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaVisitan () + "(idbebedor, idbar, fechavisita, horario) values (?, ?, ?, ?)");
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaCxc () + "(idbebedor, idbar, fechavisita, horario) values (?, ?, ?, ?)");
         q.setParameters(idBebedor, idBar, fecha, horario);
         return (long) q.executeUnique();
 	}
@@ -85,7 +85,7 @@ class SQLVisitan
 	 */
 	public long eliminarVisitan (PersistenceManager pm) 
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaVisitan ());
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc ());
         return (long) q.executeUnique();
 	}
 
@@ -98,7 +98,7 @@ class SQLVisitan
 	 */
 	public long eliminarVisitan (PersistenceManager pm, long idBebedor, long idBar) 
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaVisitan () + " WHERE idbebedor = ? AND idbar = ?");
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE idbebedor = ? AND idbar = ?");
         q.setParameters(idBebedor, idBar);
         return (long) q.executeUnique();
 	}
@@ -111,7 +111,7 @@ class SQLVisitan
 	 */
 	public long eliminarVisitanPorIdBebedor (PersistenceManager pm, long idBebedor) 
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaVisitan () + " WHERE idbebedor = ?");
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE idbebedor = ?");
         q.setParameters(idBebedor);
         return (long) q.executeUnique();
 	}
@@ -124,7 +124,7 @@ class SQLVisitan
 	 */
 	public long eliminarVisitanPorIdBar (PersistenceManager pm, long idBar) 
 	{
-        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaVisitan () + " WHERE idBar = ?");
+        Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCxc () + " WHERE idBar = ?");
         q.setParameters(idBar);
         return (long) q.executeUnique();
 	}
@@ -137,7 +137,7 @@ class SQLVisitan
 	 */
 	public List<Visitan> darVisitan (PersistenceManager pm)
 	{
-		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaVisitan ());
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaCxc ());
 		q.setResultClass(Visitan.class);
 		return (List<Visitan>) q.execute();
 	}
@@ -154,7 +154,7 @@ class SQLVisitan
 	 */
 	private List<Visitan> darVisitan_V2 (PersistenceManager pm)
 	{
-		Query q = pm.newQuery(SQL, "SELECT idBebedor, idBar, fechaVisita, horario FROM " + pp.darTablaVisitan ());
+		Query q = pm.newQuery(SQL, "SELECT idBebedor, idBar, fechaVisita, horario FROM " + pp.darTablaCxc ());
 		List<Visitan> resp = new LinkedList<>();
 		List results = q.executeList();
 		for (Object obj : results)
