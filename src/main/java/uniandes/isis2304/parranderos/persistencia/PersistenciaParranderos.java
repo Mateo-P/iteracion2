@@ -84,15 +84,7 @@ public class PersistenciaParranderos
 	 */
 	private SQLUtil sqlUtil;
 	
-	/**
-	 * Atributo para el acceso a la tabla TIPOBEBIDA de la base de datos
-	 */
-	private SQLTipoBebida sqlTipoBebida;
-	
-	/**
-	 * Atributo para el acceso a la tabla BEBIDA de la base de datos
-	 */
-	private SQLBebida sqlBebida;
+
 	
 	/**
 	 * Atributo para el acceso a la tabla BAR de la base de datos
@@ -124,13 +116,19 @@ public class PersistenciaParranderos
 		// Define los nombres por defecto de las tablas de la base de datos
 		tablas = new LinkedList<String> ();
 		tablas.add ("Parranderos_sequence");
-		tablas.add ("TIPOBEBIDA");
-		tablas.add ("BEBIDA");
 		tablas.add ("OPERADOR");
-		tablas.add ("BEBEDOR");
-		tablas.add ("INMUEBLE");
+		tablas.add ("CLIENTE");
+		tablas.add ("PAGO");
 		tablas.add ("RESERVA");
 		tablas.add ("CXC");
+		tablas.add ("INMUEBLE");
+		tablas.add ("HABITACION_PERSONA_NATURAL");
+		tablas.add ("HABITACION_HOSTEL");
+		tablas.add ("HABITACION_HOTEL");
+		tablas.add ("APARTAMENTO");
+		tablas.add ("VIVIENDA_CEDIDA");
+		tablas.add ("HABITACION_UNIVERSITARIA");
+		tablas.add ("RESTRICCION_INMUEBLE");
 }
 
 	/**
@@ -205,8 +203,7 @@ public class PersistenciaParranderos
 	 */
 	private void crearClasesSQL ()
 	{
-		sqlTipoBebida = new SQLTipoBebida(this);
-		sqlBebida = new SQLBebida(this);
+		
 		sqlOperador = new SQLOperador(this);
 
 		sqlReserva = new SQLReserva (this);
@@ -223,60 +220,104 @@ public class PersistenciaParranderos
 	}
 
 	/**
-	 * @return La cadena de caracteres con el nombre de la tabla de TipoBebida de parranderos
+	 * @return La cadena de caracteres con el nombre de la tabla de OPERADOR de parranderos
 	 */
-	public String darTablaTipoBebida ()
+	public String darTablaOperador ()
 	{
 		return tablas.get (1);
 	}
 
 	/**
-	 * @return La cadena de caracteres con el nombre de la tabla de Bebida de parranderos
+	 * @return La cadena de caracteres con el nombre de la tabla de Cliente de parranderos
 	 */
-	public String darTablaBebida ()
+	public String darTablaCliente ()
 	{
 		return tablas.get (2);
 	}
 
 	/**
-	 * @return La cadena de caracteres con el nombre de la tabla de Bar de parranderos
+	 * @return La cadena de caracteres con el nombre de la tabla de Pago de parranderos
 	 */
-	public String darTablaOperador ()
+	public String darTablaPago ()
 	{
 		return tablas.get (3);
 	}
 
 	/**
-	 * @return La cadena de caracteres con el nombre de la tabla de Bebedor de parranderos
+	 * @return La cadena de caracteres con el nombre de la tabla de Reserva de parranderos
 	 */
-	public String darTablaBebedor ()
+	public String darTablaReserva ()
 	{
 		return tablas.get (4);
 	}
 
 	/**
-	 * @return La cadena de caracteres con el nombre de la tabla de Gustan de parranderos
+	 * @return La cadena de caracteres con el nombre de la tabla de Cxc de parranderos
 	 */
-	public String darTablaInmueble ()
+	public String darTablaCxc ()
 	{
 		return tablas.get (5);
 	}
 
 	/**
-	 * @return La cadena de caracteres con el nombre de la tabla de Sirven de parranderos
+	 * @return La cadena de caracteres con el nombre de la tabla de Inmueble de parranderos
 	 */
-	public String darTablaReserva ()
+	public String darTablaInmueble ()
 	{
 		return tablas.get (6);
 	}
 
 	/**
-	 * @return La cadena de caracteres con el nombre de la tabla de Visitan de parranderos
+	 * @return La cadena de caracteres con el nombre de la tabla de Habitacion_Persona_Natural de parranderos
 	 */
-	public String darTablaCxc ()
+	public String darTablaHabitacionPersonaNatural ()
 	{
 		return tablas.get (7);
 	}
+	
+	/**
+	 * @return La cadena de caracteres con el nombre de la tabla de HABITACION_HOSTEL de parranderos
+	 */
+	public String darTablaHabitacionHostel ()
+	{
+		return tablas.get (8);
+	}
+	/**
+	 * @return La cadena de caracteres con el nombre de la tabla de HABITACION_HOTEL de parranderos
+	 */
+	public String darTablaHabitacionHotel ()
+	{
+		return tablas.get (9);
+	}
+	/**
+	 * @return La cadena de caracteres con el nombre de la tabla de APARTAMENTO de parranderos
+	 */
+	public String darTablaApartamento ()
+	{
+		return tablas.get (10);
+	}
+	/**
+	 * @return La cadena de caracteres con el nombre de la tabla de VIVIENDA_CEDIDA de parranderos
+	 */
+	public String darTablaViviendaCedida ()
+	{
+		return tablas.get (11);
+	}
+	/**
+	 * @return La cadena de caracteres con el nombre de la tabla de HABITACION_UNIVERSITARIA de parranderos
+	 */
+	public String darTablaHabitacionUniversitaria ()
+	{
+		return tablas.get (12);
+	}
+	/**
+	 * @return La cadena de caracteres con el nombre de la tabla de RESTRICCION_INMUEBLE de parranderos
+	 */
+	public String darTablaRestriccionInmueble ()
+	{
+		return tablas.get (13);
+	}
+	
 	
 	/**
 	 * Transacción para el generador de secuencia de Parranderos
@@ -304,200 +345,6 @@ public class PersistenciaParranderos
 			return je.getNestedExceptions() [0].getMessage();
 		}
 		return resp;
-	}
-
-	/* ****************************************************************
-	 * 			Métodos para manejar los TIPOS DE BEBIDA
-	 *****************************************************************/
-
-	/**
-	 * Método que inserta, de manera transaccional, una tupla en la tabla TipoBebida
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre del tipo de bebida
-	 * @return El objeto TipoBebida adicionado. null si ocurre alguna Excepción
-	 */
-	public TipoBebida adicionarTipoBebida(String nombre)
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long idTipoBebida = nextval ();
-            long tuplasInsertadas = sqlTipoBebida.adicionarTipoBebida(pm, idTipoBebida, nombre);
-            tx.commit();
-            
-            log.trace ("Inserción de tipo de bebida: " + nombre + ": " + tuplasInsertadas + " tuplas insertadas");
-            
-            return new TipoBebida (idTipoBebida, nombre);
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return null;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
-
-	/**
-	 * Método que elimina, de manera transaccional, una tupla en la tabla TipoBebida, dado el nombre del tipo de bebida
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre del tipo de bebida
-	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
-	 */
-	public long eliminarTipoBebidaPorNombre (String nombre) 
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlTipoBebida.eliminarTipoBebidaPorNombre(pm, nombre);
-            tx.commit();
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
-
-	/**
-	 * Método que elimina, de manera transaccional, una tupla en la tabla TipoBebida, dado el identificador del tipo de bebida
-	 * Adiciona entradas al log de la aplicación
-	 * @param idTipoBebida - El identificador del tipo de bebida
-	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
-	 */
-	public long eliminarTipoBebidaPorId (long idTipoBebida) 
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlTipoBebida.eliminarTipoBebidaPorId(pm, idTipoBebida);
-            tx.commit();
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
- 
-	
- 
- 
-	/**
-	 * Método que elimina, de manera transaccional, una tupla en la tabla Bebida, dado el identificador de la bebida
-	 * Adiciona entradas al log de la aplicación
-	 * @param idBebida - El identificador de la bebida
-	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
-	 */
-	public long eliminarBebidaPorId (long idBebida) 
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlBebida.eliminarBebidaPorId (pm, idBebida);
-            tx.commit();
-
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
-
-	/**
-	 * Método que consulta todas las tuplas en la tabla Bebida que tienen el nombre dado
-	 * @param nombreBebida - El nombre de la bebida
-	 * @return La lista de objetos Bebida, construidos con base en las tuplas de la tabla BEBIDA
-	 */
-	public List<Bebida> darBebidasPorNombre (String nombreBebida)
-	{
-		return sqlBebida.darBebidasPorNombre (pmf.getPersistenceManager(), nombreBebida);
-	}
- 
-	/**
-	 * Método que consulta todas las tuplas en la tabla Bebida
-	 * @return La lista de objetos Bebida, construidos con base en las tuplas de la tabla BEBIDA
-	 */
-	public List<Bebida> darBebidas ()
-	{
-		return sqlBebida.darBebidas (pmf.getPersistenceManager());
-	}
- 
-	/**
-	 * Método que elimina, de manera transaccional, las bebidas que no son referenciadas en la tabla SIRVEN de Parranderos
-	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
-	 */
-	public long eliminarBebidasNoServidas ()
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlBebida.eliminarBebidasNoServidas(pm);
-            tx.commit();
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
 	}
 	/* ****************************************************************
 	 * 			Métodos para manejar los OPERADOR

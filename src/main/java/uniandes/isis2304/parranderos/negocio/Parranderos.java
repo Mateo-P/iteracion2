@@ -77,38 +77,7 @@ public class Parranderos
 	
 	
 
-	/* ****************************************************************
-	 * 			Métodos para manejar las BEBIDAS
-	 *****************************************************************/
 	
-	
-	/**
-	 * Elimina una bebida por su nombre
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre de la bebida a eliminar
-	 * @return El número de tuplas eliminadas
-	 */
-	public long eliminarBebidaPorNombre (String nombre)
-	{
-        log.info ("Eliminando bebida por nombre: " + nombre);
-        long resp = pp.eliminarBebidaPorNombre (nombre);
-        log.info ("Eliminando bebida por nombre: " + resp + " tuplas eliminadas");
-        return resp;
-	}
-	
-	/**
-	 * Elimina una bebida por su identificador
-	 * Adiciona entradas al log de la aplicación
-	 * @param idBebida - El identificador de la bebida a eliminar
-	 * @return El número de tuplas eliminadas (1 o 0)
-	 */
-	public long eliminarBebidaPorId (long idBebida)
-	{
-        log.info ("Eliminando bebida por id: " + idBebida);
-        long resp = pp.eliminarBebidaPorId (idBebida);
-        log.info ("Eliminando bebida por id: " + resp + " tuplas eliminadas");
-        return resp;
-	}
 	
 	
 

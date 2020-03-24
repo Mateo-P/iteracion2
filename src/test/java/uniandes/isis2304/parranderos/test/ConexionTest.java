@@ -29,7 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import uniandes.isis2304.parranderos.negocio.Parranderos;
-import uniandes.isis2304.parranderos.negocio.VOTipoBebida;
+
 
 /**
  * Clase con métodos de prueba de conexión a la base de datos
@@ -190,7 +190,7 @@ public class ConexionTest
 		// Ahora si se puede probar si la tabla existe o no...
 		try
 		{
-			parranderos.darTiposBebida ();
+			parranderos.darBares();
 			fail ("Debería fallar. La tabla consultada no existe en la BD");
 		}
 		catch (Exception e)
