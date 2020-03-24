@@ -47,7 +47,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 import uniandes.isis2304.parranderos.negocio.Parranderos;
-import uniandes.isis2304.parranderos.negocio.VOTipoBebida;
+import uniandes.isis2304.parranderos.negocio.VOReserva;
+
 
 /**
  * Clase principal de la interfaz
@@ -243,20 +244,21 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
      * Adiciona un tipo de bebida con la información dada por el usuario
      * Se crea una nueva tupla de tipoBebida en la base de datos, si un tipo de bebida con ese nombre no existía
      */
-    public void adicionarTipoBebida( )
+    public void crearReserva( )
     {
     	try 
     	{
-    		String nombreTipo = JOptionPane.showInputDialog (this, "Nombre del tipo de bedida?", "Adicionar tipo de bebida", JOptionPane.QUESTION_MESSAGE);
-    		if (nombreTipo != null)
+    		String info = JOptionPane.showInputDialog (this, "Nombre del tipo de bedida?", "Adicionar tipo de bebida", JOptionPane.QUESTION_MESSAGE);
+    		if (info != null)
     		{
-        		VOTipoBebida tb = parranderos.adicionarTipoBebida (nombreTipo);
+    			String datos[]= info.split(";");
+        		VOReserva tb = parranderos.adicionarReserva(idReserva, idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
         		if (tb == null)
         		{
         			throw new Exception ("No se pudo crear un tipo de bebida con nombre: " + nombreTipo);
         		}
-        		String resultado = "En adicionarTipoBebida\n\n";
-        		resultado += "Tipo de bebida adicionado exitosamente: " + tb;
+        		String resultado = "En crearReserva\n\n";
+        		resultado += " reserva creada exitosamente: " + tb;
     			resultado += "\n Operación terminada";
     			panelDatos.actualizarInterfaz(resultado);
     		}
@@ -276,14 +278,14 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
     /**
      * Consulta en la base de datos los tipos de bebida existentes y los muestra en el panel de datos de la aplicación
      */
-    public void listarTipoBebida( )
+    public void listarReservas( )
     {
     	try 
     	{
-			List <VOTipoBebida> lista = parranderos.darVOTiposBebida();
+			List <VOReserva> lista = parranderos.darVOReserva();
 
 			String resultado = "En listarTipoBebida";
-			resultado +=  "\n" + listarTiposBebida (lista);
+			resultado +=  "\n" + listarReservas (lista);
 			panelDatos.actualizarInterfaz(resultado);
 			resultado += "\n Operación terminada";
 		} 
@@ -299,18 +301,18 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
      * Borra de la base de datos el tipo de bebida con el identificador dado po el usuario
      * Cuando dicho tipo de bebida no existe, se indica que se borraron 0 registros de la base de datos
      */
-    public void eliminarTipoBebidaPorId( )
+    public void eliminarReservaPorId( )
     {
     	try 
     	{
-    		String idTipoStr = JOptionPane.showInputDialog (this, "Id del tipo de bedida?", "Borrar tipo de bebida por Id", JOptionPane.QUESTION_MESSAGE);
+    		String idTipoStr = JOptionPane.showInputDialog (this, "Id de la reser?", "Borrar Reserva por Id", JOptionPane.QUESTION_MESSAGE);
     		if (idTipoStr != null)
     		{
     			long idTipo = Long.valueOf (idTipoStr);
-    			long tbEliminados = parranderos.eliminarTipoBebidaPorId (idTipo);
+    			long tbEliminados = parranderos.eliminarReserva(idTipo);
 
-    			String resultado = "En eliminar TipoBebida\n\n";
-    			resultado += tbEliminados + " Tipos de bebida eliminados\n";
+    			String resultado = "En eliminar reserva\n\n";
+    			resultado += tbEliminados + " Reservas eliminadas\n";
     			resultado += "\n Operación terminada";
     			panelDatos.actualizarInterfaz(resultado);
     		}
@@ -328,24 +330,25 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
     }
 
     /**
-     * Busca el tipo de bebida con el nombre indicado por el usuario y lo muestra en el panel de datos
+     * Busca la reserva con el id indicado por el usuario y lo muestra en el panel de datos
      */
-    public void buscarTipoBebidaPorNombre( )
+    public void buscarReservaPorId( )
     {
     	try 
     	{
-    		String nombreTb = JOptionPane.showInputDialog (this, "Nombre del tipo de bedida?", "Buscar tipo de bebida por nombre", JOptionPane.QUESTION_MESSAGE);
-    		if (nombreTb != null)
+    		String idReserva = JOptionPane.showInputDialog (this, "Id de la reserva?", "Buscar Reserva por Id", JOptionPane.QUESTION_MESSAGE);
+    		if (idReserva != null)
     		{
-    			VOTipoBebida tipoBebida = parranderos.darTipoBebidaPorNombre (nombreTb);
-    			String resultado = "En buscar Tipo Bebida por nombre\n\n";
-    			if (tipoBebida != null)
+    			long idParseado = Long.valueOf (idReserva);
+    			VOReserva reserva = parranderos.darReservaPorId(idParseado);
+    			String resultado = "En buscar Reserva por Id\n\n";
+    			if (reserva != null)
     			{
-        			resultado += "El tipo de bebida es: " + tipoBebida;
+        			resultado += "La reserva es del id: " + reserva.getIdReserva();
     			}
     			else
     			{
-        			resultado += "Un tipo de bebida con nombre: " + nombreTb + " NO EXISTE\n";    				
+        			resultado += "Una reserva con id: " + idParseado + " NO EXISTE\n";    				
     			}
     			resultado += "\n Operación terminada";
     			panelDatos.actualizarInterfaz(resultado);
@@ -528,11 +531,11 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
      * @param lista - La lista con los tipos de bebida
      * @return La cadena con una líea para cada tipo de bebida recibido
      */
-    private String listarTiposBebida(List<VOTipoBebida> lista) 
+    private String listarReservas(List<VOReserva> lista) 
     {
-    	String resp = "Los tipos de bebida existentes son:\n";
+    	String resp = "Las Reservas existentes son:\n";
     	int i = 1;
-        for (VOTipoBebida tb : lista)
+        for (VOReserva tb : lista)
         {
         	resp += i++ + ". " + tb.toString() + "\n";
         }

@@ -1,53 +1,29 @@
 {
-	"title": "Aplicación transaccional de Parranderos Uniandes",
+	"title": "Aplicación transaccional de Alohandes",
 	"frameH": 600,
 	"frameW": 800,
 	"bannerPath": "./src/main/resources/config/logo.png",
 	"menuBar":
 	[
-		{ "menuTitle": "TipoBebida",
+		{ "menuTitle": "Reservas",
 		  "options":
 			[
 				{
-					"label": "Adicionar",
-					"event": "adicionarTipoBebida"
+					"label": "Crear",
+					"event": "crearReserva"
 				},
 				{
-					"label": "Listar",
-					"event": "listarTipoBebida"
-				},
-				{
-					"label": "Borrar por Id",
-					"event": "eliminarTipoBebidaPorId"
-				},
-				{
-					"label": "Buscar por Nombre",
-					"event": "buscarTipoBebidaPorNombre"
+					"label": "Eliminar",
+					"event": "EliminarReserva"
 				}
 			]
 		},
-		{ "menuTitle": "Mantenimiento",
+		{ "menuTitle": "Alojamientos",
 		  "options":
 			[
 				{
-					"label": "Mostrar log Parranderos",
+					"label": "Eliminar Alojamiento",
 					"event": "mostrarLogParranderos"
-				},
-				{
-					"label": "Mostrar log datanucleus",
-					"event": "mostrarLogDatanuecleus"
-				},
-				{
-					"label": "Limpiar log de parranderos",
-					"event": "limpiarLogParranderos"
-				},
-				{
-					"label": "Limpiar log de datanucleus",
-					"event": "limpiarLogDatanucleus"
-				},
-				{
-					"label": "Limpiar Base de Datos",
-					"event": "limpiarBD"
 				}
 			]
 		},		

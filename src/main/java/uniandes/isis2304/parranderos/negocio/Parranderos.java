@@ -117,10 +117,10 @@ public class Parranderos
 	 * @param idInmueble - El identificador del Inmueble
 	 * @return El número de tuplas eliminadas
 	 */
-	public long eliminarReserva (long idReserva, long idInmueble)
+	public long eliminarReserva (long idReserva)
 	{
         log.info ("Eliminando Reservas");
-        long resp = pp.eliminarReserva (idReserva, idInmueble);
+        long resp = pp.eliminarReserva (idReserva);
         log.info ("Eliminando Reserva: " + resp + "tuplas eliminadas");
         return resp;
 	}
@@ -236,5 +236,10 @@ public class Parranderos
         long [] borrrados = pp.limpiarParranderos();	
         log.info ("Limpiando la BD de Parranderos: Listo!");
         return borrrados;
+	}
+
+	public VOReserva darReservaPorId(long idTipo) {
+		// TODO Auto-generated method stub
+		return pp.darReservaPorId(idTipo);
 	}
 }

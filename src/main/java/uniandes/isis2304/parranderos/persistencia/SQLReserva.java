@@ -89,13 +89,13 @@ class SQLReserva
 	}
 
 	/**
-	 * Crea y ejecuta la sentencia SQL para eliminar UN SIRVEN de la base de datos de Parranderos, por sus identificador
+	 * Crea y ejecuta la sentencia SQL para eliminar UN reserva de la base de datos de Parranderos, por sus identificador
 	 * @param pm - El manejador de persistencia
 	 * @param idBar - El identificador del bar
 	 * @param idBebida - El identificador de la bebida
 	 * @return EL número de tuplas eliminadas
 	 */
-	public long eliminarReserva (PersistenceManager pm, long idReserva, long idInmueble) 
+	public long eliminarReserva (PersistenceManager pm, long idReserva) 
 	{
 		Query q1 = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva () + " WHERE ID_RESERVA = ?");
 		q1.setResultClass(Reserva.class);

@@ -390,39 +390,6 @@ public class PersistenciaParranderos
         }
 	}
 
-	/**
-	 * Método que elimina, de manera transaccional, una tupla en la tabla BAR, dado el nombre del bar
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombreBar - El nombre del bar
-	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
-	 */
-	public long eliminarBarPorNombre (String nombreBar) 
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlOperador.eliminarBaresPorNombre(pm, nombreBar);
-            tx.commit();
-
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
 
 	/**
 	 * Método que elimina, de manera transaccional, una tupla en la tabla BAR, dado el identificador del bar
@@ -462,7 +429,7 @@ public class PersistenciaParranderos
 	 * Método que consulta todas las tuplas en la tabla BAR
 	 * @return La lista de objetos BAR, construidos con base en las tuplas de la tabla BAR
 	 */
-	public List<Operador> darBares ()
+	public List<Operador> darOperadores ()
 	{
 		return sqlOperador.darBares (pmf.getPersistenceManager());
 	}
@@ -472,7 +439,7 @@ public class PersistenciaParranderos
 	 * @param nombreBar - El nombre del bar
 	 * @return La lista de objetos BAR, construidos con base en las tuplas de la tabla BAR
 	 */
-	public List<Operador> darBaresPorNombre (String nombreBar)
+	public List<Operador> darOperadoresPorNombre (String nombreBar)
 	{
 		return sqlOperador.darBaresPorNombre (pmf.getPersistenceManager(), nombreBar);
 	}
@@ -482,48 +449,23 @@ public class PersistenciaParranderos
 	 * @param idBar - El identificador del bar
 	 * @return El objeto BAR, construido con base en la tuplas de la tabla BAR, que tiene el identificador dado
 	 */
-	public Operador darBarPorId (long idBar)
+	public Operador darOperadorPorId (long idOperador)
 	{
-		return sqlOperador.darBarPorId (pmf.getPersistenceManager(), idBar);
+		return sqlOperador.darBarPorId (pmf.getPersistenceManager(), idOperador);
 	}
  
-	/**
-	 * Método que actualiza, de manera transaccional, aumentando en 1 el número de sedes de todos los bares de una ciudad
-	 * @param ciudad - La ciudad que se quiere modificar
-	 * @return El número de tuplas modificadas. -1 si ocurre alguna Excepción
-	 */
-	public long aumentarSedesBaresCiudad (String ciudad)
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlOperador.aumentarSedesBaresCiudad(pm, ciudad);
-            tx.commit();
-
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
-
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación RESERVA
 	 *****************************************************************/
-	
+	/**
+	 * Método que consulta todas las tuplas en la tabla BAR que tienen el identificador dado
+	 * @param idBar - El identificador del bar
+	 * @return El objeto BAR, construido con base en la tuplas de la tabla BAR, que tiene el identificador dado
+	 */
+	public Reserva darReservaPorId (long idReserva)
+	{
+		return sqlReserva.buscarReservaPorId(pmf.getPersistenceManager(), idReserva);
+	}
 	/**
 	 * Método que inserta, de manera transaccional, una tupla en la tabla RESERVA
 	 * Adiciona entradas al log de la aplicación
@@ -568,14 +510,14 @@ public class PersistenciaParranderos
 	 * @param idInmueble - El identificador del Inmueble
 	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
 	 */
-	public long eliminarReserva (long idReserva, long idInmueble) 
+	public long eliminarReserva (long idReserva) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 	        Transaction tx=pm.currentTransaction();
 	        try
 	        {
 	            tx.begin();
-	            long resp = sqlReserva.eliminarReserva (pm, idReserva, idInmueble);	            
+	            long resp = sqlReserva.eliminarReserva (pm, idReserva);	            
 	            tx.commit();
 
 	            return resp;
@@ -603,6 +545,7 @@ public class PersistenciaParranderos
 	public List<Reserva> darReservas  ()
 	{
 		return sqlReserva.darReservas (pmf.getPersistenceManager());
+	
 	}
  
 	
