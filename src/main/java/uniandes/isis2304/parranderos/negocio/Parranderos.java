@@ -81,97 +81,9 @@ public class Parranderos
 	
 	
 
-	/* ****************************************************************
-	 * 			Métodos para manejar los OPERADOR
-	 *****************************************************************/
-	/**
-	 * Adiciona de manera persistente un bar 
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre del bar
-	 * @param presupuesto - El presupuesto del bar (ALTO, MEDIO, BAJO)
-	 * @param ciudad - La ciudad del bar
-	 * @param sedes - El número de sedes que tiene el bar en la ciudad (Mayor que 0)
-	 * @return El objeto Bar adicionado. null si ocurre alguna Excepción
-	 */
-	public Operador adicionarBar (String nombre, String presupuesto, String ciudad, int sedes)
-	{
-        log.info ("Adicionando bar: " + nombre);
-        Operador bar = pp.adicionarOperador (nombre, presupuesto, ciudad, sedes);
-        log.info ("Adicionando bar: " + bar);
-        return bar;
-	}
 	
-	/**
-	 * Elimina un bar por su nombre
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre del bar a eliminar
-	 * @return El número de tuplas eliminadas
-	 */
-	public long eliminarBarPorNombre (String nombre)
-	{
-        log.info ("Eliminando bar por nombre: " + nombre);
-        long resp = pp.eliminarBarPorNombre (nombre);
-        log.info ("Eliminando bar: " + resp + " tuplas eliminadas");
-        return resp;
-	}
 	
-	/**
-	 * Elimina un bebedor por su identificador
-	 * Adiciona entradas al log de la aplicación
-	 * @param idBar - El identificador del bar a eliminar
-	 * @return El número de tuplas eliminadas
-	 */
-	public long eliminarBarPorId (long idBar)
-	{
-        log.info ("Eliminando bar por id: " + idBar);
-        long resp = pp.eliminarOperadorPorId (idBar);
-        log.info ("Eliminando bar: " + resp);
-        return resp;
-	}
 	
-	/**
-	 * Encuentra todos los bares en Parranderos
-	 * Adiciona entradas al log de la aplicación
-	 * @return Una lista de objetos Bar con todos las bares que conoce la aplicación, llenos con su información básica
-	 */
-	public List<Operador> darBares ()
-	{
-        log.info ("Listando Bares");
-        List<Operador> bares = pp.darBares ();	
-        log.info ("Listando Bares: " + bares.size() + " bares existentes");
-        return bares;
-	}
-
-	/**
-	 * Encuentra todos los bares en Parranderos y los devuelce como VO
-	 * Adiciona entradas al log de la aplicación
-	 * @return Una lista de objetos Bar con todos las bares que conoce la aplicación, llenos con su información básica
-	 */
-	public List<VOOperador> darVOBares ()
-	{
-		log.info ("Generando los VO de Bares");
-		List<VOOperador> voBares = new LinkedList<VOOperador> ();
-		for (Operador bar: pp.darBares ())
-		{
-			voBares.add (bar);
-		}
-		log.info ("Generando los VO de Bares: " + voBares.size () + " bares existentes");
-		return voBares;
-	}
-
-	/**
-	 * Aumenta en 1 el número de sedes de los bares de una ciudad
-	 * Adiciona entradas al log de la aplicación
-	 * @param ciudad - La ciudad en la cual se aumenta el número de sedes de los bares
-	 * @return El número de tuplas actualizadas
-	 */
-	public long aumentarSedesBaresCiudad (String ciudad)
-	{
-        log.info ("Aumentando sedes de bares de una ciudad: " + ciudad);
-        long resp = pp.aumentarSedesBaresCiudad (ciudad);
-        log.info ("Aumentando sedes de bares de una ciudad: " + resp + " tuplas actualizadas");
-        return resp;
-	}
 	
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación RESERVA
@@ -244,7 +156,7 @@ public class Parranderos
 	}
 
 	/* ****************************************************************
-	 * 			Métodos para manejar la relación VISITAN
+	 * 			Métodos para manejar la relación Cxc
 	 *****************************************************************/
 
 	/**
