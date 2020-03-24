@@ -75,113 +75,12 @@ public class Parranderos
 		pp.cerrarUnidadPersistencia ();
 	}
 	
-	/* ****************************************************************
-	 * 			Métodos para manejar los TIPOS DE BEBIDA
-	 *****************************************************************/
-	/**
-	 * Adiciona de manera persistente un tipo de bebida 
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre del tipo de bebida
-	 * @return El objeto TipoBebida adicionado. null si ocurre alguna Excepción
-	 */
-	public TipoBebida adicionarTipoBebida (String nombre)
-	{
-        log.info ("Adicionando Tipo de bebida: " + nombre);
-        TipoBebida tipoBebida = pp.adicionarTipoBebida (nombre);		
-        log.info ("Adicionando Tipo de bebida: " + tipoBebida);
-        return tipoBebida;
-	}
 	
-	/**
-	 * Elimina un tipo de bebida por su nombre
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre del tipo de bebida a eliminar
-	 * @return El número de tuplas eliminadas
-	 */
-	public long eliminarTipoBebidaPorNombre (String nombre)
-	{
-		log.info ("Eliminando Tipo de bebida por nombre: " + nombre);
-        long resp = pp.eliminarTipoBebidaPorNombre (nombre);		
-        log.info ("Eliminando Tipo de bebida por nombre: " + resp + " tuplas eliminadas");
-        return resp;
-	}
-	
-	/**
-	 * Elimina un tipo de bebida por su identificador
-	 * Adiciona entradas al log de la aplicación
-	 * @param idTipoBebida - El id del tipo de bebida a eliminar
-	 * @return El número de tuplas eliminadas
-	 */
-	public long eliminarTipoBebidaPorId (long idTipoBebida)
-	{
-		log.info ("Eliminando Tipo de bebida por id: " + idTipoBebida);
-        long resp = pp.eliminarTipoBebidaPorId (idTipoBebida);		
-        log.info ("Eliminando Tipo de bebida por id: " + resp + " tuplas eliminadas");
-        return resp;
-	}
-	
-	/**
-	 * Encuentra todos los tipos de bebida en Parranderos
-	 * Adiciona entradas al log de la aplicación
-	 * @return Una lista de objetos TipoBebida con todos los tipos de bebida que conoce la aplicación, llenos con su información básica
-	 */
-	public List<TipoBebida> darTiposBebida ()
-	{
-		log.info ("Consultando Tipos de bebida");
-        List<TipoBebida> tiposBebida = pp.darTiposBebida ();	
-        log.info ("Consultando Tipos de bebida: " + tiposBebida.size() + " existentes");
-        return tiposBebida;
-	}
-
-	/**
-	 * Encuentra todos los tipos de bebida en Parranderos y los devuelve como una lista de VOTipoBebida
-	 * Adiciona entradas al log de la aplicación
-	 * @return Una lista de objetos VOTipoBebida con todos los tipos de bebida que conoce la aplicación, llenos con su información básica
-	 */
-	public List<VOTipoBebida> darVOTiposBebida ()
-	{
-		log.info ("Generando los VO de Tipos de bebida");        
-        List<VOTipoBebida> voTipos = new LinkedList<VOTipoBebida> ();
-        for (TipoBebida tb : pp.darTiposBebida ())
-        {
-        	voTipos.add (tb);
-        }
-        log.info ("Generando los VO de Tipos de bebida: " + voTipos.size() + " existentes");
-        return voTipos;
-	}
-
-	/**
-	 * Encuentra el tipos de bebida en Parranderos con el nombre solicitado
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre de la bebida
-	 * @return Un objeto TipoBebida con el tipos de bebida de ese nombre que conoce la aplicación, 
-	 * lleno con su información básica
-	 */
-	public TipoBebida darTipoBebidaPorNombre (String nombre)
-	{
-		log.info ("Buscando Tipo de bebida por nombre: " + nombre);
-		List<TipoBebida> tb = pp.darTipoBebidaPorNombre (nombre);
-		return !tb.isEmpty () ? tb.get (0) : null;
-	}
 
 	/* ****************************************************************
 	 * 			Métodos para manejar las BEBIDAS
 	 *****************************************************************/
-	/**
-	 * Adiciona de manera persistente una bebida 
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre la bebida
-	 * @param idTipoBebida - El identificador del tipo de bebida de la bebida - Debe existir un TIPOBEBIDA con este identificador
-	 * @param gradoAlcohol - El grado de alcohol de la bebida (Mayor que 0)
-	 * @return El objeto Bebida adicionado. null si ocurre alguna Excepción
-	 */
-	public Bebida adicionarBebida (String nombre, long idTipoBebida, int gradoAlcohol)
-	{
-		log.info ("Adicionando bebida " + nombre);
-		Bebida bebida = pp.adicionarBebida (nombre, idTipoBebida, gradoAlcohol);
-        log.info ("Adicionando bebida: " + bebida);
-        return bebida;
-	}
+	
 	
 	/**
 	 * Elimina una bebida por su nombre
@@ -211,61 +110,7 @@ public class Parranderos
         return resp;
 	}
 	
-	/**
-	 * Encuentra todas las bebida en Parranderos
-	 * Adiciona entradas al log de la aplicación
-	 * @return Una lista de objetos Bebida con todos las bebidas que conoce la aplicación, llenos con su información básica
-	 */
-	public List<Bebida> darBebidas ()
-	{
-        log.info ("Consultando Bebidas");
-        List<Bebida> bebidas = pp.darBebidas ();	
-        log.info ("Consultando Bebidas: " + bebidas.size() + " bebidas existentes");
-        return bebidas;
-	}
-
-	/**
-	 * Encuentra todos los tipos de bebida en Parranderos y los devuelve como una lista de VOTipoBebida
-	 * Adiciona entradas al log de la aplicación
-	 * @return Una lista de objetos VOBebida con todos las bebidas que conoce la aplicación, llenos con su información básica
-	 */
-	public List<VOBebida> darVOBebidas ()
-	{
-		log.info ("Generando los VO de las bebidas");       
-        List<VOBebida> voBebidas = new LinkedList<VOBebida> ();
-        for (Bebida beb : pp.darBebidas ())
-        {
-        	voBebidas.add (beb);
-        }
-        log.info ("Generando los VO de las bebidas: " + voBebidas.size() + " existentes");
-        return voBebidas;
-	}
-
-	/**
-	 * Elimina las bebidas que no son servidas en ningún bar (No son referenciadas en ninguna tupla de SIRVEN)
-	 * Adiciona entradas al log de la aplicación
-	 * @return El número de bebidas eliminadas
-	 */
-	public long eliminarBebidasNoServidas ()
-	{
-        log.info ("Borrando bebidas no servidas");
-        long resp = pp.eliminarBebidasNoServidas ();
-        log.info ("Borrando bebidas no servidas: " + resp + " bebidas eliminadas");
-        return resp;
-	}
-
-	/* ****************************************************************
-	 * 			Métodos para manejar los BEBEDORES
-	 *****************************************************************/
-
-
-
 	
-
-
-
-	
-
 
 	/* ****************************************************************
 	 * 			Métodos para manejar los OPERADOR
@@ -362,8 +207,27 @@ public class Parranderos
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación RESERVA
 	 *****************************************************************/
-
-	
+/**
+ * Adiciona de manera persistente una reserva 
+ * Adiciona entradas al log de la aplicación
+ * @param idReserva
+ * @param idInmueble
+ * @param idCliente
+ * @param fechaInicio
+ * @param fechaFin
+ * @param fechaGeneracion
+ * @param fechaCancelacion
+ * @param cancelado
+ * @param numeroPersonas
+ * @return
+ */
+	public Reserva adicionarReserva(long idReserva, long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas)
+	{
+		 log.info ("Adicionando Reservas");
+	        Reserva resp = pp.adicionarReserva(idReserva, idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
+	        log.info ("Adicionando Reserva: " + resp + "tuplas Adicionadas");
+	        return resp;
+	}
 	
 	/**
 	 * Elimina de manera persistente el hecho que una reserva es tomada por un cliente

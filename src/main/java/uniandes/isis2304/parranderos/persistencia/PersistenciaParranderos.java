@@ -26,17 +26,13 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
-
 import org.apache.log4j.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import uniandes.isis2304.parranderos.negocio.Operador;
 import uniandes.isis2304.parranderos.negocio.Reserva;
-import uniandes.isis2304.parranderos.negocio.Bebida;
 import uniandes.isis2304.parranderos.negocio.Cxc;
-import uniandes.isis2304.parranderos.negocio.Gustan;
-import uniandes.isis2304.parranderos.negocio.TipoBebida;
 
 
 /**
@@ -416,112 +412,10 @@ public class PersistenciaParranderos
             pm.close();
         }
 	}
-
-	/**
-	 * Método que consulta todas las tuplas en la tabla TipoBebida
-	 * @return La lista de objetos TipoBebida, construidos con base en las tuplas de la tabla TIPOBEBIDA
-	 */
-	public List<TipoBebida> darTiposBebida ()
-	{
-		return sqlTipoBebida.darTiposBebida (pmf.getPersistenceManager());
-	}
  
-	/**
-	 * Método que consulta todas las tuplas en la tabla TipoBebida que tienen el nombre dado
-	 * @param nombre - El nombre del tipo de bebida
-	 * @return La lista de objetos TipoBebida, construidos con base en las tuplas de la tabla TIPOBEBIDA
-	 */
-	public List<TipoBebida> darTipoBebidaPorNombre (String nombre)
-	{
-		return sqlTipoBebida.darTiposBebidaPorNombre (pmf.getPersistenceManager(), nombre);
-	}
- 
-	/**
-	 * Método que consulta todas las tuplas en la tabla TipoBebida con un identificador dado
-	 * @param idTipoBebida - El identificador del tipo de bebida
-	 * @return El objeto TipoBebida, construido con base en las tuplas de la tabla TIPOBEBIDA con el identificador dado
-	 */
-	public TipoBebida darTipoBebidaPorId (long idTipoBebida)
-	{
-		return sqlTipoBebida.darTipoBebidaPorId (pmf.getPersistenceManager(), idTipoBebida);
-	}
- 
-	/* ****************************************************************
-	 * 			Métodos para manejar las BEBIDAS
-	 *****************************************************************/
 	
-	/**
-	 * Método que inserta, de manera transaccional, una tupla en la tabla Bebida
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombre - El nombre de la bebida
-	 * @param idTipoBebida - El identificador del tipo de bebida (Debe existir en la tabla TipoBebida)
-	 * @param gradoAlcohol - El grado de alcohol de la bebida (mayor que 0)
-	 * @return El objeto Bebida adicionado. null si ocurre alguna Excepción
-	 */
-	public Bebida adicionarBebida(String nombre, long idTipoBebida, int gradoAlcohol) 
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();            
-            long idBebida = nextval ();
-            long tuplasInsertadas = sqlBebida.adicionarBebida(pm, idBebida, nombre, idTipoBebida, gradoAlcohol);
-            tx.commit();
-            
-            log.trace ("Inserción bebida: " + nombre + ": " + tuplasInsertadas + " tuplas insertadas");
-            return new Bebida (idBebida,nombre, idTipoBebida, gradoAlcohol);
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return null;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
-
-	/**
-	 * Método que elimina, de manera transaccional, una tupla en la tabla Bebida, dado el nombre de la bebida
-	 * Adiciona entradas al log de la aplicación
-	 * @param nombreBebida - El nombre de la bebida
-	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
-	 */
-	public long eliminarBebidaPorNombre (String nombreBebida) 
-	{
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlBebida.eliminarBebidaPorNombre(pm, nombreBebida);
-            tx.commit();
-
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-	}
-
+ 
+ 
 	/**
 	 * Método que elimina, de manera transaccional, una tupla en la tabla Bebida, dado el identificador de la bebida
 	 * Adiciona entradas al log de la aplicación

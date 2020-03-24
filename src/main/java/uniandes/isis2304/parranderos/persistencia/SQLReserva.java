@@ -21,9 +21,9 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import uniandes.isis2304.parranderos.negocio.Bebida;
+
 import uniandes.isis2304.parranderos.negocio.Reserva;
-import uniandes.isis2304.parranderos.negocio.TipoBebida;
+
 
 /**
  * Clase que encapsula los métodos que hacen acceso a la base de datos para el concepto SIRVEN de Parranderos
@@ -79,7 +79,8 @@ class SQLReserva
 		double monto =0;
 		Query q1 = pm.newQuery(SQL,"SELECT INMUEBLE.COSTO_NOCHE FROM "+pp.darTablaInmueble()+" WHERE INMUEBLE.ID_INMUEBLE=?");
 		q1.setParameters(idInmueble);
-		monto = (double)q1.executeUnique();
+		monto = (double)q1.executeUnique()*calcularIntervaloDias(fechaInicio, fechaFin);
+		//falta averiguar si hay servicios incluidos
 		
 		Query q2 = pm.newQuery(SQL, "INSERT INTO "+ pp.darTablaCxc() + " (ID_RESERVA,MONTO) VALUES (?,?)");
 		q2.setParameters(idReserva,monto);
@@ -97,7 +98,7 @@ class SQLReserva
 	public long eliminarReserva (PersistenceManager pm, long idReserva, long idInmueble) 
 	{
 		Query q1 = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva () + " WHERE ID_RESERVA = ?");
-		q1.setResultClass(TipoBebida.class);
+		q1.setResultClass(Reserva.class);
 		q1.setParameters(idReserva);
 		Reserva reserva=  (Reserva) q1.executeUnique();
 		Timestamp fechafin = reserva.getFechaFin();
@@ -169,5 +170,12 @@ class SQLReserva
 		q.setParameters(idInmueble,fechaInicio,fechafin);
 		return (Reserva) q.executeUnique();
 	}
-
+	public int calcularIntervaloDias(Timestamp fechaInicio, Timestamp fechafin)
+	{
+		int dias=0;
+		int rango= (int) ( fechaInicio.getTime()-fechafin.getTime());
+		dias=rango/86400000;
+		return dias;
+		
+	}
 }
