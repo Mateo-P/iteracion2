@@ -220,8 +220,6 @@ public class Parranderos
 	/**
 	 * Elimina de manera persistente el hecho que un bebedor visita un bar
 	 * Adiciona entradas al log de la aplicación
-	 * @param idBebedor - El identificador del bebedor
-	 * @param idBar - El identificador del bar
 	 * @return El número de tuplas eliminadas
 	 */
 	public long eliminarCxc (long idReserva)
@@ -279,8 +277,15 @@ public class Parranderos
         return borrrados;
 	}
 
-	public VOReserva darReservaPorId(long idTipo) {
+	public VOReserva darReservaPorId(long idReserva) {
 		// TODO Auto-generated method stub
-		return pp.darReservaPorId(idTipo);
+		return pp.darReservaPorId(idReserva);
 	}
+
+	public VOInmueble darInmueblePorId(long idInmueble) {
+		// TODO Auto-generated method stub
+		return pp.darInmueblePorId(idInmueble);
+	}
+
+
 }

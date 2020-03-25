@@ -47,6 +47,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 import uniandes.isis2304.parranderos.negocio.Parranderos;
+import uniandes.isis2304.parranderos.negocio.VOInmueble;
 import uniandes.isis2304.parranderos.negocio.VOReserva;
 
 
@@ -297,6 +298,28 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
 		}
     }
 
+	/**
+	 * Consulta en la base de datos los tipos de bebida existentes y los muestra en el panel de datos de la aplicación
+	 */
+	public void listarInmuebles( )
+	{
+		try
+		{
+			List <VOInmueble> lista = parranderos.darVOInmueble();
+
+			String resultado = "En listarInmuebles";
+			resultado +=  "\n" + listarInmuebles(lista);
+			panelDatos.actualizarInterfaz(resultado);
+			resultado += "\n Operación terminada";
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+	}
+
     /**
      * Borra de la base de datos el tipo de bebida con el identificador dado po el usuario
      * Cuando dicho tipo de bebida no existe, se indica que se borraron 0 registros de la base de datos
@@ -329,7 +352,9 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
 		}
     }
 
-    /**
+
+
+	/**
      * Busca la reserva con el id indicado por el usuario y lo muestra en el panel de datos
      */
     public void buscarReservaPorId( )
@@ -365,6 +390,77 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
     }
+
+    /**
+			* Borra de la base de datos el inmueble con el identificador dado po el usuario
+	 * Cuando dicho tipo de bebida no existe, se indica que se borraron 0 registros de la base de datos
+	 */
+	public void eliminarInmueblePorId( )
+	{
+		try
+		{
+			String idTipoStr = JOptionPane.showInputDialog (this, "Id del Inmueble ?", "Borrar Inmueble por Id", JOptionPane.QUESTION_MESSAGE);
+			if (idTipoStr != null)
+			{
+				long idTipo = Long.valueOf (idTipoStr);
+				long tbEliminados = parranderos.eliminarInmueble(idTipo);
+
+				String resultado = "En eliminar inmueble\n\n";
+				resultado += tbEliminados + " inmuebles eliminados\n";
+				resultado += "\n Operación terminada";
+				panelDatos.actualizarInterfaz(resultado);
+			}
+			else
+			{
+				panelDatos.actualizarInterfaz("Operación cancelada por el usuario");
+			}
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+	}
+
+	/**
+	 * Busca el inmubele con el id indicado por el usuario y lo muestra en el panel de datos
+	 */
+	public void buscarInmueblePorId( )
+	{
+		try
+		{
+			String idInmueble= JOptionPane.showInputDialog (this, "Id del inmueble?", "Buscar Inmueble por Id", JOptionPane.QUESTION_MESSAGE);
+			if (idInmueble != null)
+			{
+				long idParseado = Long.valueOf (idInmueble);
+				VOInmueble inmueble = parranderos.darInmueblePorId(idParseado);
+				String resultado = "En buscar Reserva por Id\n\n";
+				if (inmueble != null)
+				{
+					resultado += "El inmueble del id: " + inmueble.getId();
+				}
+				else
+				{
+					resultado += "Un inmueble  con id: " + idParseado + " NO EXISTE\n";
+				}
+				resultado += "\n Operación terminada";
+				panelDatos.actualizarInterfaz(resultado);
+			}
+			else
+			{
+				panelDatos.actualizarInterfaz("Operación cancelada por el usuario");
+			}
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+	}
+
+
 
 
 	/* ****************************************************************
@@ -540,6 +636,22 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
         	resp += i++ + ". " + tb.toString() + "\n";
         }
         return resp;
+	}
+
+	/**
+	 * Genera una cadena de caracteres con la lista de los tipos de bebida recibida: una línea por cada tipo de bebida
+	 * @param lista - La lista con los tipos de bebida
+	 * @return La cadena con una líea para cada tipo de bebida recibido
+	 */
+	private String listarInmuebles(List<VOInmueble> lista)
+	{
+		String resp = "Los inmuebles existentes son:\n";
+		int i = 1;
+		for (VOInmueble tb : lista)
+		{
+			resp += i++ + ". " + tb.toString() + "\n";
+		}
+		return resp;
 	}
 
     /**
