@@ -26,6 +26,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.jdo.JDODataStoreException;
@@ -239,7 +240,7 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
     }
     
 	/* ****************************************************************
-	 * 			CRUD de TipoBebida
+	 * 			CRUD de Reserva
 	 *****************************************************************/
     /**
      * Adiciona un tipo de bebida con la información dada por el usuario
@@ -249,17 +250,19 @@ public class InterfazParranderosApp extends JFrame implements ActionListener
     {
     	try 
     	{
-    		String info = JOptionPane.showInputDialog (this, "Nombre del tipo de bedida?", "Adicionar tipo de bebida", JOptionPane.QUESTION_MESSAGE);
+    		String info = JOptionPane.showInputDialog (this, "Ingrese los datos de la reserva?", "Crear Reserva", JOptionPane.QUESTION_MESSAGE);
     		if (info != null)
     		{
-    			String datos[]= info.split(";");
-        		VOReserva tb = parranderos.adicionarReserva(idReserva, idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
-        		if (tb == null)
+    			Timestamp fechaGeneracion = new Timestamp(System.currentTimeMillis());
+    			Timestamp fechaInicio = new Timestamp(System.currentTimeMillis()+10000000);
+    			Timestamp fechaFin = new Timestamp(System.currentTimeMillis()+10000000+2000000);
+        		VOReserva Reserva = parranderos.adicionarReserva(1, 1007863890, fechaInicio, fechaFin, fechaGeneracion, null, 'N', 4);
+        		if (Reserva == null)
         		{
-        			throw new Exception ("No se pudo crear un tipo de bebida con nombre: " + nombreTipo);
+        			throw new Exception ("No se pudo crear la Reserva ");
         		}
         		String resultado = "En crearReserva\n\n";
-        		resultado += " reserva creada exitosamente: " + tb;
+        		resultado += " reserva creada exitosamente: " + Reserva;
     			resultado += "\n Operación terminada";
     			panelDatos.actualizarInterfaz(resultado);
     		}

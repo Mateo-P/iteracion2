@@ -102,10 +102,10 @@ public class Parranderos
  * @param numeroPersonas
  * @return
  */
-	public Reserva adicionarReserva(long idReserva, long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas)
+	public Reserva adicionarReserva(long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas)
 	{
 		 log.info ("Adicionando Reservas");
-	        Reserva resp = pp.adicionarReserva(idReserva, idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
+	        Reserva resp = pp.adicionarReserva(idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
 	        log.info ("Adicionando Reserva: " + resp + "tuplas Adicionadas");
 	        return resp;
 	}
