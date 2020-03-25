@@ -114,8 +114,7 @@ public class Parranderos
 	 * Elimina de manera persistente el hecho que una reserva es tomada por un cliente
 	 * Adiciona entradas al log de la aplicación
 	 * @param idReserva - El identificador de la reserva
-	 * @param idInmueble - El identificador del Inmueble
-	 * @return El número de tuplas eliminadas
+	  * @return El número de tuplas eliminadas
 	 */
 	public long eliminarReserva (long idReserva)
 	{
@@ -155,6 +154,52 @@ public class Parranderos
 		return voGustan;
 	}
 
+	/**
+	 * Elimina de manera persistente el hecho de quitar una oferta de alojamiento
+	 * Adiciona entradas al log de la aplicación
+	 * @param idInmueble - El identificador del Inmueble
+	 * @return El número de tuplas eliminadas
+	 */
+	public long eliminarInmueble (long idInmueble)
+	{
+		log.info ("Eliminando Inmueble");
+		long resp = pp.eliminarInmueble(idInmueble);
+		log.info ("Eliminando Inmueble: " + resp + "tuplas eliminadas");
+		return resp;
+	}
+
+	/**
+	 * Encuentra todos los INMUEBLES en Parranderos
+	 * Adiciona entradas al log de la aplicación
+	 * @return Una lista de objetos RESERVA con todos los GUSTAN que conoce la aplicación, llenos con su información básica
+	 */
+	public List<Inmueble> darInmuebles()
+	{
+		log.info ("Listando Inmueble");
+		List<Inmueble> inmuebles = pp.darInmuebles ();
+		log.info ("Listando inmuebles: " + inmuebles.size() + " Reservas existentes");
+		return inmuebles;
+	}
+	/**
+	 * Encuentra todos los RESERVA en Parranderos y los devuelve como VO
+	 * Adiciona entradas al log de la aplicación
+	 * @return Una lista de objetos RESERVA con todos los RESERVA que conoce la aplicación, llenos con su información básica
+	 */
+	public List<VOInmueble> darVOInmueble ()
+	{
+		log.info ("Generando los VO de Inmueble");
+		List<VOInmueble> voGustan = new LinkedList<VOInmueble> ();
+		for (VOInmueble inmueble: pp.darInmuebles ())
+		{
+			voGustan.add (inmueble);
+		}
+		log.info ("Generando los VO de inmueble: " + voGustan.size () + " Inmueble existentes");
+		return voGustan;
+	}
+
+
+
+
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación Cxc
 	 *****************************************************************/
@@ -162,11 +207,7 @@ public class Parranderos
 	/**
 	 * Adiciona de manera persistente el hecho que un bebedor visita un bar
 	 * Adiciona entradas al log de la aplicación
-	 * @param idBebedor - El identificador del bebedor
-	 * @param idBar - El identificador del bar
-	 * @param fecha - La fecha en la que se realizó la visita
-	 * @param horario - El horario en el que se sirve la bebida (DIURNO, NOCTURNO, TODOS)
-	 * @return Un objeto Visitan con los valores dados
+	 *
 	 */
 	public Cxc adicionarCxc (long idReserva,double monto)
 	{

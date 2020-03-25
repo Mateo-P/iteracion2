@@ -1,11 +1,13 @@
 package uniandes.isis2304.parranderos.persistencia;
 
 import uniandes.isis2304.parranderos.negocio.Inmueble;
+import uniandes.isis2304.parranderos.negocio.Operador;
 import uniandes.isis2304.parranderos.negocio.Reserva;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class SQLInmueble {
 
@@ -38,19 +40,28 @@ public class SQLInmueble {
         this.pp = pp;
     }
 
-    /**
-     * Crea y ejecuta la sentencia SQL para adicionar una RESERVA a la base de datos de Alohandes
-     * @param pm - El manejador de persistencia
 
-     * @return EL número de tuplas insertadas
+    /**
+     * Crea y ejecuta la sentencia SQL para encontrar la información de UN BAR de la
+     * base de datos de Parranderos, por su identificador
+     * @param pm - El manejador de persistencia
+     * @param idBar - El identificador del bar
+     * @return El objeto BAR que tiene el identificador dado
      */
-    public long adicionarInmueble (PersistenceManager pm, long idReserva, Timestamp fechaInicioReserva, Timestamp fechaFinReserva, Timestamp fechaGeneracionReserva, int numeroPersonas, long idInmueble)
+    public Inmueble darInmueblePorId (PersistenceManager pm, long idInmueble)
     {
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaReserva () + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,NUMERO_PERSONAS,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?)");
-        q.setParameters(idReserva, fechaInicioReserva, fechaFinReserva,fechaGeneracionReserva,numeroPersonas,idInmueble);
-        return (long)q.executeUnique();
+        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE id = ?");
+        q.setResultClass(Inmueble.class);
+        q.setParameters(idInmueble);
+        return (Inmueble) q.executeUnique();
     }
 
+    /**
+     * Crea y ejecuta la sentencia SQL para eliminar UN INMUEBLE de la base de datos de Parranderos, por su identificador
+     * @param pm - El manejador de persistencia
+     * @param idInmueble - El identificador del bar
+     * @return EL número de tuplas eliminadas
+     */
     public long eliminarInmueble(PersistenceManager pm,long idInmueble){
         Query q1 = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva () + " WHERE ID_INMUEBLE = ?");
         q1.setResultClass(Reserva.class);
@@ -73,6 +84,19 @@ public class SQLInmueble {
             return fila1+fila2;
         }
 
+    }
+    /**
+     * Crea y ejecuta la sentencia SQL para encontrar la información de LOS INMUEBLES de la
+     * base de datos de Parranderos
+     * @param pm - El manejador de persistencia
+     * @return Una lista de objetos BAR
+     */
+
+    public List<Inmueble> darInmuebles (PersistenceManager pm)
+    {
+        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble ());
+        q.setResultClass(Reserva.class);
+        return (List<Inmueble>) q.execute();
     }
 
 }

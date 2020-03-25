@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import uniandes.isis2304.parranderos.negocio.Inmueble;
 import uniandes.isis2304.parranderos.negocio.Operador;
 import uniandes.isis2304.parranderos.negocio.Reserva;
 import uniandes.isis2304.parranderos.negocio.Cxc;
@@ -83,8 +84,10 @@ public class PersistenciaParranderos
 	 * Atributo para el acceso a las sentencias SQL propias a PersistenciaParranderos
 	 */
 	private SQLUtil sqlUtil;
-	
-
+	/**
+	 * Atributo para el acceso a la tabla INMUEBLE de la base de datos
+	 */
+    private SQLInmueble sqlInmueble;
 	
 	/**
 	 * Atributo para el acceso a la tabla BAR de la base de datos
@@ -205,7 +208,7 @@ public class PersistenciaParranderos
 	{
 		
 		sqlOperador = new SQLOperador(this);
-
+		sqlInmueble = new SQLInmueble(this);
 		sqlReserva = new SQLReserva (this);
 		sqlCxc = new SQLCxc(this);		
 		sqlUtil = new SQLUtil(this);
@@ -433,7 +436,28 @@ public class PersistenciaParranderos
 	{
 		return sqlOperador.darBares (pmf.getPersistenceManager());
 	}
- 
+
+	/**
+	 * Método que consulta todas las tuplas en la tabla BAR
+	 * @return La lista de objetos Inmueble, construidos con base en las tuplas de la tabla BAR
+	 */
+
+	public List<Inmueble> darInmuebles ()
+	{
+		return sqlInmueble.darInmuebles(pmf.getPersistenceManager());
+	}
+
+	/**
+	 * Método que consulta todas las tuplas en la tabla INmueble que tienen el identificador dado
+	 * @param idInmueble - El identificador del bar
+	 * @return El objeto BAR, construido con base en la tuplas de la tabla BAR, que tiene el identificador dado
+	 */
+
+	public Inmueble darInmueblePorId (long idInmueble)
+	{
+		return sqlInmueble.darInmueblePorId(pmf.getPersistenceManager(), idInmueble );
+	}
+
 	/**
 	 * Método que consulta todas las tuplas en la tabla BAR que tienen el nombre dado
 	 * @param nombreBar - El nombre del bar
@@ -536,6 +560,39 @@ public class PersistenciaParranderos
 	            }
 	            pm.close();
 	        }
+	}
+
+	/**
+	 * Método que elimina, de manera transaccional, una tupla en la tabla INmueble, dados los identificadores de RESERVA e Inmueble
+	 * @param idInmueble - El identificador del Inmueble
+	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
+	 */
+	public long eliminarInmueble (long idInmueble)
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long resp = sqlInmueble.eliminarInmueble (pm, idInmueble);
+			tx.commit();
+
+			return resp;
+		}
+		catch (Exception e)
+		{
+//	        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return -1;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
  
 	/**
