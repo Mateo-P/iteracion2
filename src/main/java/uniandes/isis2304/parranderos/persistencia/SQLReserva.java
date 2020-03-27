@@ -72,10 +72,15 @@ class SQLReserva
 	 */
 	public long adicionarReserva (PersistenceManager pm,long idReserva, long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas) 
 	{
+		
 		long retorno =0;
-		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaReserva () + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,FECHA_CANCELACION,CANCELADO,NUMERO_PERSONAS,ID_CLIENTE,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		System.out.println("ENTRA A SQL"+ retorno);
+		//if(fechaFin.compareTo(fechaInicio)>0)
+		//{
+		Query q = pm.newQuery(SQL, "INSERT INTO RESERVA " + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,FECHA_CANCELACION,CANCELADO,NUMERO_PERSONAS,ID_CLIENTE,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		q.setParameters( idReserva,fechaInicio,fechaFin,fechaGeneracion,fechaCancelacion, cancelado,numeroPersonas , idCliente, idInmueble);
 		retorno= (long)q.executeUnique();   
+		
 		double monto =0;
 		Query q1 = pm.newQuery(SQL,"SELECT INMUEBLE.COSTO_NOCHE FROM "+pp.darTablaInmueble()+" WHERE INMUEBLE.ID_INMUEBLE=?");
 		q1.setParameters(idInmueble);
@@ -85,7 +90,10 @@ class SQLReserva
 		Query q2 = pm.newQuery(SQL, "INSERT INTO "+ pp.darTablaCxc() + " (ID_RESERVA,MONTO) VALUES (?,?)");
 		q2.setParameters(idReserva,monto);
 		q2.executeUnique();
+		//}
+		System.out.println("SALE DE SQL "+ retorno);
 		return retorno;
+		
 	}
 
 	/**

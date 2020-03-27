@@ -504,15 +504,19 @@ public class PersistenciaAlohandes
         Transaction tx=pm.currentTransaction();
         try
         {
+        	
             tx.begin();
-            long idReserva = nextval ();
+            long idReserva = 14;
+            System.out.println("antes");
             long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(), idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
     		tx.commit();
-
+    		
+           Reserva reservaNueva = new Reserva(idReserva, idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
+            System.out.println(""+ reservaNueva.getFechaFin());
             log.trace ("Inserción de Reserva: [" + idReserva + ", " + idInmueble + "]. " + tuplasInsertadas + " tuplas insertadas");
-
-            return new Reserva ( idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
-        }
+            
+            return reservaNueva ;
+            }
         catch (Exception e)
         {
 //        	e.printStackTrace();

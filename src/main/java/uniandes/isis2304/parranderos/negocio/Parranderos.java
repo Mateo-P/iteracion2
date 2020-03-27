@@ -107,6 +107,7 @@ public class Parranderos
 		 log.info ("Adicionando Reservas");
 	        Reserva resp = pp.adicionarReserva(idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
 	        log.info ("Adicionando Reserva: " + resp + "tuplas Adicionadas");
+	  
 	        return resp;
 	}
 	
