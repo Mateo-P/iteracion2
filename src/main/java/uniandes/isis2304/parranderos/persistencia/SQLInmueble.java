@@ -41,6 +41,17 @@ public class SQLInmueble {
     }
 
 
+
+
+    public long adicionarInmueble (PersistenceManager pm, long id,String nombre, String tipoInmueble,String ubicacion,int capacidad,boolean disponible,String foto,String descripcion,int veceReservada,double costoXNoche,long idOperador)
+    {
+        
+
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaInmueble () + "(ID_INMUEBLE_, AMOBLADO, NUMERO_HABITACIONES,SERVICIOS_INCLUIDOS) values (?, ?, ?, ?, ?)");
+        q.setParameters(id, nombre, tipoInmueble, ubicacion,capacidad,);
+        return (long) q.executeUnique();
+    }
+
     /**
      * Crea y ejecuta la sentencia SQL para encontrar la información de UN BAR de la
      * base de datos de Parranderos, por su identificador
