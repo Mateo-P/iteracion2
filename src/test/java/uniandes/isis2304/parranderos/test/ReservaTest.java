@@ -138,7 +138,7 @@ public class ReservaTest
 	}
 
 	/**
-	 * Método de prueba de la restricción de unicidad sobre el nombre de TipoBebida
+	 * Método de prueba de la restricción de unicidad sobre el nombre de reserva
 	 */
 	@Test
 	public void unicidadReservaTest() 
@@ -194,7 +194,64 @@ public class ReservaTest
 			parranderos.cerrarUnidadPersistencia ();    		
 		}
 	}
+	/**
+	 * Método de prueba de la restricción de unicidad sobre el nombre de reserva
+	 */
+	@Test
+	public void unicidadReservaFKNullTest() 
+	{
+		// Probar primero la conexión a la base de datos
+		try
+		{
+			log.info ("Probando la restricción de UNICIDAD del id de la reserva");
+			parranderos = new Parranderos (openConfig (CONFIG_TABLAS_A));
+		}
+		catch (Exception e)
+		{
+			//			e.printStackTrace();
+			log.info ("Prueba de UNICIDAD de Reserva incompleta. No se pudo conectar a la base de datos !!. La excepción generada es: " + e.getClass ().getName ());
+			log.info ("La causa es: " + e.getCause ().toString ());
 
+			String msg = "Prueba de UNICIDAD de Reserva incompleta. No se pudo conectar a la base de datos !!.\n";
+			msg += "Revise el log de parranderos y el de datanucleus para conocer el detalle de la excepción";
+			System.out.println (msg);
+			fail (msg);
+		}
+
+		// Ahora si se pueden probar las operaciones
+		try
+		{
+			// Lectura de los tipos de bebida con la tabla vacía
+			List <VOReserva> lista = parranderos.darVOReserva();
+			assertEquals ("Debe haber 8 Reservas creadas!!", 8, lista.size ());
+
+			// Lectura de los tipos de bebida con un tipo de bebida adicionado
+			Timestamp fechaGeneracion = new Timestamp(System.currentTimeMillis());
+			Timestamp fechaInicio = new Timestamp(System.currentTimeMillis()+10000000);
+			Timestamp fechaFin = new Timestamp(System.currentTimeMillis()+10000000+2000000);
+			VOReserva Reserva = parranderos.adicionarReserva(1, 0, fechaInicio, fechaFin, fechaGeneracion, null, 'N', 4);
+			lista = parranderos.darVOReserva();
+			assertEquals ("Debe haber 8 Reservas creadas!!", 8, lista.size ());
+
+
+			VOReserva Reserva2 = parranderos.adicionarReserva(1, 1007863890, fechaInicio, fechaFin, fechaGeneracion, null, 'N', 0);
+			assertNull ("No puede adicionar una reserva al inmueble con id: 0", Reserva2);
+		}
+		catch (Exception e)
+		{
+			//			e.printStackTrace();
+			String msg = "Error en la ejecución de las pruebas de UNICIDAD sobre la tabla RESERVA.\n";
+			msg += "Revise el log de parranderos y el de datanucleus para conocer el detalle de la excepción";
+			System.out.println (msg);
+
+			fail ("Error en las pruebas de UNICIDAD sobre la tabla Reserva");
+		}    				
+		finally
+		{
+			parranderos.limpiarParranderos ();
+			parranderos.cerrarUnidadPersistencia ();    		
+		}
+	}
 	/* ****************************************************************
 	 * 			Métodos de configuración
 	 *****************************************************************/
