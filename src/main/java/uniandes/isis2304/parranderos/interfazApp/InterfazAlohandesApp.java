@@ -48,6 +48,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 import uniandes.isis2304.parranderos.negocio.Parranderos;
+import uniandes.isis2304.parranderos.negocio.VOApartamento;
 import uniandes.isis2304.parranderos.negocio.VOInmueble;
 import uniandes.isis2304.parranderos.negocio.VOReserva;
 
@@ -301,6 +302,44 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 		}
     }
 
+
+	/* ****************************************************************
+	 * 			CRUD de Apartamento
+	 *****************************************************************/
+	/**
+	 * Adiciona un Apartamento con la información dada por el usuario
+	 * Se crea una nueva tupla de Apartamento en la base de datos, si un tipo de bebida con ese nombre no existía
+	 */
+	public void adicionarApartamento( )
+	{
+		try
+		{
+			String nombre = JOptionPane.showInputDialog (this, "Ingrese los datos del apartamento?", "Crear un apartamento", JOptionPane.QUESTION_MESSAGE);
+			if (nombre != null)
+			{
+
+				VOApartamento tb = parranderos.adicionarApartamento (2,true,true,nombre,"APARTAMENTO","CRA 56# 34-12",3,true,"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR9Gt48xG4GqeNHLoYyt3iquEw6rI3wTFuJMUQa6E115-190EzG","2 alcobas dos bañños",0,200,0);
+				if (tb == null)
+				{
+					throw new Exception ("No se pudo crear un tipo de bebida con nombre: " + nombre);
+				}
+				String resultado = "En adicionarApartamento\n\n";
+				resultado += "Apartamento adicionado exitosamente: " + tb;
+				resultado += "\n Operación terminada";
+				panelDatos.actualizarInterfaz(resultado);
+			}
+			else
+			{
+				panelDatos.actualizarInterfaz("Operación cancelada por el usuario");
+			}
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+	}
 	/**
 	 * Consulta en la base de datos los tipos de bebida existentes y los muestra en el panel de datos de la aplicación
 	 */

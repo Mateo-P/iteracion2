@@ -1,7 +1,12 @@
 package uniandes.isis2304.parranderos.persistencia;
 
+import uniandes.isis2304.parranderos.negocio.Apartamento;
+import uniandes.isis2304.parranderos.negocio.Inmueble;
+import uniandes.isis2304.parranderos.negocio.Reserva;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import java.util.List;
 
 public class SQLApartamento {
 
@@ -22,6 +27,13 @@ public class SQLApartamento {
      */
     private PersistenciaAlohandes pp;
 
+    /**
+     * Clase padre sql INMUEBLE
+     */
+
+    private SQLInmueble inmuebleSQL;
+
+
     /* ****************************************************************
      * 			Métodos
      *****************************************************************/
@@ -34,13 +46,19 @@ public class SQLApartamento {
         this.pp = pp;
     }
 
+    public List<Apartamento> darApartamentos(PersistenceManager pm)
+    {
+        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaApartamento());
+        q.setResultClass(Reserva.class);
+        return (List<Apartamento>) q.execute();
+    }
+
 
     public long adicionarApartamento (PersistenceManager pm, long id, int numeroHabitaciones, boolean amoblado,boolean serviciosIncluidos ,String nombre, String tipoInmueble,String ubicacion,int capacidad,boolean disponible,String foto,String descripcion,int veceReservada,double costoXNoche,long idOperador)
     {
 
         String amobladoB = "";
         String servicios = "";
-        String disponibleB = "";
 
         if(amoblado == true){
             amobladoB = "Y";
@@ -52,15 +70,11 @@ public class SQLApartamento {
         }else{
             servicios = "N";
         }
-        if(disponible== true){
-            disponibleB = "Y";
-        }else{
-            disponibleB = "N";
-        }
-
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaApartamento () + "(ID_INMUEBLE_AP, AMOBLADO, NUMERO_HABITACIONES,SERVICIOS_INCLUIDOS) values (?, ?, ?, ?, ?)");
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaApartamento () + "(ID_INMUEBLE_AP, AMOBLADO, NUMERO_HABITACIONES,SERVICIOS_INCLUIDOS) values (?, ?, ?, ?)");
         q.setParameters(id, amobladoB, numeroHabitaciones, servicios);
+        inmuebleSQL.adicionarInmueble( pm, id, nombre, tipoInmueble, ubicacion,capacidad,disponible,foto,descripcion,veceReservada,costoXNoche,idOperador);
         return (long) q.executeUnique();
+
     }
 
 }

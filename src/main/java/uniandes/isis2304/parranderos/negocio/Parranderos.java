@@ -156,6 +156,19 @@ public class Parranderos
 	}
 
 	/**
+			* Adiciona de manera persistente un apartamento
+ * Adiciona entradas al log de la aplicación
+  * @return un apartamento crado
+		 */
+	public Apartamento adicionarApartamento(int numeroHabitaciones, boolean amoblado,boolean serviciosIncluidos ,String nombre, String tipoInmueble,String ubicacion,int capacidad,boolean disponible,String foto,String descripcion,int veceReservada,double costoXNoche,long idOperador)
+	{
+		log.info ("Adicionando Apartamento");
+		Apartamento resp = pp.adicionarApartamento(numeroHabitaciones,  amoblado, serviciosIncluidos , nombre,  tipoInmueble, ubicacion, capacidad, disponible, foto, descripcion, veceReservada, costoXNoche, idOperador);
+		log.info ("Adicionando Apartamento: " + resp + "tuplas Adicionadas");
+		return resp;
+	}
+
+	/**
 	 * Elimina de manera persistente el hecho de quitar una oferta de alojamiento
 	 * Adiciona entradas al log de la aplicación
 	 * @param idInmueble - El identificador del Inmueble
@@ -191,6 +204,18 @@ public class Parranderos
 		log.info ("Generando los VO de Inmueble");
 		List<VOInmueble> voGustan = new LinkedList<VOInmueble> ();
 		for (VOInmueble inmueble: pp.darInmuebles ())
+		{
+			voGustan.add (inmueble);
+		}
+		log.info ("Generando los VO de inmueble: " + voGustan.size () + " Inmueble existentes");
+		return voGustan;
+	}
+
+	public List<VOApartamento> darVOApartamento()
+	{
+		log.info ("Generando los VO de Apartamento");
+		List<VOApartamento> voGustan = new LinkedList<VOApartamento> ();
+		for (VOApartamento inmueble: pp.darApartamentos ())
 		{
 			voGustan.add (inmueble);
 		}

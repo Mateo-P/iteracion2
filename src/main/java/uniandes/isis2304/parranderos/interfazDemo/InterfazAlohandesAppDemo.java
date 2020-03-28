@@ -47,14 +47,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import uniandes.isis2304.parranderos.interfazApp.PanelDatos;
-import uniandes.isis2304.parranderos.negocio.Parranderos;
-import uniandes.isis2304.parranderos.negocio.VOOperador;
-
-
-import uniandes.isis2304.parranderos.negocio.VOInmueble;
-import uniandes.isis2304.parranderos.negocio.VOReserva;
-
-import uniandes.isis2304.parranderos.negocio.VOCxc;
+import uniandes.isis2304.parranderos.negocio.*;
 
 /**
  * Clase principal de la interfaz
@@ -297,6 +290,42 @@ public class InterfazAlohandesAppDemo extends JFrame implements ActionListener
 		}
     }
 
+	public void demoApartamento( )
+	{
+		try
+		{
+			// Ejecución de la demo y recolección de los resultados
+			// ATENCIÓN: En una aplicación real, los datos JAMÁS están en el código
+
+
+			VOApartamento tb = parranderos.adicionarApartamento (2,true,true,"apto de dani","APARTAMENTO","CRA 56# 34-12",3,true,"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR9Gt48xG4GqeNHLoYyt3iquEw6rI3wTFuJMUQa6E115-190EzG","2 alcobas dos bañños",0,200,0);
+
+
+			List <VOApartamento> listaApartamentos  = parranderos.darVOApartamento();
+
+
+			long tbEliminados = parranderos.eliminarInmueble(tb.getIdInmueble());
+
+
+			// Generación de la cadena de caracteres con la traza de la ejecución de la demo
+			String resultado = "Demo de creación y listado de Apartamento\n\n";
+			resultado += "\n\n************ Generando datos de prueba ************ \n";
+			resultado += "\n" + listarApartamento(listaApartamentos);
+			resultado += "\n\n************ Ejecutando la demo ************ \n";
+			resultado += "\n\n************ Limpiando la base de datos ************ \n";
+			resultado += tbEliminados + " Reservas eliminadas\n";
+			resultado += "\n Demo terminada";
+
+			panelDatos.actualizarInterfaz(resultado);
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+	}
+
 	/* ****************************************************************
 	 * 			Métodos administrativos
 	 *****************************************************************/
@@ -489,6 +518,19 @@ public class InterfazAlohandesAppDemo extends JFrame implements ActionListener
         }
         return resp;
 	}
+
+	private String listarApartamento (List<VOApartamento> lista)
+	{
+		String resp = "Los sirven existentes son:\n";
+		int i = 1;
+		for (VOApartamento serv : lista)
+		{
+			resp += i++ + ". " + serv.toString() + "\n";
+		}
+		return resp;
+	}
+
+
 
     /**
      * Genera una cadena de caracteres con la lista de visitan recibida: una línea por cada visitan

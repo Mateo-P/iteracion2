@@ -30,10 +30,7 @@ import org.apache.log4j.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import uniandes.isis2304.parranderos.negocio.Inmueble;
-import uniandes.isis2304.parranderos.negocio.Operador;
-import uniandes.isis2304.parranderos.negocio.Reserva;
-import uniandes.isis2304.parranderos.negocio.Cxc;
+import uniandes.isis2304.parranderos.negocio.*;
 
 
 /**
@@ -88,7 +85,11 @@ public class PersistenciaAlohandes
 	 * Atributo para el acceso a la tabla INMUEBLE de la base de datos
 	 */
     private SQLInmueble sqlInmueble;
-	
+
+	/**
+	 * Atributo para el acceso a la tabla Apartamento de la base de datos
+	 */
+	private SQLApartamento sqlApartamento;
 	/**
 	 * Atributo para el acceso a la tabla BAR de la base de datos
 	 */
@@ -210,6 +211,7 @@ public class PersistenciaAlohandes
 		sqlOperador = new SQLOperador(this);
 		sqlInmueble = new SQLInmueble(this);
 		sqlReserva = new SQLReserva (this);
+		sqlApartamento = new SQLApartamento(this);
 		sqlCxc = new SQLCxc(this);		
 		sqlUtil = new SQLUtil(this);
 	}
@@ -447,6 +449,14 @@ public class PersistenciaAlohandes
 		return sqlInmueble.darInmuebles(pmf.getPersistenceManager());
 	}
 
+	public List<Apartamento> darApartamentos ()
+	{
+		return sqlApartamento.darApartamentos(pmf.getPersistenceManager());
+	}
+
+
+
+
 	/**
 	 * Método que consulta todas las tuplas en la tabla INmueble que tienen el identificador dado
 	 * @param idInmueble - El identificador del bar
@@ -470,7 +480,7 @@ public class PersistenciaAlohandes
  
 	/**
 	 * Método que consulta todas las tuplas en la tabla BAR que tienen el identificador dado
-	 * @param idBar - El identificador del bar
+	 * @param idOperador - El identificador del OPerador
 	 * @return El objeto BAR, construido con base en la tuplas de la tabla BAR, que tiene el identificador dado
 	 */
 	public Operador darOperadorPorId (long idOperador)
@@ -483,7 +493,7 @@ public class PersistenciaAlohandes
 	 *****************************************************************/
 	/**
 	 * Método que consulta todas las tuplas en la tabla BAR que tienen el identificador dado
-	 * @param idBar - El identificador del bar
+	 * @param idReserva - El identificador del bar
 	 * @return El objeto BAR, construido con base en la tuplas de la tabla BAR, que tiene el identificador dado
 	 */
 	public Reserva darReservaPorId (long idReserva)
@@ -493,7 +503,7 @@ public class PersistenciaAlohandes
 	/**
 	 * Método que inserta, de manera transaccional, una tupla en la tabla RESERVA
 	 * Adiciona entradas al log de la aplicación
-	 * @param idReserva - El identificador de la RESERVA - Debe haber un RESERVA con ese identificador
+	 * @param idCliente - El identificador del cliente- Debe haber un RESERVA con ese identificador
 	 * @param idInmueble - El identificador dEl INMUEBLE - Debe haber una INMUEBLE con ese identificador
 	 
 	 * @return Un objeto RESERVA con la información dada. Null si ocurre alguna Excepción
@@ -536,7 +546,6 @@ public class PersistenciaAlohandes
 	/**
 	 * Método que elimina, de manera transaccional, una tupla en la tabla RESERVA, dados los identificadores de RESERVA e Inmueble
 	 * @param idReserva - El identificador de la Reserva
-	 * @param idInmueble - El identificador del Inmueble
 	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
 	 */
 	public long eliminarReserva (long idReserva) 
@@ -565,6 +574,43 @@ public class PersistenciaAlohandes
 	            }
 	            pm.close();
 	        }
+	}
+
+	/**
+	 * Método que inserta, de manera transaccional, una tupla en la tabla Apartamento
+	 * Adiciona entradas al log de la aplicación
+	 * @return Un objeto Apartamentocon la información dada. Null si ocurre alguna Excepción
+	 */
+	public Apartamento adicionarApartamento (int numeroHabitaciones, boolean amoblado,boolean serviciosIncluidos ,String nombre, String tipoInmueble,String ubicacion,int capacidad,boolean disponible,String foto,String descripcion,int veceReservada,double costoXNoche,long idOperador)
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long idApartamento = nextval ();
+			long tuplasInsertadas = sqlApartamento.adicionarApartamento(pmf.getPersistenceManager(),idApartamento, numeroHabitaciones,  amoblado, serviciosIncluidos , nombre,  tipoInmueble, ubicacion, capacidad, disponible, foto, descripcion, veceReservada, costoXNoche, idOperador);
+
+			tx.commit();
+
+			log.trace ("Inserción de Apartamento: [" + idApartamento + ", " + nombre + "]. " + tuplasInsertadas + " tuplas insertadas");
+
+			return new Apartamento( numeroHabitaciones,  amoblado, serviciosIncluidos, idApartamento);
+		}
+		catch (Exception e)
+		{
+//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
 
 	/**
@@ -619,10 +665,6 @@ public class PersistenciaAlohandes
 	/**
 	 * Método que inserta, de manera transaccional, una tupla en la tabla VISITAN
 	 * Adiciona entradas al log de la aplicación
-	 * @param idBebedor - El identificador del bebedor - Debe haber un bebedor con ese identificador
-	 * @param idBar - El identificador del bar - Debe haber un bar con ese identificador
-	 * @param fecha - La fecha en que se realizó la visita
-	 * @param horario - El hororio en que se sirve (DIURNO, NOCTURNO, TODOS)
 	 * @return Un objeto VISITAN con la información dada. Null si ocurre alguna Excepción
 	 */	
 	public Cxc adicionarCxc (long idReserva,double monto) 
@@ -658,8 +700,6 @@ public class PersistenciaAlohandes
 
 	/**
 	 * Método que elimina, de manera transaccional, una tupla en la tabla VISITAN, dados los identificadores de bebedor y bar
-	 * @param idBebedor - El identificador del bebedor
-	 * @param idBar - El identificador del bar
 	 * @return El número de tuplas eliminadas. -1 si ocurre alguna Excepción
 	 */
 	public long eliminarCxcPorId (long idReserva) 
