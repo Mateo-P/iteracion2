@@ -23,7 +23,7 @@
 			[
 				{
 					"label": "Eliminar Alojamiento",
-					"event": "mostrarLogParranderos"
+					"event": "eliminarInmueblePorId"
 				}
 			]
 		},		

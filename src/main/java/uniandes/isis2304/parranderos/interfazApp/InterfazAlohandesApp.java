@@ -254,6 +254,7 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
     		String info = JOptionPane.showInputDialog (this, "Ingrese los datos de la reserva?", "Crear Reserva", JOptionPane.QUESTION_MESSAGE);
     		if (info != null)
     		{
+    			 System.out.println("entra a reserva");
     			Timestamp fechaGeneracion = new Timestamp(System.currentTimeMillis());
     			Timestamp fechaInicio = new Timestamp(System.currentTimeMillis()+10000000);
     			Timestamp fechaFin = new Timestamp(System.currentTimeMillis()+10000000+2000000);
