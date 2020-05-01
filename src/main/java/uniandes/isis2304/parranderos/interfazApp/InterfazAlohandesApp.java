@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.JDODataStoreException;
@@ -280,7 +281,18 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
     }
-
+    public void adicionarOperador()
+    {
+    	try{
+    		parranderos.adicionarOperador();
+    		
+    	}
+    	catch(Exception e)
+    	{
+    		String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+    	}
+    }
     /**
      * Consulta en la base de datos los tipos de bebida existentes y los muestra en el panel de datos de la aplicación
      */
@@ -362,7 +374,32 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
 	}
+/**
+ * RFC3
+ */
+	public void listarIndices( )
+	{
+		try
+		{
+			List <VOInmueble> lista = parranderos.darVOInmueble();
 
+			String resultado = "En listarIndices";
+			ArrayList<Double> indices= (ArrayList<Double>) parranderos.darIndicesDeOcupacionInmuebles();
+			resultado +=  "\n" + "[";
+			for(int i=0;i<indices.size();i++)
+			{
+				resultado+="El inmueble: "+lista.get(i).getNombre()+" tiene un indice de ocupacion de: "+ indices.get(i);
+			}
+			panelDatos.actualizarInterfaz(resultado);
+			resultado += "\n Operación terminada";
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+	}
     /**
      * Borra de la base de datos el tipo de bebida con el identificador dado po el usuario
      * Cuando dicho tipo de bebida no existe, se indica que se borraron 0 registros de la base de datos
@@ -650,12 +687,9 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 		resultado += " * Licenciado	bajo	el	esquema	Academic Free License versión 2.1\n";
 		resultado += " * \n";		
 		resultado += " * Curso: isis2304 - Sistemas Transaccionales\n";
-		resultado += " * Proyecto: Parranderos Uniandes\n";
+		resultado += " * Proyecto: Alohandes Uniandes\n";
 		resultado += " * @version 1.0\n";
-		resultado += " * @author Germán Bravo\n";
-		resultado += " * Julio de 2018\n";
 		resultado += " * \n";
-		resultado += " * Revisado por: Claudia Jiménez, Christian Ariza\n";
 		resultado += "\n ************************************\n\n";
 
 		panelDatos.actualizarInterfaz(resultado);		

@@ -372,7 +372,7 @@ public class PersistenciaAlohandes
         {
             tx.begin();
             long idBar = nextval ();
-            long tuplasInsertadas = sqlOperador.adicionarOperador(pm, idBar, nombre, ciudad, presupuesto, sedes);
+            long tuplasInsertadas = sqlOperador.adicionarOperador(pm);
             tx.commit();
 
             log.trace ("Inserción de Bar: " + nombre + ": " + tuplasInsertadas + " tuplas insertadas");
@@ -454,9 +454,6 @@ public class PersistenciaAlohandes
 		return sqlApartamento.darApartamentos(pmf.getPersistenceManager());
 	}
 
-
-
-
 	/**
 	 * Método que consulta todas las tuplas en la tabla INmueble que tienen el identificador dado
 	 * @param idInmueble - El identificador del bar
@@ -487,7 +484,7 @@ public class PersistenciaAlohandes
 	{
 		return sqlOperador.darBarPorId (pmf.getPersistenceManager(), idOperador);
 	}
- 
+	
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación RESERVA
 	 *****************************************************************/
@@ -656,7 +653,11 @@ public class PersistenciaAlohandes
 	
 	}
  
+	public List<Reserva> darReservaPorMueble  (long muebleId)
+	{
+		return sqlReserva.darReservasporInmuebleId(pmf.getPersistenceManager(), muebleId);
 	
+	}
  
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación CXC

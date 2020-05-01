@@ -70,10 +70,10 @@ class SQLOperador
 	 * @param sedes - El número de sedes del bar
 	 * @return El número de tuplas insertadas
 	 */
-	public long adicionarOperador (PersistenceManager pm, long idBar, String nombre, String ciudad, String presupuesto, int sedes) 
+	public long adicionarOperador (PersistenceManager pm) 
 	{
-        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaOperador() + "(id, nombre, ciudad, presupuesto, cantsedes) values (?, ?, ?, ?, ?)");
-        q.setParameters(idBar, nombre, ciudad, presupuesto, sedes);
+        Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaOperador() + "(ID_OPERADOR, NOMBRE_OPERADOR, TIPO_VINCULO_OPERADOR, HORA_APERTURA, HORA_CIERRE, DINERO_RECAUDADO, CORREO_OPERADOR, TELEFONO_OPERADOR, TIPO_OPERADOR) values ('1007863899','cityu', 'EMPRESA', '5:00AM','12:00PM',0, 'citMyu@uniandes.edu.co', 3146753121, 'ALOHA')");
+  
         return (long) q.executeUnique();
 	}
 

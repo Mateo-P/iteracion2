@@ -77,8 +77,8 @@ class SQLReserva
 		System.out.println("ENTRA A SQL"+ retorno);
 		//if(fechaFin.compareTo(fechaInicio)>0)
 		//{
-		Query q = pm.newQuery(SQL, "INSERT INTO RESERVA " + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,FECHA_CANCELACION,CANCELADO,NUMERO_PERSONAS,ID_CLIENTE,ID_INMUEBLE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		q.setParameters( idReserva,fechaInicio,fechaFin,fechaGeneracion,fechaCancelacion, cancelado,numeroPersonas , idCliente, idInmueble);
+		Query q = pm.newQuery(SQL, "INSERT INTO RESERVA " + "(ID_RESERVA,FECHA_INICIO_RESERVA,FECHA_FINAL_RESERVA,FECHA_GENERACION_RESERVA,FECHA_CANCELACION,CANCELADO,NUMERO_PERSONAS,ID_CLIENTE,ID_INMUEBLE)  VALUES (2234567898,DATE'2015-12-17',DATE'2016-1-17',DATE'2019-12-17',DATE'2015-12-17','N',1,1007863890,18765)");
+
 		retorno= (long)q.executeUnique();   
 		
 		double monto =0;
@@ -149,6 +149,13 @@ class SQLReserva
 		return (List<Reserva>) q.execute();
 	}
 
+	public List<Reserva> darReservasporInmuebleId (PersistenceManager pm, long muebleId)
+	{
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva ()+" WHERE ID_INMUEBLE=?");
+		q.setParameters(muebleId);
+		q.setResultClass(Reserva.class);
+		return (List<Reserva>) q.execute();
+	}
 	/**
 	 * Crea y ejecuta la sentencia SQL para encontrar la información de UNA RESERVA de la 
 	 * base de datos de Parranderos, por su identificador
@@ -160,7 +167,7 @@ class SQLReserva
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva () + " WHERE RESERVA.ID_RESERVA = ?");
 		q.setResultClass(Reserva.class);
-		q.setParameters(idReserva);
+		q.setParameters(null);
 		return (Reserva) q.executeUnique();
 	}
 	

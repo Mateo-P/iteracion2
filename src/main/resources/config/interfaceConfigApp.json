@@ -15,6 +15,23 @@
 				{
 					"label": "Eliminar",
 					"event": "EliminarReserva"
+				},
+				{
+					"label": "Listar",
+					"event": "listarReservas"
+				},
+				{
+					"label": "Buscar",
+					"event": "buscarReservaPorId"
+				}
+			]
+		},
+		{ "menuTitle": "Operador",
+		  "options":
+			[
+				{
+					"label": "Crear",
+					"event": "adicionarOperador"
 				}
 			]
 		},
@@ -24,6 +41,11 @@
 				{
 					"label": "Eliminar Alojamiento",
 					"event": "eliminarInmueblePorId"
+				},
+				{
+					"label": "Indice de ocupacion",
+					"event": "listarIndices"
+								
 				}
 			]
 		},		

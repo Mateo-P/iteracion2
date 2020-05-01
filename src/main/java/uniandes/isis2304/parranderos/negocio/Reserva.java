@@ -99,7 +99,7 @@ public class Reserva implements VOReserva
 	@Override
 	public String toString() 
 	{
-		return "Sirven [idBar=" + idReserva + ", idBebida=" + idInmueble + ", fecha inicio=" + fechaInicio + "]";
+		return "Reserva [idBar=" + idReserva + ", idBebida=" + idInmueble + ", fecha inicio=" + fechaInicio + "]";
 	}
 
 	public long getIdReserva() {

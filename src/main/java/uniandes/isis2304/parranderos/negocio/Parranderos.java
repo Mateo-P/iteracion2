@@ -16,6 +16,7 @@
 package uniandes.isis2304.parranderos.negocio;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class Parranderos
 	 * Logger para escribir la traza de la ejecución
 	 */
 	private static Logger log = Logger.getLogger(Parranderos.class.getName());
-	
+
 	/* ****************************************************************
 	 * 			Atributos
 	 *****************************************************************/
@@ -46,7 +47,7 @@ public class Parranderos
 	 * El manejador de persistencia
 	 */
 	private PersistenciaAlohandes pp;
-	
+
 	/* ****************************************************************
 	 * 			Métodos
 	 *****************************************************************/
@@ -57,7 +58,7 @@ public class Parranderos
 	{
 		pp = PersistenciaAlohandes.getInstance ();
 	}
-	
+
 	/**
 	 * El constructor qye recibe los nombres de las tablas en tableConfig
 	 * @param tableConfig - Objeto Json con los nombres de las tablas y de la unidad de persistencia
@@ -66,7 +67,7 @@ public class Parranderos
 	{
 		pp = PersistenciaAlohandes.getInstance (tableConfig);
 	}
-	
+
 	/**
 	 * Cierra la conexión con la base de datos (Unidad de persistencia)
 	 */
@@ -74,57 +75,57 @@ public class Parranderos
 	{
 		pp.cerrarUnidadPersistencia ();
 	}
-	
-	
 
-	
-	
-	
 
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación RESERVA
 	 *****************************************************************/
-/**
- * Adiciona de manera persistente una reserva 
- * Adiciona entradas al log de la aplicación
- * @param idReserva
- * @param idInmueble
- * @param idCliente
- * @param fechaInicio
- * @param fechaFin
- * @param fechaGeneracion
- * @param fechaCancelacion
- * @param cancelado
- * @param numeroPersonas
- * @return
- */
+	/**
+	 * Adiciona de manera persistente una reserva 
+	 * Adiciona entradas al log de la aplicación
+	 * @param idReserva
+	 * @param idInmueble
+	 * @param idCliente
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @param fechaGeneracion
+	 * @param fechaCancelacion
+	 * @param cancelado
+	 * @param numeroPersonas
+	 * @return
+	 */
 	public Reserva adicionarReserva(long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas)
 	{
-		 log.info ("Adicionando Reservas");
-	        Reserva resp = pp.adicionarReserva(idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
-	        log.info ("Adicionando Reserva: " + resp + "tuplas Adicionadas");
-	  
-	        return resp;
+		log.info ("Adicionando Reservas");
+		Reserva resp = pp.adicionarReserva(idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
+		log.info ("Adicionando Reserva: " + resp + "tuplas Adicionadas");
+
+		return resp;
 	}
-	
+
 	/**
 	 * Elimina de manera persistente el hecho que una reserva es tomada por un cliente
 	 * Adiciona entradas al log de la aplicación
 	 * @param idReserva - El identificador de la reserva
-	  * @return El número de tuplas eliminadas
+	 * @return El número de tuplas eliminadas
 	 */
 	public long eliminarReserva (long idReserva)
 	{
-        log.info ("Eliminando Reservas");
-        long resp = pp.eliminarReserva (idReserva);
-        log.info ("Eliminando Reserva: " + resp + "tuplas eliminadas");
-        return resp;
+		log.info ("Eliminando Reservas");
+		long resp = pp.eliminarReserva (idReserva);
+		log.info ("Eliminando Reserva: " + resp + "tuplas eliminadas");
+		return resp;
 	}
-	
+
 	/**
 	 * Encuentra todos los RESERVA en Parranderos
 	 * Adiciona entradas al log de la aplicación
@@ -132,10 +133,10 @@ public class Parranderos
 	 */
 	public List<Reserva> darReservas ()
 	{
-        log.info ("Listando Reservas");
-        List<Reserva> sirven = pp.darReservas ();	
-        log.info ("Listando Reservas: " + sirven.size() + " Reservas existentes");
-        return sirven;
+		log.info ("Listando Reservas");
+		List<Reserva> sirven = pp.darReservas ();	
+		log.info ("Listando Reservas: " + sirven.size() + " Reservas existentes");
+		return sirven;
 	}
 
 	/**
@@ -156,10 +157,10 @@ public class Parranderos
 	}
 
 	/**
-			* Adiciona de manera persistente un apartamento
- * Adiciona entradas al log de la aplicación
-  * @return un apartamento crado
-		 */
+	 * Adiciona de manera persistente un apartamento
+	 * Adiciona entradas al log de la aplicación
+	 * @return un apartamento crado
+	 */
 	public Apartamento adicionarApartamento(int numeroHabitaciones, boolean amoblado,boolean serviciosIncluidos ,String nombre, String tipoInmueble,String ubicacion,int capacidad,boolean disponible,String foto,String descripcion,int veceReservada,double costoXNoche,long idOperador)
 	{
 		log.info ("Adicionando Apartamento");
@@ -193,6 +194,35 @@ public class Parranderos
 		List<Inmueble> inmuebles = pp.darInmuebles ();
 		log.info ("Listando inmuebles: " + inmuebles.size() + " Reservas existentes");
 		return inmuebles;
+	}
+	/**
+	 * RFC3
+	 * @return
+	 */
+	public List<Double> darIndicesDeOcupacionInmuebles()
+	{
+		List<Double> indices = new ArrayList<Double>();
+		log.info ("Calculado indice de ocupacion de los Inmuebles");
+		List<Inmueble> inmuebles = pp.darInmuebles ();
+		for(int i=0;i<inmuebles.size();i++)
+		{
+			List<Reserva> reservas = pp.darReservaPorMueble(inmuebles.get(i).getId());
+			Timestamp hoy = new Timestamp(System.currentTimeMillis());
+			int antiguedad= calcularIntervaloDias(reservas.get(0).getFechaInicio(), hoy);
+			int ocupacion=0;
+			if(reservas.size()!=0){
+				for(int j=0;j<reservas.size();j++)
+				{
+					ocupacion+=calcularIntervaloDias(reservas.get(j).getFechaInicio(),reservas.get(j).getFechaFin());
+				}
+			}
+			double indice= ocupacion/antiguedad;
+			indices.add(indice);
+			log.info ("El inmueble: " + inmuebles.get(i).getNombre() + " tiene un indice de ocupacion de:" + indice);
+		}
+													
+		//										DIA 46/60 Matenme plis :/
+		return indices;
 	}
 	/**
 	 * Encuentra todos los RESERVA en Parranderos y los devuelve como VO
@@ -237,12 +267,12 @@ public class Parranderos
 	 */
 	public Cxc adicionarCxc (long idReserva,double monto)
 	{
-        log.info ("Adicionando Cxc [" + idReserva + ", " + monto + "]");
-        Cxc resp = pp.adicionarCxc (idReserva, monto);
-        log.info ("Adicionando Cxc: " + resp + " tuplas insertadas");
-        return resp;
+		log.info ("Adicionando Cxc [" + idReserva + ", " + monto + "]");
+		Cxc resp = pp.adicionarCxc (idReserva, monto);
+		log.info ("Adicionando Cxc: " + resp + " tuplas insertadas");
+		return resp;
 	}
-	
+
 	/**
 	 * Elimina de manera persistente el hecho que un bebedor visita un bar
 	 * Adiciona entradas al log de la aplicación
@@ -250,12 +280,12 @@ public class Parranderos
 	 */
 	public long eliminarCxc (long idReserva)
 	{
-        log.info ("Eliminando Cxc");
-        long resp = pp.eliminarCxcPorId (idReserva);
-        log.info ("Eliminando Cxc: " + resp + " tuplas eliminadas");
-        return resp;
+		log.info ("Eliminando Cxc");
+		long resp = pp.eliminarCxcPorId (idReserva);
+		log.info ("Eliminando Cxc: " + resp + " tuplas eliminadas");
+		return resp;
 	}
-	
+
 	/**
 	 * Encuentra todos los VISITAN en Parranderos
 	 * Adiciona entradas al log de la aplicación
@@ -263,10 +293,10 @@ public class Parranderos
 	 */
 	public List<Cxc> darCxc ()
 	{
-        log.info ("Listando Cxc");
-        List<Cxc> visitan = pp.darCxc();	
-        log.info ("Listando Cxc: Listo!");
-        return visitan;
+		log.info ("Listando Cxc");
+		List<Cxc> visitan = pp.darCxc();	
+		log.info ("Listando Cxc: Listo!");
+		return visitan;
 	}
 
 	/**
@@ -297,10 +327,10 @@ public class Parranderos
 	 */
 	public long [] limpiarParranderos ()
 	{
-        log.info ("Limpiando la BD de Parranderos");
-        long [] borrrados = pp.limpiarParranderos();	
-        log.info ("Limpiando la BD de Parranderos: Listo!");
-        return borrrados;
+		log.info ("Limpiando la BD de Parranderos");
+		long [] borrrados = pp.limpiarParranderos();	
+		log.info ("Limpiando la BD de Parranderos: Listo!");
+		return borrrados;
 	}
 
 	public VOReserva darReservaPorId(long idReserva) {
@@ -312,6 +342,17 @@ public class Parranderos
 		// TODO Auto-generated method stub
 		return pp.darInmueblePorId(idInmueble);
 	}
+	public Operador adicionarOperador()
+	{
+		return pp.adicionarOperador("hola", "", "", 12);
+	}
+	public int calcularIntervaloDias(Timestamp fechaInicio, Timestamp fechafin)
+	{
+		int dias=0;
+		int rango= (int) ( fechaInicio.getTime()-fechafin.getTime());
+		dias=rango/86400000;
+		return dias;
 
+	}
 
 }
