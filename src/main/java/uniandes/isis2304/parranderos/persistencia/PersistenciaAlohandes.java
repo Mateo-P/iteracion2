@@ -134,7 +134,13 @@ public class PersistenciaAlohandes
 		tablas.add ("VIVIENDA_CEDIDA");
 		tablas.add ("HABITACION_UNIVERSITARIA");
 		tablas.add ("RESTRICCION_INMUEBLE");
+<<<<<<< HEAD
+		tablas.add ("SERVICIO_ADICIONAL");
+		tablas.add ("OFRECEN");
+}
+=======
 	}
+>>>>>>> 491133de22d7db3f74489e0a7409860a0c6a447a
 
 	/**
 	 * Constructor privado, que recibe los nombres de las tablas en un objeto Json - Patrón SINGLETON
@@ -323,8 +329,25 @@ public class PersistenciaAlohandes
 	{
 		return tablas.get (13);
 	}
+<<<<<<< HEAD
+	
+	/**
+	 * @return La cadena de caracteres con el nombre de la tabla de RESTRICCION_INMUEBLE de parranderos
+	 */
+	public String darTablaServiciosAdicional()
+	{
+		return tablas.get (14);
+	}
+	
+	public String darTablaOfrecen(){
+		return tablas.get(15);
+	}
+	
+	
+=======
 
 
+>>>>>>> 491133de22d7db3f74489e0a7409860a0c6a447a
 	/**
 	 * Transacción para el generador de secuencia de Parranderos
 	 * Adiciona entradas al log de la aplicación
