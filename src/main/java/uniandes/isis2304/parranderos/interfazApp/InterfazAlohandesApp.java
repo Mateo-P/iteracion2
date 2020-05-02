@@ -49,6 +49,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 import uniandes.isis2304.parranderos.negocio.Parranderos;
+import uniandes.isis2304.parranderos.negocio.Reserva;
 import uniandes.isis2304.parranderos.negocio.VOApartamento;
 import uniandes.isis2304.parranderos.negocio.VOInmueble;
 import uniandes.isis2304.parranderos.negocio.VOReserva;
@@ -266,6 +267,39 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
         		}
         		String resultado = "En crearReserva\n\n";
         		resultado += " reserva creada exitosamente: " + Reserva;
+    			resultado += "\n Operación terminada";
+    			panelDatos.actualizarInterfaz(resultado);
+    		}
+    		else
+    		{
+    			panelDatos.actualizarInterfaz("Operación cancelada por el usuario");
+    		}
+		} 
+    	catch (Exception e) 
+    	{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+    }
+    public void crearReservaMasiva( )
+    {
+    	try 
+    	{
+    		String info = JOptionPane.showInputDialog (this, "Ingrese los datos de la reserva 1ro el tipo de alojamiento, 2do la cantidad demandada \n Ej: APARTAMENTO, 50 ?", "Crear Reserva Masiva", JOptionPane.QUESTION_MESSAGE);
+    		if (info != null)
+    		{
+    			 System.out.println("entra a reserva Masiva");
+    			Timestamp fechaGeneracion = new Timestamp(System.currentTimeMillis());
+    			Timestamp fechaInicio = new Timestamp(System.currentTimeMillis()+10000000);
+    			Timestamp fechaFin = new Timestamp(System.currentTimeMillis()+10000000+2000000);
+        		List<Reserva> Reserva = parranderos.adicionarReservaMasivas(info.split(",")[0], 1007863890, fechaInicio, fechaFin, fechaGeneracion, null,'N',Integer.parseInt(info.split(",")[1]));
+        		if (Reserva.size() == 0)
+        		{
+        			throw new Exception ("No se pudo crear la Reserva Masiva ");
+        		}
+        		String resultado = "En crearReserva\n\n";
+        		resultado += " reserva Masiva creada exitosamente: " + Reserva;
     			resultado += "\n Operación terminada";
     			panelDatos.actualizarInterfaz(resultado);
     		}

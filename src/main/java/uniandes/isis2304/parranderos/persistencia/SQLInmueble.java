@@ -112,10 +112,10 @@ public class SQLInmueble {
         q.setResultClass(Reserva.class);
         return (List<Inmueble>) q.execute();
     }
-    
+
     public List<Inmueble> darInmueblesPorTipo (PersistenceManager pm, String tipoInmueble)
     {
-        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE INMUEBLE.TIPO_INMUEBLE=?");
+        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE TIPO_INMUEBLE = HABITACION_HOTEL");
         q.setResultClass(Inmueble.class);
         q.setParameters(tipoInmueble);
         return (List<Inmueble>) q.execute();

@@ -13,6 +13,10 @@
 					"event": "crearReserva"
 				},
 				{
+					"label": "Crear Masiva",
+					"event": "crearReservaMasiva"
+				},
+				{
 					"label": "Eliminar",
 					"event": "EliminarReserva"
 				},
