@@ -69,7 +69,7 @@ public class SQLInmueble {
         q.setParameters(idInmueble);
         return (Inmueble) q.executeUnique();
     }
-
+  
     /**
      * Crea y ejecuta la sentencia SQL para eliminar UN INMUEBLE de la base de datos de Parranderos, por su identificador
      * @param pm - El manejador de persistencia
@@ -110,6 +110,14 @@ public class SQLInmueble {
     {
         Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble ());
         q.setResultClass(Reserva.class);
+        return (List<Inmueble>) q.execute();
+    }
+    
+    public List<Inmueble> darInmueblesPorTipo (PersistenceManager pm, String tipoInmueble)
+    {
+        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE INMUEBLE.TIPO_INMUEBLE=?");
+        q.setResultClass(Inmueble.class);
+        q.setParameters(tipoInmueble);
         return (List<Inmueble>) q.execute();
     }
 

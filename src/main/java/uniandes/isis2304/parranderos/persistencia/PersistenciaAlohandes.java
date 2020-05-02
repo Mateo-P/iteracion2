@@ -18,6 +18,7 @@ package uniandes.isis2304.parranderos.persistencia;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class PersistenciaAlohandes
 	 * Logger para escribir la traza de la ejecución
 	 */
 	private static Logger log = Logger.getLogger(PersistenciaAlohandes.class.getName());
-	
+
 	/**
 	 * Cadena para indicar el tipo de sentencias que se va a utilizar en una consulta
 	 */
@@ -65,18 +66,18 @@ public class PersistenciaAlohandes
 	 * Atributo privado que es el único objeto de la clase - Patrón SINGLETON
 	 */
 	private static PersistenciaAlohandes instance;
-	
+
 	/**
 	 * Fábrica de Manejadores de persistencia, para el manejo correcto de las transacciones
 	 */
 	private PersistenceManagerFactory pmf;
-	
+
 	/**
 	 * Arreglo de cadenas con los nombres de las tablas de la base de datos, en su orden:
 	 * Secuenciador, tipoBebida, bebida, bar, bebedor, gustan, sirven y visitan
 	 */
 	private List <String> tablas;
-	
+
 	/**
 	 * Atributo para el acceso a las sentencias SQL propias a PersistenciaParranderos
 	 */
@@ -84,7 +85,7 @@ public class PersistenciaAlohandes
 	/**
 	 * Atributo para el acceso a la tabla INMUEBLE de la base de datos
 	 */
-    private SQLInmueble sqlInmueble;
+	private SQLInmueble sqlInmueble;
 
 	/**
 	 * Atributo para el acceso a la tabla Apartamento de la base de datos
@@ -94,17 +95,17 @@ public class PersistenciaAlohandes
 	 * Atributo para el acceso a la tabla BAR de la base de datos
 	 */
 	private SQLOperador sqlOperador;
-	
+
 	/**
 	 * Atributo para el acceso a la tabla SIRVEN de la base de datos
 	 */
 	private SQLReserva sqlReserva;
-	
+
 	/**
 	 * Atributo para el acceso a la tabla VISITAN de la base de datos
 	 */
 	private SQLCxc sqlCxc;
-	
+
 	/* ****************************************************************
 	 * 			Métodos del MANEJADOR DE PERSISTENCIA
 	 *****************************************************************/
@@ -116,7 +117,7 @@ public class PersistenciaAlohandes
 	{
 		pmf = JDOHelper.getPersistenceManagerFactory("Parranderos");		
 		crearClasesSQL ();
-		
+
 		// Define los nombres por defecto de las tablas de la base de datos
 		tablas = new LinkedList<String> ();
 		tablas.add ("Parranderos_sequence");
@@ -133,7 +134,7 @@ public class PersistenciaAlohandes
 		tablas.add ("VIVIENDA_CEDIDA");
 		tablas.add ("HABITACION_UNIVERSITARIA");
 		tablas.add ("RESTRICCION_INMUEBLE");
-}
+	}
 
 	/**
 	 * Constructor privado, que recibe los nombres de las tablas en un objeto Json - Patrón SINGLETON
@@ -143,7 +144,7 @@ public class PersistenciaAlohandes
 	{
 		crearClasesSQL ();
 		tablas = leerNombresTablas (tableConfig);
-		
+
 		String unidadPersistencia = tableConfig.get ("unidadPersistencia").getAsString ();
 		log.trace ("Accediendo unidad de persistencia: " + unidadPersistencia);
 		pmf = JDOHelper.getPersistenceManagerFactory (unidadPersistencia);
@@ -160,7 +161,7 @@ public class PersistenciaAlohandes
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Constructor que toma los nombres de las tablas de la base de datos del objeto tableConfig
 	 * @param tableConfig - El objeto JSON con los nombres de las tablas
@@ -183,7 +184,7 @@ public class PersistenciaAlohandes
 		pmf.close ();
 		instance = null;
 	}
-	
+
 	/**
 	 * Genera una lista con los nombres de las tablas de la base de datos
 	 * @param tableConfig - El objeto Json con los nombres de las tablas
@@ -198,16 +199,16 @@ public class PersistenciaAlohandes
 		{
 			resp.add (nom.getAsString ());
 		}
-		
+
 		return resp;
 	}
-	
+
 	/**
 	 * Crea los atributos de clases de apoyo SQL
 	 */
 	private void crearClasesSQL ()
 	{
-		
+
 		sqlOperador = new SQLOperador(this);
 		sqlInmueble = new SQLInmueble(this);
 		sqlReserva = new SQLReserva (this);
@@ -279,7 +280,7 @@ public class PersistenciaAlohandes
 	{
 		return tablas.get (7);
 	}
-	
+
 	/**
 	 * @return La cadena de caracteres con el nombre de la tabla de HABITACION_HOSTEL de parranderos
 	 */
@@ -322,8 +323,8 @@ public class PersistenciaAlohandes
 	{
 		return tablas.get (13);
 	}
-	
-	
+
+
 	/**
 	 * Transacción para el generador de secuencia de Parranderos
 	 * Adiciona entradas al log de la aplicación
@@ -331,11 +332,11 @@ public class PersistenciaAlohandes
 	 */
 	private long nextval ()
 	{
-        long resp = sqlUtil.nextval (pmf.getPersistenceManager());
-        log.trace ("Generando secuencia: " + resp);
-        return resp;
-    }
-	
+		long resp = sqlUtil.nextval (pmf.getPersistenceManager());
+		log.trace ("Generando secuencia: " + resp);
+		return resp;
+	}
+
 	/**
 	 * Extrae el mensaje de la exception JDODataStoreException embebido en la Exception e, que da el detalle específico del problema encontrado
 	 * @param e - La excepción que ocurrio
@@ -354,7 +355,7 @@ public class PersistenciaAlohandes
 	/* ****************************************************************
 	 * 			Métodos para manejar los OPERADOR
 	 *****************************************************************/
-	
+
 	/**
 	 * Método que inserta, de manera transaccional, una tupla en la tabla BAR
 	 * Adiciona entradas al log de la aplicación
@@ -367,32 +368,32 @@ public class PersistenciaAlohandes
 	public Operador adicionarOperador(String nombre, String ciudad, String presupuesto, int sedes) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long idBar = nextval ();
-            long tuplasInsertadas = sqlOperador.adicionarOperador(pm);
-            tx.commit();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long idBar = nextval ();
+			long tuplasInsertadas = sqlOperador.adicionarOperador(pm);
+			tx.commit();
 
-            log.trace ("Inserción de Bar: " + nombre + ": " + tuplasInsertadas + " tuplas insertadas");
+			log.trace ("Inserción de Bar: " + nombre + ": " + tuplasInsertadas + " tuplas insertadas");
 
-            return new Operador (idBar, nombre, ciudad, presupuesto, presupuesto, sedes, presupuesto, sedes, presupuesto);
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return null;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
+			return new Operador (idBar, nombre, ciudad, presupuesto, presupuesto, sedes, presupuesto, sedes, presupuesto);
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
 
 
@@ -405,29 +406,29 @@ public class PersistenciaAlohandes
 	public long eliminarOperadorPorId (long idBar) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlOperador.eliminarBarPorId (pm, idBar);
-            tx.commit();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long resp = sqlOperador.eliminarBarPorId (pm, idBar);
+			tx.commit();
 
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
+			return resp;
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return -1;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
 
 	/**
@@ -448,7 +449,28 @@ public class PersistenciaAlohandes
 	{
 		return sqlInmueble.darInmuebles(pmf.getPersistenceManager());
 	}
+	public List<Inmueble> darInmueblesDisponibles(PersistenceManager pm ,List<Inmueble> inmuebles,Timestamp fechaInicio, Timestamp fechaFin ){
 
+		List<Inmueble> disponibles = new ArrayList<Inmueble>();
+		for (int i=0;i<inmuebles.size();i++)
+		{
+			List<Reserva> reservas = sqlReserva.darReservasporInmuebleId(pm, inmuebles.get(i).getId());
+			boolean validar=true;
+			for(int j=0;j<reservas.size();j++)
+			{
+				if(reservas.get(j).getFechaFin().compareTo(fechaInicio)<0||reservas.get(j).getFechaInicio().compareTo(fechaFin)>0)
+				{
+					validar= !validar;
+				}
+			}
+			if(validar)
+			{
+				disponibles.add(inmuebles.get(i));
+			}
+
+		}
+		return disponibles;
+	}
 	public List<Apartamento> darApartamentos ()
 	{
 		return sqlApartamento.darApartamentos(pmf.getPersistenceManager());
@@ -474,7 +496,7 @@ public class PersistenciaAlohandes
 	{
 		return sqlOperador.darBaresPorNombre (pmf.getPersistenceManager(), nombreBar);
 	}
- 
+
 	/**
 	 * Método que consulta todas las tuplas en la tabla BAR que tienen el identificador dado
 	 * @param idOperador - El identificador del OPerador
@@ -484,7 +506,7 @@ public class PersistenciaAlohandes
 	{
 		return sqlOperador.darBarPorId (pmf.getPersistenceManager(), idOperador);
 	}
-	
+
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación RESERVA
 	 *****************************************************************/
@@ -502,44 +524,96 @@ public class PersistenciaAlohandes
 	 * Adiciona entradas al log de la aplicación
 	 * @param idCliente - El identificador del cliente- Debe haber un RESERVA con ese identificador
 	 * @param idInmueble - El identificador dEl INMUEBLE - Debe haber una INMUEBLE con ese identificador
-	 
+
 	 * @return Un objeto RESERVA con la información dada. Null si ocurre alguna Excepción
 	 */
 	public Reserva adicionarReserva (long idInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int numeroPersonas) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-        	
-            tx.begin();
-            long idReserva = 14;
-            System.out.println("antes");
-            long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(), idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
-    		tx.commit();
-    		
-           Reserva reservaNueva = new Reserva(idReserva, idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
-            System.out.println(""+ reservaNueva.getFechaFin());
-            log.trace ("Inserción de Reserva: [" + idReserva + ", " + idInmueble + "]. " + tuplasInsertadas + " tuplas insertadas");
-            
-            return reservaNueva ;
-            }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return null;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+
+			tx.begin();
+			long idReserva = nextval();
+			System.out.println("antes");
+			long tuplasInsertadas = sqlReserva.adicionarReserva (pmf.getPersistenceManager(), idReserva,  idInmueble, idCliente, fechaInicio,  fechaFin,  fechaGeneracion, fechaCancelacion, cancelado , numeroPersonas);
+			tx.commit();
+
+			Reserva reservaNueva = new Reserva(idReserva, idInmueble, idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, numeroPersonas);
+			System.out.println(""+ reservaNueva.getFechaFin());
+			log.trace ("Inserción de Reserva: [" + idReserva + ", " + idInmueble + "]. " + tuplasInsertadas + " tuplas insertadas");
+
+			return reservaNueva ;
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
- 
+
+	public List<Reserva> adicionarReservasMasivas(String tipoInmueble, int cantidad,Timestamp fechaInicio, Timestamp fechaFin,long idCliente,Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado)
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
+		List<Inmueble> inmuebles =sqlInmueble.darInmueblesPorTipo(pm, tipoInmueble);
+		List<Inmueble> disponibles = darInmueblesDisponibles(pm, inmuebles, fechaInicio, fechaFin);
+		List<Reserva> nuevasReservas = new ArrayList<Reserva>();
+		int capacidad=0;
+		for(int i=0;i<disponibles.size();i++)
+		{
+			capacidad+=disponibles.get(i).getCapacidad();
+		}
+		if(capacidad>cantidad)
+		{
+			try{
+				tx.begin();
+
+				long tuplasInsertadas=0;
+				for(int i=0;i<disponibles.size() && cantidad>0;i++)
+				{
+					long idReserva= nextval();
+					long tuplasInsetadas= sqlReserva.adicionarReserva(pm, idReserva, disponibles.get(i).getId(), idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, disponibles.get(i).getCapacidad());
+					log.trace ("Inserción de Reserva: [" + idReserva + ", " + disponibles.get(i).getId() + "]. ");
+					tuplasInsertadas++;
+
+					Reserva reservaNueva = new Reserva(idReserva, disponibles.get(i).getId(), idCliente, fechaInicio, fechaFin, fechaGeneracion, fechaCancelacion, cancelado, disponibles.get(i).getCapacidad());
+					System.out.println(""+ reservaNueva.getFechaFin());
+					nuevasReservas.add(reservaNueva);
+				}
+				log.trace(  tuplasInsertadas + " tuplas insertadas");
+				tx.commit();
+				return nuevasReservas;
+			}catch (Exception e)
+			{
+				//        	e.printStackTrace();
+				log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			
+			}
+			finally
+			{
+				if (tx.isActive())
+				{
+					tx.rollback();
+				}
+				pm.close();
+			}
+		}
+		return null;
+	}
+
+
+
 	/**
 	 * Método que elimina, de manera transaccional, una tupla en la tabla RESERVA, dados los identificadores de RESERVA e Inmueble
 	 * @param idReserva - El identificador de la Reserva
@@ -548,29 +622,29 @@ public class PersistenciaAlohandes
 	public long eliminarReserva (long idReserva) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-	        Transaction tx=pm.currentTransaction();
-	        try
-	        {
-	            tx.begin();
-	            long resp = sqlReserva.eliminarReserva (pm, idReserva);	            
-	            tx.commit();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long resp = sqlReserva.eliminarReserva (pm, idReserva);	            
+			tx.commit();
 
-	            return resp;
-	        }
-	        catch (Exception e)
-	        {
-//	        	e.printStackTrace();
-	        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-	        	return -1;
-	        }
-	        finally
-	        {
-	            if (tx.isActive())
-	            {
-	                tx.rollback();
-	            }
-	            pm.close();
-	        }
+			return resp;
+		}
+		catch (Exception e)
+		{
+			//	        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return -1;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
 
 	/**
@@ -596,7 +670,7 @@ public class PersistenciaAlohandes
 		}
 		catch (Exception e)
 		{
-//        	e.printStackTrace();
+			//        	e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 			return null;
 		}
@@ -629,7 +703,7 @@ public class PersistenciaAlohandes
 		}
 		catch (Exception e)
 		{
-//	        	e.printStackTrace();
+			//	        	e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 			return -1;
 		}
@@ -642,7 +716,7 @@ public class PersistenciaAlohandes
 			pm.close();
 		}
 	}
- 
+
 	/**
 	 * Método que consulta todas las tuplas en la tabla RESERVA
 	 * @return La lista de objetos RESERVA, construidos con base en las tuplas de la tabla RESERVA
@@ -650,15 +724,15 @@ public class PersistenciaAlohandes
 	public List<Reserva> darReservas  ()
 	{
 		return sqlReserva.darReservas (pmf.getPersistenceManager());
-	
+
 	}
- 
+
 	public List<Reserva> darReservaPorMueble  (long muebleId)
 	{
 		return sqlReserva.darReservasporInmuebleId(pmf.getPersistenceManager(), muebleId);
-	
+
 	}
- 
+
 	/* ****************************************************************
 	 * 			Métodos para manejar la relación CXC
 	 *****************************************************************/
@@ -671,31 +745,31 @@ public class PersistenciaAlohandes
 	public Cxc adicionarCxc (long idReserva,double monto) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long tuplasInsertadas = sqlCxc.adicionarCxc(pm, idReserva, monto);
-            tx.commit();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long tuplasInsertadas = sqlCxc.adicionarCxc(pm, idReserva, monto);
+			tx.commit();
 
-            log.trace ("Inserción de Cxc: [" + idReserva + ", " + monto + "]. " + tuplasInsertadas + " tuplas insertadas");
+			log.trace ("Inserción de Cxc: [" + idReserva + ", " + monto + "]. " + tuplasInsertadas + " tuplas insertadas");
 
-            return new Cxc (idReserva, monto);
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return null;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
+			return new Cxc (idReserva, monto);
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
 
 
@@ -706,29 +780,29 @@ public class PersistenciaAlohandes
 	public long eliminarCxcPorId (long idReserva) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long resp = sqlCxc.eliminarCxcPorIdReserva(pm, idReserva);
-            tx.commit();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long resp = sqlCxc.eliminarCxcPorIdReserva(pm, idReserva);
+			tx.commit();
 
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
+			return resp;
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return -1;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
 
 	/**
@@ -739,33 +813,33 @@ public class PersistenciaAlohandes
 	public long eliminarCxcPorIdReserva (long idBebedor) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long visitasEliminadas = sqlCxc.eliminarCxcPorIdReserva(pm, idBebedor);
-            tx.commit();
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long visitasEliminadas = sqlCxc.eliminarCxcPorIdReserva(pm, idBebedor);
+			tx.commit();
 
-            return visitasEliminadas;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-            return -1;
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
+			return visitasEliminadas;
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return -1;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 	}
-	
 
-	
+
+
 
 	/**
 	 * Método que consulta todas las tuplas en la tabla VISITAN
@@ -785,31 +859,31 @@ public class PersistenciaAlohandes
 	public long [] limpiarParranderos ()
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long [] resp = sqlUtil.limpiarParranderos (pm);
-            tx.commit ();
-            log.info ("Borrada la base de datos");
-            return resp;
-        }
-        catch (Exception e)
-        {
-//        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return new long[] {-1, -1, -1, -1, -1, -1, -1};
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-		
-	}
-	
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long [] resp = sqlUtil.limpiarParranderos (pm);
+			tx.commit ();
+			log.info ("Borrada la base de datos");
+			return resp;
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return new long[] {-1, -1, -1, -1, -1, -1, -1};
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
 
- }
+	}
+
+
+}

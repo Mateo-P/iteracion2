@@ -111,7 +111,14 @@ public class Parranderos
 
 		return resp;
 	}
+	public List<Reserva> adicionarReservaMasivas(String tipoInmueble,long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion,Timestamp fechaCancelacion,char cancelado ,int cantidad)
+	{
+		log.info ("Adicionando ReservasMasivas");
+		List<Reserva> resp = pp.adicionarReservasMasivas(tipoInmueble, cantidad, fechaInicio, fechaFin, idCliente, fechaGeneracion, fechaCancelacion, cancelado);
+		log.info ("Adicionando Reserva: " + resp + "tuplas Adicionadas");
 
+		return resp;
+	}
 	/**
 	 * Elimina de manera persistente el hecho que una reserva es tomada por un cliente
 	 * Adiciona entradas al log de la aplicación
