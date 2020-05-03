@@ -15,6 +15,7 @@
 
 package uniandes.isis2304.parranderos.negocio;
 import java.sql.Timestamp;
+import java.util.Comparator;
 /**
  * Clase para modelar la relación SIRVEN del negocio de los Parranderos:
  * Cada objeto de esta clase representa el hecho que un bar sirve una bebida y viceversa.
@@ -185,4 +186,22 @@ public class Reserva implements VOReserva
 	public void setFechaCancelacion(Timestamp fechaCancelacion) {
 		this.fechaCancelacion = fechaCancelacion;
 	}
+	
+	public static class cmpFechaGeneracion implements Comparator<Reserva>{
+		/**
+		 * metodo de comparacion de los Viajes de Uber por la zona de destino
+		 * @return 0 si dstid = dstid de com, 1 si dstid > dstid de com, -1 si dstid < dstid de com
+		 */		
+			public int compare(Reserva o1, Reserva o2) {
+				if(o1.fechaGeneracion.getTime()-o2.fechaGeneracion.getTime()<0){
+					return -1;
+				}else if(o1.fechaGeneracion.getTime()-o2.fechaGeneracion.getTime()<0){
+					return 1;
+				}
+				else return 0;
+			}
+		}
+
+	
+	
 }

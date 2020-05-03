@@ -120,5 +120,24 @@ public class SQLInmueble {
         q.setParameters(tipoInmueble);
         return (List<Inmueble>) q.execute();
     }
+    
+  public long deshabilitarInmuble(PersistenceManager pm, Long idInmuble){
+    	
+    	Query q1=pm.newQuery(SQL,"UPDATE "+pp.darTablaInmueble()+ " SET DISPONIBLE = ? WHERE ID=?");
+		q1.setParameters('N',idInmuble);
+		long res = (long) q1.executeUnique();
+		return res;
+    }
+    
+    
+    public long habilitarInmuble(PersistenceManager pm, Long idInmuble){
+    	
+    	Query q1=pm.newQuery(SQL,"UPDATE "+pp.darTablaInmueble()+ " SET DISPONIBLE = ? WHERE ID=?");
+		q1.setParameters('Y',idInmuble);
+		long res = (long) q1.executeUnique();
+		return res;
+    }
+    
+    
 
 }
