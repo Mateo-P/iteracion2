@@ -646,7 +646,7 @@ public class PersistenciaAlohandes
 			tx.begin();
 			long resp = sqlReserva.eliminarReserva (pm, idReserva);	            
 			tx.commit();
-
+			log.trace ("Se eliminino " + resp + " reserva ");
 			return resp;
 		}
 		catch (Exception e)
@@ -665,6 +665,39 @@ public class PersistenciaAlohandes
 		}
 	}
 
+	public long eliminarReservasMasivas (long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
+		List<Reserva> reservaMasiva= sqlReserva.darReservasMasivas(pm, idCliente, fechaInicio, fechaFin, fechaGeneracion);
+		try
+		{
+			tx.begin();
+			long resp=0;
+			for(int i=0;i<reservaMasiva.size();i++)
+			{
+				resp += sqlReserva.eliminarReserva(pm, reservaMasiva.get(i).getIdReserva());
+			}
+			log.trace(  resp + " tuplas eliminadas");            
+			tx.commit();
+
+			return resp;
+		}
+		catch (Exception e)
+		{
+			//	        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return -1;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+	}
 	/**
 	 * Método que inserta, de manera transaccional, una tupla en la tabla Apartamento
 	 * Adiciona entradas al log de la aplicación

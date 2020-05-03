@@ -315,6 +315,48 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
     }
+    
+    public void eliminarReservaMasiva( )
+    {
+    	try 
+    	{
+    		String info = JOptionPane.showInputDialog (this, "Ingrese los siguientes datos de la reserva Masiva\n"
+    																						+ "Fecha inicio,\n"
+    																						+ "Fecha fin,\n"
+    																						+ "Fecha de generacion,\n"
+    																						+ "cedula"
+    																						+ " Ej: DATE'2015-12-17',\n"
+    																						+ " DATE'2016-1-17',\n"
+    																						+ "DATE'2019-12-17',\n"
+    																						+ "1007863890 ", JOptionPane.QUESTION_MESSAGE);
+    		if (info != null)
+    		{
+    			 System.out.println("entra a reserva Masiva");
+    			Timestamp fechaGeneracion = new Timestamp(System.currentTimeMillis());
+    			Timestamp fechaInicio = new Timestamp(System.currentTimeMillis()+10000000);
+    			Timestamp fechaFin = new Timestamp(System.currentTimeMillis()+10000000+2000000);
+        		long Reserva = parranderos.eliminarReservaMasiva(1007863890, fechaInicio, fechaFin, fechaGeneracion);
+        		if (Reserva == 0)
+        		{
+        			throw new Exception ("No se pudo eliminar la Reserva Masiva ");
+        		}
+        		String resultado = "En eliminarReserva\n\n";
+        		resultado += " reserva Masiva Eliminada exitosamente: " + Reserva;
+    			resultado += "\n Operación terminada";
+    			panelDatos.actualizarInterfaz(resultado);
+    		}
+    		else
+    		{
+    			panelDatos.actualizarInterfaz("Operación cancelada por el usuario");
+    		}
+		} 
+    	catch (Exception e) 
+    	{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+    }
     public void adicionarOperador()
     {
     	try{
@@ -442,7 +484,7 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
     {
     	try 
     	{
-    		String idTipoStr = JOptionPane.showInputDialog (this, "Id de la reser?", "Borrar Reserva por Id", JOptionPane.QUESTION_MESSAGE);
+    		String idTipoStr = JOptionPane.showInputDialog (this, "Id de la reserva?", "Borrar Reserva por Id", JOptionPane.QUESTION_MESSAGE);
     		if (idTipoStr != null)
     		{
     			long idTipo = Long.valueOf (idTipoStr);

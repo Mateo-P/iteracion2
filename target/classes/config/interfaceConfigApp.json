@@ -21,6 +21,10 @@
 					"event": "EliminarReserva"
 				},
 				{
+					"label": "Eliminar Masiva",
+					"event": "eliminarReservaMasiva"
+				},
+				{
 					"label": "Listar",
 					"event": "listarReservas"
 				},

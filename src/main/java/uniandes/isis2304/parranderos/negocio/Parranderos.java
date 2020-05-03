@@ -132,7 +132,13 @@ public class Parranderos
 		log.info ("Eliminando Reserva: " + resp + "tuplas eliminadas");
 		return resp;
 	}
-
+	public long eliminarReservaMasiva (long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion)
+	{
+		log.info ("Eliminando ReservaMasiva");
+		long resp = pp.eliminarReservasMasivas(idCliente, fechaInicio, fechaFin, fechaGeneracion);
+		log.info ("Eliminando ReservaMasiva: " + resp + "tuplas eliminadas");
+		return resp;
+	}
 	/**
 	 * Encuentra todos los RESERVA en Parranderos
 	 * Adiciona entradas al log de la aplicación
