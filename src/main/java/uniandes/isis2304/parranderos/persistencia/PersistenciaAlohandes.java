@@ -989,6 +989,9 @@ public class PersistenciaAlohandes {
 	    
 	    try{
 	    	tx.begin();
+	    	
+	    	sqlInmueble.deshabilitarInmuble(pm, idInmubele);
+	    	
 		for (int i = 0; i < actuales.size(); i++) {
 			TIPO_INMUEBLE tipoInmueble = sqlInmueble.darInmueblePorId(pm, actuales.get(i).getIdInmueble())
 					.getTipoInmueble();
@@ -1078,6 +1081,12 @@ public class PersistenciaAlohandes {
 			pm.close();
 		}
 
+	}
+	
+	
+	public void habilitarAlojamiento(Long idInmueble){
+		PersistenceManager pm = pmf.getPersistenceManager();
+		sqlInmueble.habilitarInmuble(pm, idInmueble);
 	}
 
 }
