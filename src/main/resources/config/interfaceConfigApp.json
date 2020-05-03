@@ -1,4 +1,4 @@
-{
+﻿{
 	"title": "Aplicación transaccional de Alohandes",
 	"frameH": 600,
 	"frameW": 800,
@@ -62,6 +62,18 @@
 				{
 					"label": "Indice de ocupacion",
 					"event": "listarIndices"
+								
+				}
+,
+				{
+					"label": "Deshabilitar Alojamiento",
+					"event": "deshabilitarAlojamiento"
+								
+				}
+,
+				{
+					"label": "Habilitar Alojamiento",
+					"event": "habilitarInmueble"
 								
 				}
 			]

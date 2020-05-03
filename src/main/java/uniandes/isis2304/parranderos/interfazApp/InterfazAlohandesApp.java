@@ -371,6 +371,55 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
     	}
     }
+    
+	public void deshabilitarAlojamiento(){
+    	try{
+    		
+    		String idInmueble = JOptionPane.showInputDialog (this, "Id del Inmueble ?", "Deshabilitar Inmueble por Id", JOptionPane.QUESTION_MESSAGE);
+    		long id = Integer.parseInt(idInmueble);
+    		long resp = parranderos.deshabilitarAlojamiento(id);
+    		if(resp !=0){
+    		String resultado = "En deshabilitar Alojamiento\n\n";
+    		resultado += " reservas reubicadas exitosamente: " + resp;
+			resultado += "\n Operación terminada";
+			panelDatos.actualizarInterfaz(resultado);
+    		}
+    		else{
+    			panelDatos.actualizarInterfaz("Hubo algun erro en la operación");
+    		}
+    		
+    	}
+    	catch(Exception e)
+    	{
+    		String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+    	}
+    }
+    
+    public void habilitarInmueble(){
+    	try{
+    		String idInmueble = JOptionPane.showInputDialog (this, "Id del Inmueble ?", "Deshabilitar Inmueble por Id", JOptionPane.QUESTION_MESSAGE);
+    		long id = Integer.parseInt(idInmueble);
+    		long resp = parranderos.habilitarAlojamiento(id);
+    		if(resp ==1){
+    		String resultado = "En habilitar Alojamiento\n\n";
+    		resultado += " Alojamiento habilitado: " + resp;
+			resultado += "\n Operación terminada";
+			panelDatos.actualizarInterfaz(resultado);
+			
+    		}else{
+    			panelDatos.actualizarInterfaz("Operación cancelada por el usuario");
+    		}
+    	}
+    	catch(Exception e)
+    	{
+    		String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+    	}
+	}
+    
+    
+    
     /**
      * Consulta en la base de datos los tipos de bebida existentes y los muestra en el panel de datos de la aplicación
      */

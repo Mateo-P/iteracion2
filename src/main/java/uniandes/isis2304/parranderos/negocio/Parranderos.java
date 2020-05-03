@@ -391,4 +391,19 @@ public class Parranderos
 		log.info ("Generando los VO de Cxc: " + voCxc.size () + " Clientes existentes");
 		return voCxc;
 	}
+	
+	public long deshabilitarAlojamiento(long idInmueble){
+		log.info ("Deshabilitando alojamiento");
+		long resp = pp.deshabilitarAlojamiento(idInmueble);
+		log.info ("Reubicando Reservas: " + resp + "reservas reubicadas");
+		return resp;
+		
+	}
+	
+	public long habilitarAlojamiento(long idInmueble){
+		log.info ("Habilitando alojamiento");
+		long resp = pp.habilitarAlojamiento(idInmueble);
+		log.info ("Alojamiento habilitado: " + resp + "con id"+idInmueble);
+		return resp;
+	}
 }

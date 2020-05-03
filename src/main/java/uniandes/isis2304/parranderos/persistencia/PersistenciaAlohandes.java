@@ -1042,8 +1042,8 @@ public class PersistenciaAlohandes {
 		return disponible;
 	}
 
-	public void deshabilitarAlojamiento(Long idInmubele) {
-
+	public long deshabilitarAlojamiento(Long idInmubele) {
+        long resp = 0;
 		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
 		List<Reserva> futuros = reservasFuturas(idInmubele);
@@ -1073,6 +1073,7 @@ public class PersistenciaAlohandes {
 					Timestamp fechaHoy = new Timestamp(System.currentTimeMillis());
 					sqlReserva.adicionarReserva(pm, idReserva, idInmNuevo, actuales.get(i).getIdCliente(), fechaHoy,
 							actuales.get(i).getFechaFin(), fechaHoy, null, 'N', actuales.get(i).getNumeroPersonas());
+				resp++;
 				}
 			}
 		}
@@ -1094,6 +1095,7 @@ public class PersistenciaAlohandes {
 					sqlReserva.adicionarReserva(pm, idReserva, idInmNuevo, futuros.get(i).getIdCliente(),
 							futuros.get(i).getFechaInicio(), futuros.get(i).getFechaFin(), fechaHoy, null, 'N',
 							futuros.get(i).getNumeroPersonas());
+					resp++;
 				}
 			}
 		}
@@ -1125,6 +1127,7 @@ public class PersistenciaAlohandes {
 						sqlReserva.adicionarReserva(pm, idReserva, idInmNuevo, masivas.get(i).getIdCliente(),
 								masivas.get(i).getFechaInicio(), masivas.get(i).getFechaFin(), fechaHoy, null, 'N',
 								masivas.get(i).getNumeroPersonas());
+						resp++;
 					}
 
 				}
@@ -1133,12 +1136,13 @@ public class PersistenciaAlohandes {
 			sqlReserva.eliminarReserva(pm, masivas.get(i).getIdReserva());
 		}
 		tx.commit();
+		return resp;
 	    }
 
 	catch (Exception e) {
 			// e.printStackTrace();
 			log.error("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-			
+			return -1;
 		} finally {
 			if (tx.isActive()) {
 				tx.rollback();
@@ -1149,9 +1153,10 @@ public class PersistenciaAlohandes {
 	}
 	
 	
-	public void habilitarAlojamiento(Long idInmueble){
+	public long habilitarAlojamiento(Long idInmueble){
 		PersistenceManager pm = pmf.getPersistenceManager();
-		sqlInmueble.habilitarInmuble(pm, idInmueble);
+		long resp = sqlInmueble.habilitarInmuble(pm, idInmueble);
+		return resp;
 	}
 
 
