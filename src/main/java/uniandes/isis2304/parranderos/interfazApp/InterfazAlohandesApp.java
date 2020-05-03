@@ -48,9 +48,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
+import uniandes.isis2304.parranderos.negocio.Cliente;
 import uniandes.isis2304.parranderos.negocio.Parranderos;
 import uniandes.isis2304.parranderos.negocio.Reserva;
 import uniandes.isis2304.parranderos.negocio.VOApartamento;
+import uniandes.isis2304.parranderos.negocio.VOCliente;
 import uniandes.isis2304.parranderos.negocio.VOInmueble;
 import uniandes.isis2304.parranderos.negocio.VOReserva;
 
@@ -450,6 +452,25 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
 	}
+	
+	public void listarClientes( )
+	{
+		try
+		{
+			List <VOCliente> lista = parranderos.darVOCliente();
+
+			String resultado = "En listarInmuebles";
+			resultado +=  "\n" + listarClientes(lista);
+			panelDatos.actualizarInterfaz(resultado);
+			resultado += "\n Operación terminada";
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+	}
 /**
  * RFC3
  */
@@ -546,7 +567,46 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
     }
-
+    
+    /**
+     *RCF8 consultar informacion de clientes mas frecuentes
+     */
+    public void BuscarClientesMasFrecuentesPorIdInmueble( )
+    {
+    	try 
+    	{
+    		String idInmueble = JOptionPane.showInputDialog (this, "Id del Inmueble?", "Buscar Clientes mas frecuentes por Id de un Inmueble", JOptionPane.QUESTION_MESSAGE);
+    		if (idInmueble != null)
+    		{
+    			long idParseado = Long.valueOf (idInmueble);
+    			List<Cliente> cliente = parranderos.darInformacionCLientesMasFrecuentes(idParseado);
+    			String resultado = "En listar Cliente por mas frecunetes \n\n";
+    			if (cliente.size()!=0)
+    			{
+        			resultado += "La Clientes mas frecuentes del in mueble"+ idInmueble+ " son ";
+        			for (int i = 0; i < cliente.size(); i++) {
+						resultado+=cliente.get(i).toString()+"\n";
+					}
+    			}
+    			else
+    			{
+        			resultado += "Una inmuelbe con id: " + idParseado + " NO EXISTE\n";    				
+    			}
+    			resultado += "\n Operación terminada";
+    			panelDatos.actualizarInterfaz(resultado);
+    		}
+    		else
+    		{
+    			panelDatos.actualizarInterfaz("Operación cancelada por el usuario");
+    		}
+		} 
+    	catch (Exception e) 
+    	{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+    }
     /**
 			* Borra de la base de datos el inmueble con el identificador dado po el usuario
 	 * Cuando dicho tipo de bebida no existe, se indica que se borraron 0 registros de la base de datos
@@ -807,6 +867,16 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 		return resp;
 	}
 
+	private String listarClientes(List<VOCliente> lista)
+	{
+		String resp = "\n";
+		int i = 1;
+		for (VOCliente tb : lista)
+		{
+			resp += i++ + ". " + tb.toString() + "\n";
+		}
+		return resp;
+	}
     /**
      * Genera una cadena de caracteres con la descripción de la excepcion e, haciendo énfasis en las excepcionsde JDO
      * @param e - La excepción recibida

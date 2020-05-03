@@ -140,6 +140,18 @@ public class Parranderos
 		return resp;
 	}
 	/**
+	 * RCF8
+	 * @param muebleId
+	 * @return
+	 */
+	public List<Cliente> darInformacionCLientesMasFrecuentes (long muebleId)
+	{
+		log.info ("Listando Clientes");
+		List<Cliente> clientes = pp.darInfoClientesFrecuentes(muebleId);	
+		log.info ("Listando Clientes: " + clientes.size() + " clientes existentes");
+		return clientes;
+	}
+	/**
 	 * Encuentra todos los RESERVA en Parranderos
 	 * Adiciona entradas al log de la aplicación
 	 * @return Una lista de objetos RESERVA con todos los GUSTAN que conoce la aplicación, llenos con su información básica
@@ -368,4 +380,15 @@ public class Parranderos
 
 	}
 
+	public List<VOCliente> darVOCliente ()
+	{
+		log.info ("Generando los VO de Cxc");
+		List<VOCliente> voCxc = new LinkedList<VOCliente> ();
+		for (VOCliente vis: pp.darCliente ())
+		{
+			voCxc.add (vis);
+		}
+		log.info ("Generando los VO de Cxc: " + voCxc.size () + " Clientes existentes");
+		return voCxc;
+	}
 }

@@ -106,6 +106,8 @@ public class PersistenciaAlohandes
 	 */
 	private SQLCxc sqlCxc;
 
+	private SQLCliente sqlCliente;
+
 	/* ****************************************************************
 	 * 			Métodos del MANEJADOR DE PERSISTENCIA
 	 *****************************************************************/
@@ -137,9 +139,9 @@ public class PersistenciaAlohandes
 
 		tablas.add ("SERVICIO_ADICIONAL");
 		tablas.add ("OFRECEN");
-}
+	}
 
-	
+
 
 
 	/**
@@ -219,7 +221,8 @@ public class PersistenciaAlohandes
 		sqlInmueble = new SQLInmueble(this);
 		sqlReserva = new SQLReserva (this);
 		sqlApartamento = new SQLApartamento(this);
-		sqlCxc = new SQLCxc(this);		
+		sqlCxc = new SQLCxc(this);	
+		sqlCliente = new SQLCliente(this);
 		sqlUtil = new SQLUtil(this);
 	}
 
@@ -337,12 +340,12 @@ public class PersistenciaAlohandes
 	{
 		return tablas.get (14);
 	}
-	
+
 	public String darTablaOfrecen(){
 		return tablas.get(15);
 	}
-	
-	
+
+
 	/**
 	 * Transacción para el generador de secuencia de Parranderos
 	 * Adiciona entradas al log de la aplicación
@@ -616,7 +619,7 @@ public class PersistenciaAlohandes
 			{
 				//        	e.printStackTrace();
 				log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-			
+
 			}
 			finally
 			{
@@ -629,7 +632,6 @@ public class PersistenciaAlohandes
 		}
 		return null;
 	}
-
 
 
 	/**
@@ -698,6 +700,57 @@ public class PersistenciaAlohandes
 			pm.close();
 		}
 	}
+
+	/**
+	 * RCF8 consultar informacion de clientes mas frecuentes
+	 * @param muebleId
+	 * @return
+	 */
+
+	public List<Cliente> darInfoClientesFrecuentes(long muebleId)
+	{
+		List<Cliente> clientes= new ArrayList<Cliente>();
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx=pm.currentTransaction();
+		try{
+			tx.begin();
+			List<Reserva> reservas = sqlReserva.darReservasporInmuebleId(pm, muebleId);
+			for(int i=0;i<reservas.size();i++)
+			{
+				int frecuente=0;
+				for (int j=i;j<reservas.size();j++)
+				{
+					if(reservas.get(j).getIdCliente()==reservas.get(i).getIdCliente())
+					{
+						frecuente++;
+					}
+				}
+				if(frecuente==3)
+				{
+					clientes.add(sqlCliente.buscarClientePorId(pm, reservas.get(i).getIdCliente()));
+					log.trace ("Inserción de Cliente: [" + reservas.get(i).getIdCliente() + "]. ");
+					frecuente=0;
+				}	
+			}
+			tx.commit();
+			return clientes;
+		}
+		catch (Exception e)
+		{
+			//        	e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+	}
+	
 	/**
 	 * Método que inserta, de manera transaccional, una tupla en la tabla Apartamento
 	 * Adiciona entradas al log de la aplicación
@@ -901,6 +954,7 @@ public class PersistenciaAlohandes
 		return sqlCxc.darCxc (pmf.getPersistenceManager());
 	}	
 
+
 	/**
 	 * Elimina todas las tuplas de todas las tablas de la base de datos de Parranderos
 	 * Crea y ejecuta las sentencias SQL para cada tabla de la base de datos - EL ORDEN ES IMPORTANTE 
@@ -935,6 +989,14 @@ public class PersistenciaAlohandes
 		}
 
 	}
+
+
+
+
+	public List<Cliente> darCliente ()
+	{
+		return sqlCliente.darClientes(pmf.getPersistenceManager());
+	}	
 
 
 }

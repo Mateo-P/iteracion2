@@ -148,7 +148,12 @@ class SQLReserva
 		q.setResultClass(Reserva.class);
 		return (List<Reserva>) q.execute();
 	}
-
+	/**
+	 * RCF8 consultar informacion de clientes mas frecuentes
+	 * @param pm
+	 * @param muebleId
+	 * @return
+	 */
 	public List<Reserva> darReservasporInmuebleId (PersistenceManager pm, long muebleId)
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva ()+" WHERE ID_INMUEBLE=?");

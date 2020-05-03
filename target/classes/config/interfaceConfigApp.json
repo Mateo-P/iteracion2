@@ -43,6 +43,15 @@
 				}
 			]
 		},
+		{ "menuTitle": "Cliente",
+		  "options":
+			[
+				{
+					"label": "MasFrecuentes",
+					"event": "BuscarClientesMasFrecuentesPorIdInmueble"
+				}
+			]
+		},
 		{ "menuTitle": "Alojamientos",
 		  "options":
 			[
