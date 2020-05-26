@@ -81,7 +81,7 @@ public class Cliente implements VOCliente
 
 	/**
 	 * Constructor con valores
-	 * @param id - El id del operador
+	 * @param id - El id del operaedor
 	 * @param nombre - El nombre del operador
 	 * @param ciudad - La ciudad del operador
 	 * @param presupuesto - El presupuesto del bar (ALTO, MEDIO, BAJO)

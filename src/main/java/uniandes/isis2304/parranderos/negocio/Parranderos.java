@@ -323,7 +323,10 @@ public class Parranderos
 		log.info ("Listando Cxc: Listo!");
 		return visitan;
 	}
-
+	public List<Inmueble> darMejorYPeorInmueble()
+	{
+		return pp.darMejorYPeorInmueble();
+	}
 	/**
 	 * Encuentra todos los visitan en Parranderos y los devuelve como VO
 	 * Adiciona entradas al log de la aplicación

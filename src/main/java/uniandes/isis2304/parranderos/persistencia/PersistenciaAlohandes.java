@@ -32,6 +32,9 @@ import org.apache.log4j.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import oracle.jdbc.internal.OracleStatement.SqlKind;
+import oracle.net.aso.n;
 import uniandes.isis2304.parranderos.negocio.*;
 import uniandes.isis2304.parranderos.negocio.Reserva.cmpFechaGeneracion;
 import uniandes.isis2304.parranderos.negocio.Restriccion_Inmueble.TIPO_INMUEBLE;
@@ -1026,7 +1029,33 @@ public class PersistenciaAlohandes {
 		}
 		return resp;
 	}
+	public List<Inmueble> darMejorYPeorInmueble(){
+		PersistenceManager pm = pmf.getPersistenceManager();
+		List<Inmueble> resp = new ArrayList<Inmueble>();
+		List<Inmueble> inmuebles = sqlInmueble.darInmuebles(pm);
+		long idmax=0;
+		long idmin=0;
+		int max=0;
+		int min=999999999;
+		for(int i=0;i<inmuebles.size();i++)
+		{
+			int numReservasInmueble= sqlReserva.darReservasporInmuebleId(pm,inmuebles.get(i).getId()).size();
+			if(numReservasInmueble<min)
+			{
 
+				min= numReservasInmueble;
+				idmin=inmuebles.get(i).getId();
+			}
+			if(numReservasInmueble>max)
+			{
+				max=numReservasInmueble;
+				idmax=inmuebles.get(i).getId();
+			}
+		}
+		resp.add(sqlInmueble.darInmueblePorId(pm, idmax));
+		resp.add(sqlInmueble.darInmueblePorId(pm, idmin));
+		return resp;
+	}
 	public boolean disponibleRangoFechas(Timestamp fechaInicio, Timestamp fechaFinal, Long idInmueble) {
 		PersistenceManager pm = pmf.getPersistenceManager();
 		boolean disponible = true;

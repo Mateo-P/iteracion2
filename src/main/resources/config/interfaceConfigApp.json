@@ -64,16 +64,22 @@
 					"event": "listarIndices"
 								
 				}
-,
+					,
 				{
 					"label": "Deshabilitar Alojamiento",
 					"event": "deshabilitarAlojamiento"
 								
 				}
-,
+					,
 				{
 					"label": "Habilitar Alojamiento",
 					"event": "habilitarInmueble"
+								
+				}
+					,
+				{
+					"label": "Mejor y Peor Inmueble",
+					"event": "listarMejorYPeorInmueble"
 								
 				}
 			]

@@ -64,7 +64,7 @@ public class SQLInmueble {
      */
     public Inmueble darInmueblePorId (PersistenceManager pm, long idInmueble)
     {
-        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE id = ?");
+        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE ID_INMUEBLE = ?");
         q.setResultClass(Inmueble.class);
         q.setParameters(idInmueble);
         return (Inmueble) q.executeUnique();
@@ -109,10 +109,18 @@ public class SQLInmueble {
     public List<Inmueble> darInmuebles (PersistenceManager pm)
     {
         Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble ());
-        q.setResultClass(Reserva.class);
+        q.setResultClass(Inmueble.class);
         return (List<Inmueble>) q.execute();
     }
 
+    public List<Inmueble> darInmueblesPorIdOperador (PersistenceManager pm, long idOperador)
+    {
+        Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE inmueble.id_inmueble = ?");
+        q.setResultClass(Inmueble.class);
+        q.setParameters(idOperador);
+        return (List<Inmueble>) q.execute();
+    }
+    
     public List<Inmueble> darInmueblesPorTipo (PersistenceManager pm, String tipoInmueble)
     {
         Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaInmueble () + " WHERE TIPO_INMUEBLE = HABITACION_HOTEL");

@@ -49,6 +49,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 import uniandes.isis2304.parranderos.negocio.Cliente;
+import uniandes.isis2304.parranderos.negocio.Inmueble;
 import uniandes.isis2304.parranderos.negocio.Parranderos;
 import uniandes.isis2304.parranderos.negocio.Reserva;
 import uniandes.isis2304.parranderos.negocio.VOApartamento;
@@ -441,7 +442,24 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
     }
+    public void listarMejorYPeorInmueble( )
+    {
+    	try 
+    	{
+			List<Inmueble> lista = (List<Inmueble>) parranderos.darMejorYPeorInmueble();
 
+			String resultado = "En listarInbmuelbes";
+			resultado +=  "\n" + listarMejorYPeorInmueble(lista);
+			panelDatos.actualizarInterfaz(resultado);
+			resultado += "\n Operación terminada";
+		} 
+    	catch (Exception e) 
+    	{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+    }
 
 	/* ****************************************************************
 	 * 			CRUD de Apartamento
@@ -915,7 +933,14 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 		}
 		return resp;
 	}
-
+	private String listarMejorYPeorInmueble(List<Inmueble> lista)
+	{
+		String resp = "";
+		
+			resp +="El mejor inmuble es " + lista.get(0).toString() + "\n";
+			resp +="El peor inmuble es " + lista.get(0).toString() + "\n";
+		return resp;
+	}
 	private String listarClientes(List<VOCliente> lista)
 	{
 		String resp = "\n";
