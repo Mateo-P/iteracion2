@@ -327,6 +327,21 @@ public class Parranderos
 	{
 		return pp.darMejorYPeorInmueble();
 	}
+	
+	public List<Cliente> darClientesTop1()
+	{
+		return pp.darClientesTop1();
+	}
+	
+	public List<Cliente> darClientesTop2()
+	{
+		return pp.darClientesTop2();
+	}
+	
+	public List<Cliente> darClientesTop3()
+	{
+		return pp.darClientesTop3();
+	}
 	/**
 	 * Encuentra todos los visitan en Parranderos y los devuelve como VO
 	 * Adiciona entradas al log de la aplicación

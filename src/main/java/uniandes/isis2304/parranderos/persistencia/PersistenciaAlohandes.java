@@ -477,7 +477,30 @@ public class PersistenciaAlohandes {
 	public List<Operador> darOperadores() {
 		return sqlOperador.darBares(pmf.getPersistenceManager());
 	}
-
+	
+	public List<Cliente> darClientesTop1()
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		//priemra semana de enero
+		int firstWeekJan=1579046400;
+		Timestamp semana1 = new Timestamp(firstWeekJan);
+		int intervaloSemana=7*24*60*60;
+		List<Cliente> fieles = sqlCliente.darClientesTOP1(pm, semana1);
+		for( int i=0;i<51;i++)
+		{
+			firstWeekJan+=intervaloSemana;
+			Timestamp semanai = new Timestamp(firstWeekJan);
+			List<Cliente> fielessemana= sqlCliente.darClientesTOP1(pm, semanai);
+			fieles=fielessemana;
+		}
+		return fieles;
+	}
+	public List<Cliente> darClientesTop2() {
+		return sqlCliente.darClientesTOP2(pmf.getPersistenceManager());
+	}
+	public List<Cliente> darClientesTop3() {
+		return sqlCliente.darClientesTOP3(pmf.getPersistenceManager());
+	}
 	/**
 	 * Método que consulta todas las tuplas en la tabla BAR
 	 * 

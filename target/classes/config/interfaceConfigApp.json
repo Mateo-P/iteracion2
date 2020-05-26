@@ -49,6 +49,10 @@
 				{
 					"label": "MasFrecuentes",
 					"event": "BuscarClientesMasFrecuentesPorIdInmueble"
+				},
+				{
+					"label": "Top Clientes",
+					"event": "listarTopClientes"
 				}
 			]
 		},

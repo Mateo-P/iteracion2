@@ -114,5 +114,36 @@ class SQLCliente
 		return (List<Cliente>) q.execute();
 	}
 
-		 	
+	public List<Cliente> darClientesTOP1 (PersistenceManager pm, Timestamp semana)
+	{
+		Query q = pm.newQuery(SQL, "WHERE RESERVA.ID_CLIENTE=CLIENTE.ID_CLIENTE and reserva.fecha_inicio_reserva < ? "
+				+ "and reserva.fecha_final_reserva > ? "
+				+ "group by cliente.id_cliente,cliente.nombre_cliente,cliente.cedula_cliente,cliente.habilitado_cliente,cliente.telefono_cliente,cliente.correo_cliente,cliente.tipo_vinculo_cliente");
+		q.setResultClass(Cliente.class);
+		q.setParameters(semana, semana);
+		return (List<Cliente>) q.execute();
+	} 	
+	
+	public List<Cliente> darClientesTOP2 (PersistenceManager pm)
+	{
+		Query q = pm.newQuery(SQL, "SELECT cliente.id_cliente,cliente.nombre_cliente,cliente.cedula_cliente,cliente.habilitado_cliente,cliente.telefono_cliente,cliente.correo_cliente,cliente.tipo_vinculo_cliente FROM " 
+				+ pp.darTablaReserva()+","+ pp.darTablaCliente()+","+ pp.darTablaInmueble()
+				+"WHERE RESERVA.ID_CLIENTE=CLIENTE.ID_CLIENTE AND RESERVA.ID_INMUEBLE=inmueble.id_inmueble AND inmueble.costo_noche>149"
+				+" group by cliente.id_cliente,cliente.nombre_cliente,cliente.cedula_cliente,cliente.habilitado_cliente,cliente.telefono_cliente,cliente.correo_cliente,cliente.tipo_vinculo_cliente");
+		q.setResultClass(Cliente.class);
+		return (List<Cliente>) q.execute();
+	} 	
+	
+	public List<Cliente> darClientesTOP3 (PersistenceManager pm)
+	{
+		Query q = pm.newQuery(SQL, "SELECT cliente.id_cliente,cliente.nombre_cliente,cliente.cedula_cliente,cliente.habilitado_cliente,cliente.telefono_cliente,cliente.correo_cliente,cliente.tipo_vinculo_cliente "
+				+ "FROM RESERVA, CLIENTE,INMUEBLE,HABITACION_HOTEL "
+				+ "WHERE RESERVA.ID_CLIENTE=CLIENTE.ID_CLIENTE AND "
+				+ "RESERVA.ID_INMUEBLE=inmueble.id_inmueble AND "
+				+ "inmueble.id_inmueble = habitacion_hotel.id_inmueble_hh AND "
+				+ "habitacion_hotel.tipo_habitacion=SUITE "
+				+ "group by cliente.id_cliente,cliente.nombre_cliente,cliente.cedula_cliente,cliente.habilitado_cliente,cliente.telefono_cliente,cliente.correo_cliente,cliente.tipo_vinculo_cliente");
+		q.setResultClass(Cliente.class);
+		return (List<Cliente>) q.execute();
+	} 
 }

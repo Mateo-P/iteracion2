@@ -461,6 +461,28 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 		}
     }
 
+    public void listarTopClientes( )
+    {
+    	try 
+    	{
+			List<Cliente> lista = (List<Cliente>) parranderos.darClientesTop1();
+			List<Cliente> lista2 = (List<Cliente>) parranderos.darClientesTop2();
+			List<Cliente> lista3= (List<Cliente>) parranderos.darClientesTop3();
+			
+			String resultado = "En listarClientes";
+			resultado +=  "\n" + listarClientes(lista,1);
+			resultado +=  "\n" + listarClientes(lista2,2);
+			resultado +=  "\n" + listarClientes(lista3,3);
+			panelDatos.actualizarInterfaz(resultado);
+			resultado += "\n Operación terminada";
+		} 
+    	catch (Exception e) 
+    	{
+//			e.printStackTrace();
+			String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+		}
+    }
 	/* ****************************************************************
 	 * 			CRUD de Apartamento
 	 *****************************************************************/
@@ -941,9 +963,33 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			resp +="El peor inmuble es " + lista.get(0).toString() + "\n";
 		return resp;
 	}
+	private String listarClientes(List<Cliente> lista,int top)
+	{
+		String resp = "\n";
+		if(top==1)
+		{
+			resp+="Clientes que reservaron todas las semanas\n";
+		}
+		if(top==2)
+		{
+			resp+="Clientes que pagan habitaciones caras\n";
+		}
+		if(top==3)
+		{
+			resp+="Clientes que reservan SUITES\n";
+		}
+		int i = 1;
+		for (Cliente tb : lista)
+		{
+			resp += i++ + ". " + tb.toString() + "\n";
+		}
+		return resp;
+	}
+	
 	private String listarClientes(List<VOCliente> lista)
 	{
 		String resp = "\n";
+	
 		int i = 1;
 		for (VOCliente tb : lista)
 		{
