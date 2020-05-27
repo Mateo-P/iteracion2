@@ -162,6 +162,14 @@ class SQLReserva
 		return (List<Reserva>) q.execute();
 	}
 	
+	public List<Reserva> darReservasDiferentesAInmuebleId (PersistenceManager pm, long muebleId)
+	{
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva ()+" WHERE ID_INMUEBLE<>?");
+		q.setParameters(muebleId);
+		q.setResultClass(Reserva.class);
+		return (List<Reserva>) q.execute();
+	}
+	
 	public List<Reserva> darReservasMasivas (PersistenceManager pm, long idCliente,Timestamp fechaInicio, Timestamp fechaFin, Timestamp fechaGeneracion)
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaReserva ()+" WHERE FECHA_INICIO_RESERVA= ? AND fecha_final_reserva= ? AND fecha_generacion_reserva=? AND id_cliente=?");

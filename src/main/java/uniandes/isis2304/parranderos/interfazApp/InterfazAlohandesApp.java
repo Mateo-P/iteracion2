@@ -27,6 +27,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -483,6 +485,71 @@ public class InterfazAlohandesApp extends JFrame implements ActionListener
 			panelDatos.actualizarInterfaz(resultado);
 		}
     }
+    
+    public void verConsumoAlohAndes(){
+    	try{
+    		
+    		String nombre = JOptionPane.showInputDialog (this, "Ingrese el id del inmuble y el rango de fechas separados por coma", "Crear un apartamento", JOptionPane.QUESTION_MESSAGE);
+    		String[] respuestas = nombre.split(",");
+    		Long idInmueble = (long) Integer.parseInt(respuestas[0]);
+    		String inDate = respuestas[1];
+    		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    		Timestamp fecha1 = new Timestamp(((java.util.Date)df.parse(inDate)).getTime());
+    		String inDate2 = respuestas[2];
+    		Timestamp fecha2 = new Timestamp(((java.util.Date)df.parse(inDate2)).getTime());
+    		
+    		List<Cliente> resp = parranderos.consultarConsumo(idInmueble, fecha1, fecha2);
+    		String resultado = "Consultar Consumo Aloh Andes\n\n";
+    		for(int i=0;i>resp.size();i++){
+    			resultado +=  "\n"+resp.get(i).toString();
+    		}
+    		
+    		panelDatos.actualizarInterfaz(resultado);
+			resultado += "\n Operación terminada";
+    		
+    		
+    		
+    	}catch (Exception e){
+    		
+    		String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+    		
+    	}
+    }
+    
+    public void verConsumoAlohAndesV2(){
+    	try{
+    		
+    		String nombre = JOptionPane.showInputDialog (this, "Ingrese el id del inmuble y el rango de fechas separados por coma", "Crear un apartamento", JOptionPane.QUESTION_MESSAGE);
+    		String[] respuestas = nombre.split(",");
+    		Long idInmueble = (long) Integer.parseInt(respuestas[0]);
+    		String inDate = respuestas[1];
+    		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    		Timestamp fecha1 = new Timestamp(((java.util.Date)df.parse(inDate)).getTime());
+    		String inDate2 = respuestas[2];
+    		Timestamp fecha2 = new Timestamp(((java.util.Date)df.parse(inDate2)).getTime());
+    		
+    		List<Cliente> resp = parranderos.consultarConsumoV2(idInmueble, fecha1, fecha2);
+    		String resultado = "Consultar Consumo Aloh Andes\n\n";
+    		for(int i=0;i>resp.size();i++){
+    			resultado +=  "\n"+resp.get(i).toString();
+    		}
+    		
+    		panelDatos.actualizarInterfaz(resultado);
+			resultado += "\n Operación terminada";
+    		
+    		
+    		
+    	}catch (Exception e){
+    		
+    		String resultado = generarMensajeError(e);
+			panelDatos.actualizarInterfaz(resultado);
+    		
+    	}
+    }
+    	
+    	    
+    
 	/* ****************************************************************
 	 * 			CRUD de Apartamento
 	 *****************************************************************/

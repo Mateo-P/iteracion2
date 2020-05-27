@@ -1217,6 +1217,51 @@ public class PersistenciaAlohandes {
 	{
 		return sqlCliente.darClientes(pmf.getPersistenceManager());
 	}	
+	
+	public List<Cliente> consultarConsumoAlohAndes(Long idInmuble,Timestamp rango1,Timestamp rango2){
+		
+		
+		ArrayList<Cliente> resp = new ArrayList<>() ;
+		
+		PersistenceManager pm = pmf.getPersistenceManager();
+		
+		List<Reserva> reservasInm = sqlReserva.darReservasporInmuebleId(pm, idInmuble);
+		
+		for(int i = 0;i < reservasInm.size();i++){
+			Reserva actual = reservasInm.get(i);
+			if( actual.getFechaGeneracion().getTime()> rango1.getTime() && actual.getFechaGeneracion().getTime()<rango2.getTime()){
+				resp.add(sqlCliente.buscarClientePorId(pm,actual.getIdCliente()));
+			}
+		}
+		return resp;
+	}
+	
+    public List<Cliente>  consultarConsumoAlohAndesV2(Long idInmuble,Timestamp rango1,Timestamp rango2){
+		  
+	    PersistenceManager pm = pmf.getPersistenceManager();
+	
+	
+	    List<Reserva> reservasDifInm = sqlReserva.darReservasDiferentesAInmuebleId(pm, idInmuble);
+	    
+	 	ArrayList<Cliente> resp2 = new ArrayList<>() ;
+		
+		
+		List<Reserva> reservasInm = sqlReserva.darReservasporInmuebleId(pm, idInmuble);
+		
+		for(int i = 0;i < reservasInm.size();i++){
+			Reserva actual = reservasInm.get(i);
+			if( actual.getFechaGeneracion().getTime()< rango1.getTime() && actual.getFechaGeneracion().getTime()>rango2.getTime()){
+				resp2.add(sqlCliente.buscarClientePorId(pm,actual.getIdCliente()));
+			}
+		}
+		
+		for(int i = 0;i < reservasInm.size();i++){
+			Reserva actual = reservasInm.get(i);
+			resp2.add(sqlCliente.buscarClientePorId(pm,actual.getIdCliente()));
+		}
+		
+		return resp2;
+	}
 
 
 }

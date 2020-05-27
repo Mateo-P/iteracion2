@@ -338,6 +338,13 @@ public class Parranderos
 		return pp.darClientesTop2();
 	}
 	
+	public List<Cliente> consultarConsumo(Long idInmuble, Timestamp fecha1, Timestamp fecha2){
+		return pp.consultarConsumoAlohAndes(idInmuble, fecha1, fecha2);
+	}
+	public List<Cliente> consultarConsumoV2(Long idInmuble, Timestamp fecha1, Timestamp fecha2){
+		return pp.consultarConsumoAlohAndesV2(idInmuble, fecha1, fecha2);
+	}
+	
 	public List<Cliente> darClientesTop3()
 	{
 		return pp.darClientesTop3();

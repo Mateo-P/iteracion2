@@ -85,6 +85,17 @@
 					"label": "Mejor y Peor Inmueble",
 					"event": "listarMejorYPeorInmueble"
 								
+				},
+
+{
+					"label": "Consumo AlohAndes",
+					"event": "verConsumoAlohAndes"
+								
+				},
+{
+					"label": "Consumo AlohAndesV2",
+					"event": "verConsumoAlohAndesV2"
+								
 				}
 			]
 		},		
